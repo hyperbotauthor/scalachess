@@ -5,7 +5,7 @@ import scala.scalajs.js.annotation.JSExportTopLevel
 object ChessApp {
 	@JSExportTopLevel("exportFunc")
 	def exportFunc(): Unit = {
-		val p1 = Piece(White, King)
+		/*val p1 = Piece(White, King)
 		val p2 = Piece(Black, King)
 		val pos1 = Pos.A1
 		val pos2 = Pos.E4
@@ -13,7 +13,7 @@ object ChessApp {
 		val b = Board(pm, History(), variant.Atomic, None)
 		val s = Situation(b, White)
 		val g = Game(s)
-		println(g)
+		println(g)*/
 		val sg = Game(variant.Atomic)
 		println(sg)
 	}
