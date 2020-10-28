@@ -1,3 +1,5 @@
+enablePlugins(ScalaJSPlugin)
+
 name := "scalachess"
 
 organization := "org.lichess"
@@ -62,3 +64,5 @@ scalacOptions ++= Seq(
 )
 
 publishTo := Option(Resolver.file("file", new File(sys.props.getOrElse("publishTo", ""))))
+
+scalaJSUseMainModuleInitializer := true
