@@ -1,1 +1,2 @@
 exportFunc()
+console.log("done")
