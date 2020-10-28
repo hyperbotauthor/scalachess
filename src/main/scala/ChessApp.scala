@@ -14,6 +14,8 @@ object ChessApp {
 		val s = Situation(b, White)
 		val g = Game(s)
 		println(g)
+		val sg = Game(variant.Atomic)
+		println(sg)
 	}
 	def main(args: Array[String]): Unit = {
 		println("Hello world!")		
