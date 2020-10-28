@@ -4,7 +4,7 @@ import scala.scalajs.js.annotation.JSExportTopLevel
 
 object ChessApp {
 	@JSExportTopLevel("exportFunc")
-	def exportFunc(): Unit = {
+	def exportFunc(variantKey: scala.scalajs.js.UndefOr[String], ucisJs: scala.scalajs.js.Array[String]): Unit = {
 		/*val p1 = Piece(White, King)
 		val p2 = Piece(Black, King)
 		val pos1 = Pos.A1
@@ -14,9 +14,9 @@ object ChessApp {
 		val s = Situation(b, White)
 		val g = Game(s)
 		println(g)*/
-		val ucis = List("e2e4", "e7e5", "g1f3", "b1c3", "lol")
-		var g = Game(variant.Atomic)		
-		ucis.foreach(uci => {
+		//val ucis = ucisJs.toList
+		var g = Game(variant.Variant(variantKey.get).get)		
+		ucisJs.foreach(uci => {
 			format.Uci.Move(uci) match {
 				case Some(move) => {
 					g(move) match {
@@ -37,7 +37,6 @@ object ChessApp {
 		println(g.pgnMoves)
 	}
 	def main(args: Array[String]): Unit = {
-		println("Hello world!")				
-		exportFunc()
+		println("Hello world!")
 	}
 }
