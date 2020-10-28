@@ -19,14 +19,13 @@ object ChessApp {
 		ucis.foreach(uci => {
 			val v = g(format.Uci.Move(uci).get)
 			v match {
-				case cats.data.Validated.Valid((ng, move)) => {
-					println("move ok ", move)					
+				case cats.data.Validated.Valid((ng, move)) => {									
 					g = ng
 				}
 			}
 		})
 		
-		println(g)
+		println(g.pgnMoves)
 	}
 	def main(args: Array[String]): Unit = {
 		println("Hello world!")				
