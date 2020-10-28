@@ -14,13 +14,16 @@ object ChessApp {
 		val s = Situation(b, White)
 		val g = Game(s)
 		println(g)*/
-		val ucis = List("e2e4", "e7e5", "g1f3")
+		val ucis = List("e2e4", "e7e5", "g1f3", "b1c3")
 		var g = Game(variant.Atomic)		
 		ucis.foreach(uci => {
 			val v = g(format.Uci.Move(uci).get)
 			v match {
-				case cats.data.Validated.Valid((ng, move)) => {									
+				case cats.data.Validated.Valid((ng, _)) => {									
 					g = ng
+				}
+				case cats.data.Validated.Invalid(why) => {									
+					println(uci + " invalid " + why)
 				}
 			}
 		})
