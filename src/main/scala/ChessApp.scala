@@ -14,10 +14,13 @@ object ChessApp {
 		val s = Situation(b, White)
 		val g = Game(s)
 		println(g)*/
-		val sg = Game(variant.Atomic)
-		println(sg)
-		val sg2 = sg(format.Uci.Move("e2e4").get)
-		println(sg2)
+		val sg = Game(variant.Atomic)		
+		val after = sg(format.Uci.Move("e2e4").get)		
+		after match {
+			case cats.data.Validated.Valid((newGame, move)) => {
+				println(newGame(format.Uci.Move("e7e5").get))
+			}
+		}
 	}
 	def main(args: Array[String]): Unit = {
 		println("Hello world!")				
