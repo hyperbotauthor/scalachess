@@ -16,8 +16,11 @@ object ChessApp {
 		println(g)*/
 		val sg = Game(variant.Atomic)
 		println(sg)
+		val sg2 = sg(format.Uci.Move("e2e4").get)
+		println(sg2)
 	}
 	def main(args: Array[String]): Unit = {
 		println("Hello world!")				
+		exportFunc()
 	}
 }
