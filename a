@@ -1,0 +1,3 @@
+cp /workspace/scalarepo/scalachess/target/scala-2.13/scalachess-fastopt.js ./
+cat scalachess-fastopt.js post.js > out.js
+ls

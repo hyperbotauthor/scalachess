@@ -1,9 +1,9 @@
 package chess
 
-//import scala.scalajs.js.annotation.JSExportTopLevel
+import scala.scalajs.js.annotation.JSExportTopLevel
 
 object ChessApp {
-	//@JSExportTopLevel("exportFunc")
+	@JSExportTopLevel("exportFunc")
 	def exportFunc(): Unit = {
 		val p1 = Piece(White, King)
 		val p2 = Piece(Black, King)
@@ -18,7 +18,6 @@ object ChessApp {
 		println(sg)
 	}
 	def main(args: Array[String]): Unit = {
-		println("Hello world!")		
-		exportFunc()
+		println("Hello world!")				
 	}
 }
