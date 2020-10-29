@@ -124,14 +124,3 @@ function newGame(variantKey, fen){
 	if(result.success) return Game(variantKey, fen)
 	return null
 }
-
-let game = newGame("atomic")
-
-game.makeUciMove("e2e4")
-
-game = newGame("atomic", game.fen())
-
-game.makeUciMove("d7d5")
-game.makeUciMove("g1f3")
-
-console.log(`${game.linePgn()}`)

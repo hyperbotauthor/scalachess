@@ -1,0 +1,25 @@
+{
+  "name": "scalachess",
+  "version": "1.0.0",
+  "description": "Manage a chess game in Javascript using the scalachess library.",
+  "main": "out.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hyperbotauthor/scalachess.git"
+  },
+  "keywords": [
+    "scalachess",
+    "Javascript",
+    "chess",
+    "game"
+  ],
+  "author": "hyperbotauthor",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/hyperbotauthor/scalachess/issues"
+  },
+  "homepage": "https://github.com/hyperbotauthor/scalachess#readme"
+}
