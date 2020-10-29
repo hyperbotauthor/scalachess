@@ -48,6 +48,8 @@
 			this.boardContainer = div().poa().w(this.boardWidth).h(this.boardHeight)
 			
 			this.por().a(this.squareContainer, this.boardContainer)
+			
+			this.imgCache = {}
 		}
 		
 		setFen(fen){
@@ -71,12 +73,20 @@
 
 				let i = file + rank * 8
 				let p = this.raw.substring(i, i+1)		
+				
 				if(p!="."){
-					let img = Image().setWidth(this.pieceSize).setHeight(this.pieceSize).poa()
+					let cachedImg = this.imgCache[`p${i}`]
+					
+					if(cachedImg){
+						this.boardContainer.a(cachedImg)
+					}else{
+						let img = Image().setWidth(this.pieceSize).setHeight(this.pieceSize).poa()						
 						.l(file * this.squareSize + this.pieceMargin).t(rank * this.squareSize + this.pieceMargin)
 						.load(PIECES_CSS[this.pieceSet][p.toLowerCase() == p ? "b" : "w"][p.toLowerCase()], _=>{
 							this.boardContainer.a(img)
+							this.imgCache[`p${i}`] = img
 						})			
+					}					
 				}			
 			}		
 			
@@ -90,11 +100,10 @@
 	let sb = ShowBoard().setFen(game.fen()).draw()
 	
 	let i = 0
-	for(let uci of ["e2e4", "d7d5", "g1f3", "c8g4"]){
+	for(let uci of ["e2e4", "d7d5", "g1f3", "c8g4", "d2d4", "c7c6", "b1c3"]){
 		game.makeUciMove(uci)
 		let fen = game.fen()
-		setTimeout(_=>{
-			console.log("draw", fen)
+		setTimeout(_=>{			
 			sb.setFen(fen).draw()
 		}, ++i * 3000)
 	}	
