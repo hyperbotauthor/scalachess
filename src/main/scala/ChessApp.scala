@@ -6,13 +6,12 @@ import js.JSConverters._
 
 object ChessApp {
 	val DEFAULT_VARIANT = variant.Standard
-	@JSExportTopLevel("exportFunc")
-	def exportFunc(
+	@JSExportTopLevel("makeUciMovesScala")
+	def makeUciMovesScala(
 		variantKeyOptJs: js.UndefOr[String],
 		fenOptJs: js.UndefOr[String],
 		ucisJs: js.UndefOr[js.Array[String]]
-	): js.Array[String] = {		
-		println(variantKeyOptJs, fenOptJs, ucisJs)
+	): (js.UndefOr[String], js.Array[String]) = {				
 		val variantKey = variantKeyOptJs.getOrElse(DEFAULT_VARIANT.key)
 		val variantOpt = variant.Variant(variantKey)				
 		val fenOpt : Option[chess.format.FEN] = fenOptJs.toOption match {
@@ -38,9 +37,9 @@ object ChessApp {
 			}			
 		})
 		
-		g.pgnMoves.toJSArray
+		((chess.format.Forsyth >> g).toString, g.pgnMoves.toJSArray)
 	}
 	def main(args: Array[String]): Unit = {
-		println("Hello world!")
+		println("scalachess.js by hyperbotauthor")
 	}
 }
