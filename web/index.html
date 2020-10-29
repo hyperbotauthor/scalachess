@@ -1,7 +1,34 @@
+<script src="https://unpkg.com/@easychessanimations/foo@1.0.22/lib/fooweb.js"></script>	
+
 <script src="out.js"></script>
 <script src="pieces.js"></script>
 
 <script>
+	class Image_ extends SmartdomElement_{
+		constructor(props){
+			super({...props, ...{tagName: "img"}})			
+		}
+		
+		load(url, onload){
+			this.e.onload = onload
+			this.e.src = url
+			return this
+		}
+		
+		setWidth(width){
+			this.e.width = width
+			return this
+		}
+		
+		setHeight(height){
+			this.e.height = height
+			return this
+		}
+	}
+	function Image(props){return new Image_(props)}
+	
+	let pieceSet = "alpha"
+	
 	let game = Game('atomic')
 	game.makeUciMove("e2e4")
 	game.makeUciMove("d7d5")
@@ -12,24 +39,33 @@
 	raw = raw.replace(/\//g, "")
 	for(let i=1;i<=8;i++) raw = raw.replace(new RegExp(`${i}`, "g"), "........".substring(0,i))
 	
-	document.documentElement.style.position = "relative"
-	
 	let pieceSize = 40
 	let squareSize = 50
+	let pieceMargin = (squareSize - pieceSize) / 2
+	let numFiles = 8
+	let numRanks = 8
+	let boardWidth = numFiles * squareSize
+	let boardHeight = numRanks * squareSize
 	
-	for(let file=0;file<8;file++) for(let rank=0;rank<8;rank++){
+	let squareContainer = div().poa().w(boardWidth).h(boardHeight)
+	
+	let boardContainer = div().poa().w(boardWidth).h(boardHeight)
+	
+	let app = div().por().a(squareContainer, boardContainer)
+	
+	for(let file=0;file<numFiles;file++) for(let rank=0;rank<numRanks;rank++){
+		squareContainer.a(div().poa().w(squareSize).h(squareSize).t(rank * squareSize).l(file * squareSize).bc((file+rank)%2?"#aaa":"#ddd"))
+		
 		let i = file + rank * 8
 		let p = raw.substring(i, i+1)		
 		if(p!="."){
-			let img = document.createElement('img')
-			img.onload = function(){
-				document.documentElement.appendChild(img)
-			}
-			img.width = pieceSize
-			img.src = PIECES_CSS["alpha"][p.toLowerCase() == p ? "b" : "w"][p.toLowerCase()]		
-			img.style.position = "absolute"
-			img.style.left = file * squareSize + "px"
-			img.style.top = rank * squareSize + "px"
-		}		
+			let img = Image().setWidth(pieceSize).setHeight(pieceSize).poa()
+				.l(file * squareSize + pieceMargin).t(rank * squareSize + pieceMargin)
+				.load(PIECES_CSS[pieceSet][p.toLowerCase() == p ? "b" : "w"][p.toLowerCase()], _=>{
+					boardContainer.a(img)
+				})			
+		}			
 	}		
+	
+	document.documentElement.appendChild(app.e)
 </script>
