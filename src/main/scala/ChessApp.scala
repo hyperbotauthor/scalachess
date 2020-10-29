@@ -13,12 +13,19 @@ object ChessApp {
 		ucisJs: js.UndefOr[js.Array[String]]
 	): (js.UndefOr[String], js.Array[String]) = {				
 		val variantKey = variantKeyOptJs.getOrElse(DEFAULT_VARIANT.key)
-		val variantOpt = variant.Variant(variantKey)				
+		val variantOpt = variant.Variant(variantKey)	
+		if(variantOpt.isEmpty) return ("", List("invalid variant key").toJSArray)
 		val fenOpt : Option[chess.format.FEN] = fenOptJs.toOption match {
 			case Some(fen) => Some(chess.format.FEN(fen));
 			case None => None
 		}
+		if(!fenOptJs.toOption.isEmpty){
+			val fen = format.FEN(fenOptJs.get)
+			val parsed = format.Forsyth.<<<@(variantOpt.get, fen)
+			if(parsed.isEmpty) return ("", List("invalid fen").toJSArray)
+		}
 		var g = Game(variantOpt, fenOpt)		
+		var errors = Array[String]()
 		ucisJs.getOrElse(js.Array[String]()).foreach(uci => {
 			format.Uci.Move(uci) match {
 				case Some(move) => {
@@ -27,15 +34,17 @@ object ChessApp {
 							g = ng
 						}
 						case cats.data.Validated.Invalid(why) => {									
-							println(uci + " invalid move " + why)
+							errors :+= (uci + " invalid move " + why)
 						}
 					}		
 				}
 				case None => {
-					println("ill formatted uci " + uci)
+					errors :+= ("ill formatted uci " + uci)
 				}
 			}			
 		})
+		
+		if(errors.length > 0) return ("", errors.toJSArray)
 		
 		((chess.format.Forsyth >> g).toString, g.pgnMoves.toJSArray)
 	}
