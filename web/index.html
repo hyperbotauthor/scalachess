@@ -27,45 +27,79 @@
 	}
 	function Image(props){return new Image_(props)}
 	
-	let pieceSet = "alpha"
+	class ShowBoard_ extends SmartdomElement_{
+		constructor(props){
+			super({...props, ...{tagName: "div"}})			
+			
+			props = props || {}
+			
+			this.pieceSize = props.pieceSize || 40
+			this.squareSize = props.squareSize || 50
+			this.pieceMargin = (this.squareSize - this.pieceSize) / 2
+			this.numFiles = props.numFiles || 8
+			this.numRanks = props.numRanks || 8
+			this.boardWidth = this.numFiles * this.squareSize
+			this.boardHeight = this.numRanks * this.squareSize
+			
+			this.pieceSet = props.pieceSet || "alpha"
+
+			this.squareContainer = div().poa().w(this.boardWidth).h(this.boardHeight)
+
+			this.boardContainer = div().poa().w(this.boardWidth).h(this.boardHeight)
+			
+			this.por().a(this.squareContainer, this.boardContainer)
+		}
+		
+		setFen(fen){
+			this.fen = fen
+			
+			let raw = this.fen.split(" ")[0]
+			raw = raw.replace(/\//g, "")
+			for(let i=1;i<=8;i++) raw = raw.replace(new RegExp(`${i}`, "g"), "........".substring(0,i))
+			
+			this.raw = raw
+			
+			return this
+		}
+		
+		draw(){
+			this.squareContainer.x()
+			this.boardContainer.x()
+			
+			for(let file=0;file<this.numFiles;file++) for(let rank=0;rank<this.numRanks;rank++){
+				this.squareContainer.a(div().poa().w(this.squareSize).h(this.squareSize).t(rank * this.squareSize).l(file * this.squareSize).bc((file+rank)%2?"#aaa":"#ddd"))
+
+				let i = file + rank * 8
+				let p = this.raw.substring(i, i+1)		
+				if(p!="."){
+					let img = Image().setWidth(this.pieceSize).setHeight(this.pieceSize).poa()
+						.l(file * this.squareSize + this.pieceMargin).t(rank * this.squareSize + this.pieceMargin)
+						.load(PIECES_CSS[this.pieceSet][p.toLowerCase() == p ? "b" : "w"][p.toLowerCase()], _=>{
+							this.boardContainer.a(img)
+						})			
+				}			
+			}		
+			
+			return this
+		}		
+	}
+	function ShowBoard(props){return new ShowBoard_(props)}
 	
 	let game = Game('atomic')
-	game.makeUciMove("e2e4")
-	game.makeUciMove("d7d5")
 	
-	let fen = game.fen()
+	let sb = ShowBoard().setFen(game.fen()).draw()
 	
-	let raw = fen.split(" ")[0]
-	raw = raw.replace(/\//g, "")
-	for(let i=1;i<=8;i++) raw = raw.replace(new RegExp(`${i}`, "g"), "........".substring(0,i))
+	let i = 0
+	for(let uci of ["e2e4", "d7d5", "g1f3", "c8g4"]){
+		game.makeUciMove(uci)
+		let fen = game.fen()
+		setTimeout(_=>{
+			console.log("draw", fen)
+			sb.setFen(fen).draw()
+		}, ++i * 3000)
+	}	
 	
-	let pieceSize = 40
-	let squareSize = 50
-	let pieceMargin = (squareSize - pieceSize) / 2
-	let numFiles = 8
-	let numRanks = 8
-	let boardWidth = numFiles * squareSize
-	let boardHeight = numRanks * squareSize
-	
-	let squareContainer = div().poa().w(boardWidth).h(boardHeight)
-	
-	let boardContainer = div().poa().w(boardWidth).h(boardHeight)
-	
-	let app = div().por().a(squareContainer, boardContainer)
-	
-	for(let file=0;file<numFiles;file++) for(let rank=0;rank<numRanks;rank++){
-		squareContainer.a(div().poa().w(squareSize).h(squareSize).t(rank * squareSize).l(file * squareSize).bc((file+rank)%2?"#aaa":"#ddd"))
-		
-		let i = file + rank * 8
-		let p = raw.substring(i, i+1)		
-		if(p!="."){
-			let img = Image().setWidth(pieceSize).setHeight(pieceSize).poa()
-				.l(file * squareSize + pieceMargin).t(rank * squareSize + pieceMargin)
-				.load(PIECES_CSS[pieceSet][p.toLowerCase() == p ? "b" : "w"][p.toLowerCase()], _=>{
-					boardContainer.a(img)
-				})			
-		}			
-	}		
+	let app = sb
 	
 	document.documentElement.appendChild(app.e)
 </script>
