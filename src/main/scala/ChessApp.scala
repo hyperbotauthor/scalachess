@@ -1,22 +1,26 @@
 package chess
 
 import scala.scalajs.js.annotation.JSExportTopLevel
+import scala.scalajs.js
+import js.JSConverters._
 
 object ChessApp {
+	val DEFAULT_VARIANT = variant.Standard
 	@JSExportTopLevel("exportFunc")
-	def exportFunc(variantKey: scala.scalajs.js.UndefOr[String], ucisJs: scala.scalajs.js.Array[String]): Unit = {
-		/*val p1 = Piece(White, King)
-		val p2 = Piece(Black, King)
-		val pos1 = Pos.A1
-		val pos2 = Pos.E4
-		val pm : PieceMap = Map(pos1 -> p1, pos2 -> p2)		
-		val b = Board(pm, History(), variant.Atomic, None)
-		val s = Situation(b, White)
-		val g = Game(s)
-		println(g)*/
-		//val ucis = ucisJs.toList
-		var g = Game(variant.Variant(variantKey.get).get)		
-		ucisJs.foreach(uci => {
+	def exportFunc(
+		variantKeyOptJs: js.UndefOr[String],
+		fenOptJs: js.UndefOr[String],
+		ucisJs: js.UndefOr[js.Array[String]]
+	): js.Array[String] = {		
+		println(variantKeyOptJs, fenOptJs, ucisJs)
+		val variantKey = variantKeyOptJs.getOrElse(DEFAULT_VARIANT.key)
+		val variantOpt = variant.Variant(variantKey)				
+		val fenOpt : Option[chess.format.FEN] = fenOptJs.toOption match {
+			case Some(fen) => Some(chess.format.FEN(fen));
+			case None => None
+		}
+		var g = Game(variantOpt, fenOpt)		
+		ucisJs.getOrElse(js.Array[String]()).foreach(uci => {
 			format.Uci.Move(uci) match {
 				case Some(move) => {
 					g(move) match {
@@ -34,7 +38,7 @@ object ChessApp {
 			}			
 		})
 		
-		println(g.pgnMoves)
+		g.pgnMoves.toJSArray
 	}
 	def main(args: Array[String]): Unit = {
 		println("Hello world!")
