@@ -11,10 +11,14 @@ object ChessApp {
 		variantKeyOptJs: js.UndefOr[String],
 		fenOptJs: js.UndefOr[String],
 		ucisJs: js.UndefOr[js.Array[String]]
-	): (js.UndefOr[String], js.Array[String]) = {				
+	): (
+		js.UndefOr[String],
+		js.Array[String],
+		js.Array[String]
+	) = {				
 		val variantKey = variantKeyOptJs.getOrElse(DEFAULT_VARIANT.key)
 		val variantOpt = variant.Variant(variantKey)	
-		if(variantOpt.isEmpty) return ("", List("invalid variant key").toJSArray)
+		if(variantOpt.isEmpty) return ("", List[String]().toJSArray, List("invalid variant key").toJSArray)
 		val fenOpt : Option[chess.format.FEN] = fenOptJs.toOption match {
 			case Some(fen) => Some(chess.format.FEN(fen));
 			case None => None
@@ -22,7 +26,7 @@ object ChessApp {
 		if(!fenOptJs.toOption.isEmpty){
 			val fen = format.FEN(fenOptJs.get)
 			val parsed = format.Forsyth.<<<@(variantOpt.get, fen)
-			if(parsed.isEmpty) return ("", List("invalid fen").toJSArray)
+			if(parsed.isEmpty) return ("", List[String]().toJSArray, List("invalid fen").toJSArray)
 		}
 		var g = Game(variantOpt, fenOpt)		
 		var errors = Array[String]()
@@ -44,9 +48,13 @@ object ChessApp {
 			}			
 		})
 		
-		if(errors.length > 0) return ("", errors.toJSArray)
+		val legalMoves = g.situation.moves
 		
-		((chess.format.Forsyth >> g).toString, g.pgnMoves.toJSArray)
+		val legalMovesUcis = (for((pos, moves) <- legalMoves) yield moves).flatten.map(move => move.toUci.uci).toList
+		
+		if(errors.length > 0) return ("", List[String]().toJSArray, errors.toJSArray)
+		
+		((chess.format.Forsyth >> g).toString, legalMovesUcis.toJSArray, g.pgnMoves.toJSArray)
 	}
 	def main(args: Array[String]): Unit = {
 		println("scalachess.js by hyperbotauthor")

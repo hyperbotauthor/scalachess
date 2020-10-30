@@ -1,13 +1,15 @@
 function makeUciMoves(variantKey, fen, uciMoves){
 	let result = makeUciMovesScala(variantKey, fen, uciMoves)	
 	
-	fen = result.T2__f__1
-	let sanMoves = result.T2__f__2
+	fen = result.T3__f__1
+	let legalMovesUcis = result.T3__f__2
+	let sanMoves = result.T3__f__3
 	
 	if(fen) return {		
 		success: true,
 		fen: fen,
-		sanMoves: result.T2__f__2
+		legalMovesUcis: legalMovesUcis,
+		sanMoves: sanMoves
 	}
 	
 	return {		
@@ -124,3 +126,5 @@ function newGame(variantKey, fen){
 	if(result.success) return Game(variantKey, fen)
 	return null
 }
+
+console.log(makeUciMoves("atomic", undefined, []))
