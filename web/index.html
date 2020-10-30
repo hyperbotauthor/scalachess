@@ -67,8 +67,7 @@
 			this.variantChanged(this.variantCombo.select.e.value)
 		}
 		
-		variantChanged(variantKey){
-			console.log("variant changed", variantKey)
+		variantChanged(variantKey){			
 			if(this.props.variantChangedCallback){
 				this.props.variantChangedCallback(variantKey)
 			}
@@ -193,7 +192,6 @@
 		setVariantKey(variantKey){
 			this.variantKey = variantKey
 			
-			console.log(this.variantCombo)
 			this.variantCombo.selectOption(this.variantKey)
 		}
 	}
@@ -257,8 +255,6 @@
 	}
 	
 	function clickedMoveCallback(moveUci){
-		console.log("moveUci", moveUci)
-		
 		game.makeUciMove(moveUci)
 		
 		setGame(game)

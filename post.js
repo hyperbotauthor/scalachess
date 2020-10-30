@@ -18,20 +18,17 @@ function makeUciMoves(variantKey, fen, uciMoves){
 	}
 }
 
-function storeLocal(id, blob){
-	console.log("storing", id, blob)
+function storeLocal(id, blob){	
 	localStorage.setItem(id, JSON.stringify(blob))
 }
 
 function getLocal(id){
 	let content = localStorage.getItem(id)
-	if(!content){
-		console.log("could not get local", id)
+	if(!content){		
 		return null
 	}
 	try{
-		let blob = JSON.parse(content)
-		console.log("getting", id, blob)
+		let blob = JSON.parse(content)		
 		return blob
 	}catch(err){}
 	return null
@@ -113,8 +110,7 @@ class GameNode_{
 function GameNode(parentGame, props){return new GameNode_(parentGame, props)}
 
 class Game_{
-	constructor(variantKey, fen, id){		
-		console.log("constructing game", variantKey, fen, id)
+	constructor(variantKey, fen, id){				
 		this.variantKey = variantKey || "standard"
 		let result = makeUciMoves(this.variantKey, fen, [])
 		this.currentNode = null
@@ -156,7 +152,7 @@ class Game_{
 		if(this.id){			
 			storeLocal(this.id, this.serialize())
 		}else{
-			console.log("could not store game without id")
+			
 		}
 	}
 	
@@ -164,7 +160,7 @@ class Game_{
 		if(this.id){
 			this.fromblob(getLocal(this.id))
 		}else{
-			console.log("could not load game without id")
+			
 		}
 	}
 	
@@ -243,7 +239,6 @@ class Game_{
 		for(let id in this.nodes){
 			if(id.match(delId)){				
 				delete this.nodes[id]
-				console.log("deleted node", id)
 			}
 		}
 		return true
