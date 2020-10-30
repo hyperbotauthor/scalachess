@@ -105,6 +105,8 @@
 			this.pieceSet = props.pieceSet || "alpha"
 
 			this.squareContainer = div().poa().w(this.boardWidth).h(this.boardHeight)
+			
+			this.clickContainer = div().poa().w(this.boardWidth).h(this.boardHeight)
 
 			this.boardContainer = div().poa().w(this.boardWidth).h(this.boardHeight)
 			
@@ -131,7 +133,7 @@
 				)
 			
 			this.por().w(this.totalWidth()).h(this.totalHeight()).bc("#ddd")
-				.a(this.squareContainer, this.boardContainer, this.legalMovesContainer, this.controlPanel)
+				.a(this.squareContainer, this.boardContainer, this.clickContainer, this.legalMovesContainer, this.controlPanel)
 			
 			this.imgCache = {}
 		}
@@ -175,14 +177,58 @@
 			return this
 		}
 		
+		indexToUci(i){
+			let rank = Math.floor(i / this.numFiles)
+			let file = i - rank * this.numFiles
+			
+			let rankUci = `${this.numRanks - rank}`
+			let fileUci = String.fromCharCode(97 + file)
+			
+			return `${fileUci}${rankUci}`
+		}
+		
+		clickMove(fromI, toI){
+			let moveUci = `${this.indexToUci(fromI)}${this.indexToUci(toI)}`
+			
+			if(this.props.clickedMoveCallback){				
+				this.props.clickedMoveCallback(moveUci)
+			}
+		}
+		
+		clickSquareClicked(i){
+			if(this.clickedSquareIndex != null){
+				this.clickedSquare.op(0)
+				
+				this.clickMove(this.clickedSquareIndex, i)
+				
+				this.clickedSquareIndex = null
+				this.clickedSquare.op(0)
+				
+				return
+			}
+			
+			this.clickedSquareIndex = i
+			
+			this.clickedSquare = this.clickSquares[i]
+			
+			this.clickedSquare.op(0.5)
+		}
+		
 		draw(){
 			this.squareContainer.x()
 			this.boardContainer.x()
 			
+			this.clickSquares = {}
+			
+			this.clickedSquareIndex = null
+			
 			for(let file=0;file<this.numFiles;file++) for(let rank=0;rank<this.numRanks;rank++){
-				this.squareContainer.a(div().poa().w(this.squareSize).h(this.squareSize).t(rank * this.squareSize).l(file * this.squareSize).bc((file+rank)%2?"#aaa":"#ddd"))
-
 				let i = file + rank * 8
+				
+				this.squareContainer.a(div().poa().w(this.squareSize).h(this.squareSize).t(rank * this.squareSize).l(file * this.squareSize).bc((file+rank)%2?"#aaa":"#ddd"))
+				
+				this.clickContainer.a(this.clickSquares[i] = div().poa().w(this.squareSize).h(this.squareSize).t(rank * this.squareSize).l(file * this.squareSize).bc("#00f").op(0).ae("click", this.clickSquareClicked.bind(this, i)))
+				
 				let p = this.raw.substring(i, i+1)		
 				
 				if(p!="."){
@@ -232,14 +278,13 @@
 		moveClickedCallback: moveClickedCallback,
 		controlButtonCallback: controlButtonCallback,
 		variantKeys: ["standard", "atomic", "antichess", "horde", "racingKings", "kingOfTheHill", "threeCheck", "chess960", "fromPosition"],
-		variantChangedCallback: variantChangedCallback
+		variantChangedCallback: variantChangedCallback,
+		clickedMoveCallback: clickedMoveCallback
 	}).bdrs("solid").bdrw(8).bdrc("#bbb").bdrr(10)
 	
 	let game = Game(undefined, undefined, "chessgame")
 	
 	game.load()
-	
-	game.save()
 			
 	setGame(game)
 	
@@ -255,14 +300,13 @@
 		}
 		sb.setFen(g.fen(),g.legalMovesUcis(), uciInfo).draw()
 		sb.setVariantKey(g.variantKey)
+		game.save()
 	}
 	
 	function moveClickedCallback(uci){
 		game.makeUciMove(uci)
 		
 		setGame(game)
-		
-		game.save()
 	}
 	
 	function controlButtonCallback(cb){
@@ -273,15 +317,19 @@
 		if(cb == "X") game.del()
 		
 		setGame(game)
-		
-		game.save()
 	}
 	
 	function variantChangedCallback(variantKey){
 		game = Game(variantKey, undefined, "chessgame")
-	
-		game.save()
 			
+		setGame(game)
+	}
+	
+	function clickedMoveCallback(moveUci){
+		console.log("moveUci", moveUci)
+		
+		game.makeUciMove(moveUci)
+		
 		setGame(game)
 	}
 
