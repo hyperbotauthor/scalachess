@@ -315,7 +315,9 @@
 	}
 	function ShowGame(props){return new ShowGame_(props)}
 
-	let app = div().h(window.innerHeight - 20).bc("#ddf").fl().aic().jcsa().a(ShowGame())
+	let app = div().h(window.innerHeight - 20).bc("#ddf").fl().aic().jcsa().a(
+		ShowGame().bdrs("solid").bdrw(10).bdrc("#aaa").bdrr(20)
+	)
 	
 	document.getElementById("root").appendChild(app.e)
 </script>
