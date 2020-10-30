@@ -220,21 +220,42 @@
 			
 			this.id = props.id || "chess"
 			
+			this.borderWidth = props.borderWidth || 8
+			
 			this.sb = ShowBoard({
 				moveClickedCallback: this.moveClickedCallback.bind(this),
 				controlButtonCallback: this.controlButtonCallback.bind(this),
 				variantKeys: ["standard", "atomic", "antichess", "horde", "racingKings", "kingOfTheHill", "threeCheck", "chess960", "fromPosition"],
 				variantChangedCallback: this.variantChangedCallback.bind(this),
 				clickedMoveCallback: this.clickedMoveCallback.bind(this)
-			}).bdrs("solid").bdrw(8).bdrc("#bbb").bdrr(10)
+			}).bdrs("solid").bdrw(this.borderWidth).bdrc("#bbb").bdrr(10)
 			
 			this.game = Game(undefined, undefined, this.id + "/game")
 			
 			this.game.load()
 			
-			this.setGame()
+			this.showLineHeight = props.showLineHeight || 80
 			
-			this.por().a(this.sb)
+			this.w(this.totalWidth()).h(this.totalHeight())
+			
+			this.showLineContainer = div().fl()
+				.bc("#eff").ovfys()
+				.w(this.totalWidth()).h(this.showLineHeight)
+			
+			this.por().a(
+				this.sb.t(0).l(0),
+				this.showLineContainer.t(this.sb.totalHeight()).l(0)
+			)
+			
+			this.setGame()
+		}
+		
+		totalWidth(){
+			return this.sb.totalWidth() + 2 * this.borderWidth
+		}
+		
+		totalHeight(){
+			return this.sb.totalHeight() + this.showLineHeight + 2 * this.borderWidth
 		}
 		
 		moveClickedCallback(uci){
@@ -266,6 +287,8 @@
 			this.sb.setFen(this.game.fen(),this.game.legalMovesUcis(), uciInfo).draw()
 			this.sb.setVariantKey(this.game.variantKey)
 			this.game.save()
+			
+			this.showLineContainer.html(this.game.linePgn())
 		}
 		
 		controlButtonCallback(cb){
