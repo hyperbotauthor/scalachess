@@ -132,5 +132,3 @@ function newGame(variantKey, fen){
 	if(result.success) return Game(variantKey, fen)
 	return null
 }
-
-console.log(makeUciMoves("atomic", undefined, []))
