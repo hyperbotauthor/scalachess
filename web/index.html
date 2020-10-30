@@ -60,9 +60,18 @@
 				.poa().w(this.boardWidth).h(this.controlPanelHeight).t(this.boardHeight).bc("#eff")
 				.a(this.controlButtons.map(cb => button(this.controlButtonPressed.bind(this, cb)).html(cb)))
 			
-			this.por().a(this.squareContainer, this.boardContainer, this.legalMovesContainer, this.controlPanel)
+			this.por().w(this.totalWidth()).h(this.totalHeight()).bc("#ddd")
+				.a(this.squareContainer, this.boardContainer, this.legalMovesContainer, this.controlPanel)
 			
 			this.imgCache = {}
+		}
+		
+		totalWidth(){
+			return this.boardWidth + this.legalMovesWidth
+		}
+		
+		totalHeight(){
+			return this.boardHeight + this.controlPanelHeight
 		}
 		
 		controlButtonPressed(cb){
@@ -134,7 +143,7 @@
 	let sb = ShowBoard({
 		moveClickedCallback: moveClickedCallback,
 		controlButtonCallback: controlButtonCallback
-	})
+	}).bdrs("solid").bdrw(8).bdrc("#bbb").bdrr(10)
 	
 	let game = Game(undefined, undefined, "chessgame")
 	
@@ -177,7 +186,7 @@
 		game.save()
 	}
 
-	let app = sb
+	let app = div().h(window.innerHeight).bc("#ddf").fl().ai("center").jc("space-around").a(sb)
 	
 	document.documentElement.appendChild(app.e)
 </script>
