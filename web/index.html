@@ -1,4 +1,4 @@
-<script src="https://unpkg.com/@easychessanimations/foo@1.0.22/lib/fooweb.js"></script>	
+<script src="https://unpkg.com/@easychessanimations/foo@1.0.23/lib/fooweb.js"></script>	
 
 <script src="out.js"></script>
 <script src="pieces.js"></script>
@@ -41,6 +41,7 @@
 			this.boardWidth = this.numFiles * this.squareSize
 			this.boardHeight = this.numRanks * this.squareSize
 			this.legalMovesWidth = props.legalMovesWidth || 70
+			this.controlPanelHeight = props.controlPanelHeight || 40
 			
 			this.pieceSet = props.pieceSet || "alpha"
 
@@ -50,9 +51,22 @@
 			
 			this.legalMovesContainer = div().poa().l(this.boardWidth).w(this.legalMovesWidth).h(this.boardHeight).bc("#eee")
 			
-			this.por().a(this.squareContainer, this.boardContainer, this.legalMovesContainer)
+			this.controlButtons = props.controlButtons || ["<<", "<", ">", ">>"]
+			
+			this.controlPanel = div()
+				.fl().ai("center").jc("space-around")
+				.poa().w(this.boardWidth).h(this.controlPanelHeight).t(this.boardHeight).bc("#eff")
+				.a(this.controlButtons.map(cb => button(this.controlButtonPressed.bind(this, cb)).html(cb)))
+			
+			this.por().a(this.squareContainer, this.boardContainer, this.legalMovesContainer, this.controlPanel)
 			
 			this.imgCache = {}
+		}
+		
+		controlButtonPressed(cb){
+			if(this.props.controlButtonCallback){
+				this.props.controlButtonCallback(cb)
+			}
 		}
 		
 		setFen(fen, legalMovesUcis){
@@ -79,7 +93,7 @@
 				let p = this.raw.substring(i, i+1)		
 				
 				if(p!="."){
-					let cachedImg = this.imgCache[`p${i}`]
+					let cachedImg = this.imgCache[`${p}${i}`]
 					
 					if(cachedImg){
 						this.boardContainer.a(cachedImg)
@@ -88,7 +102,7 @@
 						.l(file * this.squareSize + this.pieceMargin).t(rank * this.squareSize + this.pieceMargin)
 						.load(PIECES_CSS[this.pieceSet][p.toLowerCase() == p ? "b" : "w"][p.toLowerCase()], _=>{
 							this.boardContainer.a(img)
-							this.imgCache[`p${i}`] = img
+							this.imgCache[`${p}${i}`] = img
 						})			
 					}					
 				}			
@@ -113,15 +127,38 @@
 	}
 	function ShowBoard(props){return new ShowBoard_(props)}
 	
-	let game = Game('atomic')
+	let game = Game(undefined, undefined, "chessgame")
+	
+	game.load()
+	
+	game.save()
 	
 	let sb = ShowBoard({
-		moveClickedCallback: moveClickedCallback
+		moveClickedCallback: moveClickedCallback,
+		controlButtonCallback: controlButtonCallback
 	}).setFen(game.fen(), game.legalMovesUcis()).draw()
+	
+	function setGame(g){
+		sb.setFen(g.fen(), g.legalMovesUcis()).draw()
+	}
 	
 	function moveClickedCallback(uci){
 		game.makeUciMove(uci)
-		sb.setFen(game.fen(), game.legalMovesUcis()).draw()
+		
+		setGame(game)
+		
+		game.save()
+	}
+	
+	function controlButtonCallback(cb){
+		if(cb == "<") game.back()
+		if(cb == ">") game.forward()
+		if(cb == "<<") game.tobegin()
+		if(cb == ">>") game.toend()
+		
+		setGame(game)
+		
+		game.save()
 	}
 
 	let app = sb

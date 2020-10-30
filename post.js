@@ -18,16 +18,28 @@ function makeUciMoves(variantKey, fen, uciMoves){
 	}
 }
 
+function storeLocal(id, blob){
+	console.log("storing", id, blob)
+	localStorage.setItem(id, JSON.stringify(blob))
+}
+
+function getLocal(id){
+	let content = localStorage.getItem(id)
+	if(!content){
+		console.log("could not get local", id)
+		return null
+	}
+	try{
+		let blob = JSON.parse(content)
+		console.log("getting", id, blob)
+		return blob
+	}catch(err){}
+	return null
+}
+
 class GameNode_{
 	constructor(parentGame, props){
-		this.parentGame = parentGame
-		this.id = props.id || "root"
-		this.parentId = props.parentId
-		this.fen = props.fen
-		this.uci = props.uci
-		this.san = props.san
-		this.legalMovesUcis = props.legalMovesUcis || []
-		this.childIds = props.childIds || []
+		this.fromblob(parentGame, props)
 	}
 	
 	getNodeById(id){
@@ -38,7 +50,7 @@ class GameNode_{
 		let newId = this.id + "_" + uci
 		let node
 		if(this.childIds.includes(newId)){
-			let node = this.getNodeById(newId)
+			node = this.getNodeById(newId)
 		}else{
 			this.childIds.push(newId)
 			
@@ -71,15 +83,88 @@ class GameNode_{
 		if(number) return number + " " + this.san
 		return this.san
 	}
+	
+	serialize(){
+		return {
+			id: this.id,
+			parentId: this.parentId,
+			fen: this.fen,
+			uci: this.uci,
+			san: this.san,
+			legalMovesUcis: this.legalMovesUcis,
+			childIds: this.childIds
+		}
+	}
+	
+	fromblob(parentGame, blob){		
+		if(!parentGame) return this
+		if(!blob) return this
+		this.parentGame = parentGame
+		this.id = blob.id || "root"
+		this.parentId = blob.parentId
+		this.fen = blob.fen
+		this.uci = blob.uci
+		this.san = blob.san
+		this.legalMovesUcis = blob.legalMovesUcis
+		this.childIds = blob.childIds || []
+		return this
+	}
 }
 function GameNode(parentGame, props){return new GameNode_(parentGame, props)}
 
 class Game_{
-	constructor(variantKey, fen){
-		this.variantKey = variantKey
-		let result = makeUciMoves(this.variantKey, fen)
-		this.currentNode = GameNode(this, {fen: result.fen, legalMovesUcis: result.legalMovesUcis})
-		this.nodes = {root: this.currentNode}
+	constructor(variantKey, fen, id){		
+		console.log("constructing game", variantKey, fen, id)
+		this.variantKey = variantKey || "standard"
+		let result = makeUciMoves(this.variantKey, fen, [])
+		this.currentNode = null
+		this.nodes = null
+		if(result.success){
+			this.currentNode = GameNode(this, {fen: result.fen, legalMovesUcis: result.legalMovesUcis})
+			this.nodes = {root: this.currentNode}	
+		}		
+		this.id = id
+	}
+	
+	serialize(){
+		let nodesSerialized = {}
+		for(let id in this.nodes){			
+			nodesSerialized[id] = this.getNodeById(id).serialize()
+		}
+		return {
+			id: this.id,
+			variantKey: this.variantKey,
+			currentNode: this.currentNode.serialize(),
+			nodes: nodesSerialized
+		}
+	}
+	
+	fromblob(blob){
+		if(!blob) return
+		this.id = blob.id
+		this.variantKey = blob.variantKey
+		this.currentNode = GameNode().fromblob(this, blob.currentNode)
+		this.nodes = {}
+		for(let id in blob.nodes){
+			this.nodes[id] = GameNode().fromblob(this, blob.nodes[id])
+		}
+		return this
+	}
+	
+	save(){
+		if(this.id){			
+			storeLocal(this.id, this.serialize())
+		}else{
+			console.log("could not store game without id")
+		}
+	}
+	
+	load(){		
+		if(this.id){
+			this.fromblob(getLocal(this.id))
+		}else{
+			console.log("could not load game without id")
+		}
 	}
 	
 	makeUciMove(uci){
@@ -124,8 +209,32 @@ class Game_{
 	legalMovesUcis(){
 		return this.currentNode.legalMovesUcis
 	}
+	
+	back(){
+		if(this.currentNode.parentId){
+			this.currentNode = this.currentNode.getParent()
+			return true
+		}
+		return false
+	}
+	
+	forward(){
+		if(this.currentNode.childIds.length){
+			this.currentNode = this.getNodeById(this.currentNode.childIds[0])
+			return true
+		}
+		return false
+	}
+	
+	tobegin(){
+		while(this.back());
+	}
+	
+	toend(){
+		while(this.forward());
+	}
 }
-function Game(variantKey, fen){return new Game_(variantKey, fen)}
+function Game(variantKey, fen, id){return new Game_(variantKey, fen, id)}
 
 function newGame(variantKey, fen){
 	let result = makeUciMoves(variantKey, fen, [])
