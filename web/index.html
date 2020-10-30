@@ -51,7 +51,7 @@
 			
 			this.legalMovesContainer = div().poa().l(this.boardWidth).w(this.legalMovesWidth).h(this.boardHeight).bc("#eee")
 			
-			this.controlButtons = props.controlButtons || ["<<", "<", ">", ">>"]
+			this.controlButtons = props.controlButtons || ["<<", "<", ">", ">>", "X"]
 			
 			this.controlPanel = div()
 				.fl().ai("center").jc("space-around")
@@ -155,6 +155,7 @@
 		if(cb == ">") game.forward()
 		if(cb == "<<") game.tobegin()
 		if(cb == ">>") game.toend()
+		if(cb == "X") game.del()
 		
 		setGame(game)
 		

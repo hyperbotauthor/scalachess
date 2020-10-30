@@ -148,6 +148,7 @@ class Game_{
 		for(let id in blob.nodes){
 			this.nodes[id] = GameNode().fromblob(this, blob.nodes[id])
 		}
+		this.nodes[this.currentNode.id] = this.currentNode
 		return this
 	}
 	
@@ -232,6 +233,20 @@ class Game_{
 	
 	toend(){
 		while(this.forward());
+	}
+	
+	del(){
+		if(!this.currentNode.parentId) return false
+		let delId = this.currentNode.id
+		this.back()
+		this.currentNode.childIds = this.currentNode.childIds.filter(id => (id != delId))		
+		for(let id in this.nodes){
+			if(id.match(delId)){				
+				delete this.nodes[id]
+				console.log("deleted node", id)
+			}
+		}
+		return true
 	}
 }
 function Game(variantKey, fen, id){return new Game_(variantKey, fen, id)}
