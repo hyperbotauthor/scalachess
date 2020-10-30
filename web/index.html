@@ -1,7 +1,7 @@
 <div id="root"></div>
 
-<script src="https://unpkg.com/@easychessanimations/foo@1.0.25/lib/fooweb.js"></script>	
-<script src="https://unpkg.com/@easychessanimations/foo@1.0.25/lib/pieces.js"></script>	
+<script src="https://unpkg.com/@easychessanimations/foo@1.0.27/lib/fooweb.js"></script>	
+<script src="https://unpkg.com/@easychessanimations/foo@1.0.27/lib/pieces.js"></script>	
 
 <script src="out.js"></script>
 
@@ -49,7 +49,7 @@
 			})
 			
 			this.controlPanel = div()
-				.fl().ai("center").jc("space-around")
+				.fl().ai("center").jcsa()
 				.poa().w(this.boardWidth).h(this.controlPanelHeight).t(this.boardHeight).bc("#eff")
 				.a(
 					button(this.reset.bind(this)).html("Reset"),
@@ -173,9 +173,9 @@
 			}		
 			
 			this.legalMovesContainer.x()
-				.addStyle("font-family", "monospace").ovfys().c("#007")
+				.ffms().ovfys().c("#007")
 				.a(this.legalMovesUcis.sort((a,b) => (this.uciInfo[a] ? this.uciInfo[a].san : a).localeCompare((this.uciInfo[b] ? this.uciInfo[b].san : b))).map(uci => div()
-					.pad(3).mar(1).cursor("pointer")
+					.pad(3).mar(1).curp()
 					.bc(this.uciInfo[uci].bc || "#ffe")
 					.ae("click", _=>this.moveClicked(uci)).tac()
 					.html(this.uciInfo[uci].san))
@@ -264,7 +264,7 @@
 		setGame(game)
 	}
 
-	let app = div().h(window.innerHeight - 20).bc("#ddf").fl().ai("center").jc("space-around").a(sb)
+	let app = div().h(window.innerHeight - 20).bc("#ddf").fl().aic().jcsa().a(sb)
 	
 	document.getElementById("root").appendChild(app.e)
 </script>
