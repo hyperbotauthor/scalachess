@@ -1,0 +1,17 @@
+[core]
+	repositoryformatversion = 0
+	filemode = true
+	bare = false
+	logallrefupdates = true
+[remote "origin"]
+	url = git://github.com/ornicar/scalachess
+	fetch = +refs/heads/*:refs/remotes/origin/*
+[remote "github"]
+	url = https://github.com/hyperbotauthor/scalachess
+	fetch = +refs/heads/*:refs/remotes/github/*
+[user]
+	name = hyperbotauthor
+	email = hyperchessbotauthor@gmail.com
+	[credential "https://github.com/hyperbotauthor/scalachess"]
+		username = hyperbotauthor
+	
