@@ -173,7 +173,7 @@
 			
 			this.legalMovesContainer.x()
 				.ffms().ovfys().c("#007")
-				.a(this.legalMovesUcis.sort((a,b) => (this.uciInfo[a] ? this.uciInfo[a].san : a).localeCompare((this.uciInfo[b] ? this.uciInfo[b].san : b))).map(uci => div()
+				.a(this.legalMovesUcis.sort(this.cmpUcis.bind(this)).map(uci => div()
 					.pad(3).mar(1).curp()
 					.bc(this.uciInfo[uci].bc || "#ffe")
 					.ae("click", _=>this.moveClicked(uci)).tac()
@@ -182,6 +182,21 @@
 			
 			return this
 		}		
+		
+		cmpUcis(a, b){
+			let infoA = this.uciInfo[a] || {san: a}
+			let infoB = this.uciInfo[b] || {san: b}
+			
+			if(infoA.first != infoB.first){
+				return (infoB.first ? 1 : 0) - (infoA.first ? 1 : 0)
+			}
+			
+			if(infoA.branching != infoB.branching){
+				return (infoB.branching ? 1 : 0) - (infoA.branching ? 1 : 0)	
+			}
+				
+			return infoA.san.localeCompare(infoB.san)
+		}
 		
 		moveClicked(uci){
 			if(this.props.moveClickedCallback){
@@ -196,71 +211,88 @@
 		}
 	}
 	function ShowBoard(props){return new ShowBoard_(props)}
-									  
-	let sb = ShowBoard({
-		moveClickedCallback: moveClickedCallback,
-		controlButtonCallback: controlButtonCallback,
-		variantKeys: ["standard", "atomic", "antichess", "horde", "racingKings", "kingOfTheHill", "threeCheck", "chess960", "fromPosition"],
-		variantChangedCallback: variantChangedCallback,
-		clickedMoveCallback: clickedMoveCallback
-	}).bdrs("solid").bdrw(8).bdrc("#bbb").bdrr(10)
 	
-	let game = Game(undefined, undefined, "chessgame")
-	
-	game.load()
+	class ShowGame_ extends SmartdomElement_{
+		constructor(props){
+			super({...props, ...{tagName: "div"}})			
 			
-	setGame(game)
-	
-	function setGame(g){
-		let uciInfo = {}
-		let first = true
-		for(let uci of g.currentNode.legalMovesUcis){
-			let hasNode = g.nodes[g.currentNode.id + "_" + uci]
-			g.makeUciMove(uci)
-			uciInfo[uci] = {
-				san: g.currentNode.san
-			}
-			if(hasNode) g.back(); else g.del()
-		}
-		for(let childId of g.currentNode.childIds){
-			let node = g.getNodeById(childId)
-			uciInfo[node.uci].bc = first ? "#0f0" : "#aaf"
-			first = false
-		}
-		sb.setFen(g.fen(),g.legalMovesUcis(), uciInfo).draw()
-		sb.setVariantKey(g.variantKey)
-		game.save()
-	}
-	
-	function moveClickedCallback(uci){
-		game.makeUciMove(uci)
-		
-		setGame(game)
-	}
-	
-	function controlButtonCallback(cb){
-		if(cb == "<") game.back()
-		if(cb == ">") game.forward()
-		if(cb == "<<") game.tobegin()
-		if(cb == ">>") game.toend()
-		if(cb == "X") game.del()
-		
-		setGame(game)
-	}
-	
-	function variantChangedCallback(variantKey){
-		game = Game(variantKey, undefined, "chessgame")
+			props = props || {}
 			
-		setGame(game)
-	}
-	
-	function clickedMoveCallback(moveUci){
-		game.makeUciMove(moveUci)
+			this.id = props.id || "chess"
+			
+			this.sb = ShowBoard({
+				moveClickedCallback: this.moveClickedCallback.bind(this),
+				controlButtonCallback: this.controlButtonCallback.bind(this),
+				variantKeys: ["standard", "atomic", "antichess", "horde", "racingKings", "kingOfTheHill", "threeCheck", "chess960", "fromPosition"],
+				variantChangedCallback: this.variantChangedCallback.bind(this),
+				clickedMoveCallback: this.clickedMoveCallback.bind(this)
+			}).bdrs("solid").bdrw(8).bdrc("#bbb").bdrr(10)
+			
+			this.game = Game(undefined, undefined, this.id + "/game")
+			
+			this.game.load()
+			
+			this.setGame()
+			
+			this.por().a(this.sb)
+		}
 		
-		setGame(game)
-	}
+		moveClickedCallback(uci){
+			this.game.makeUciMove(uci)
 
-	let app = div().h(window.innerHeight - 20).bc("#ddf").fl().aic().jcsa().a(sb)
+			this.setGame()
+		}
+		
+		setGame(){
+			let uciInfo = {}			
+			for(let uci of this.game.currentNode.legalMovesUcis){
+				let hasNode = this.game.nodes[this.game.currentNode.id + "_" + uci]
+				this.game.makeUciMove(uci)
+				uciInfo[uci] = {
+					san: this.game.currentNode.san,
+					branching: false,
+					first: false
+				}
+				if(hasNode) this.game.back(); else this.game.del()
+			}
+			let first = true
+			for(let childId of this.game.currentNode.childIds){
+				let node = this.game.getNodeById(childId)
+				uciInfo[node.uci].bc = first ? "#0f0" : "#aaf"
+				uciInfo[node.uci].branching = true
+				uciInfo[node.uci].first = first
+				first = false
+			}
+			this.sb.setFen(this.game.fen(),this.game.legalMovesUcis(), uciInfo).draw()
+			this.sb.setVariantKey(this.game.variantKey)
+			this.game.save()
+		}
+		
+		controlButtonCallback(cb){
+			if(cb == "<") this.game.back()
+			if(cb == ">") this.game.forward()
+			if(cb == "<<") this.game.tobegin()
+			if(cb == ">>") this.game.toend()
+			if(cb == "X") this.game.del()
+
+			this.setGame()
+		}
+		
+		variantChangedCallback(variantKey){
+			this.game = Game(variantKey, undefined, "chessgame")
+
+			this.setGame()
+		}
+		
+		clickedMoveCallback(moveUci){
+			this.game.makeUciMove(moveUci)
+
+			this.setGame()
+		}
+	}
+	function ShowGame(props){return new ShowGame_(props)}
+
+	let app = div().h(window.innerHeight - 20).bc("#ddf").fl().aic().jcsa().a(ShowGame())
 	
 	document.getElementById("root").appendChild(app.e)
 </script>
