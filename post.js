@@ -26,6 +26,7 @@ class GameNode_{
 		this.fen = props.fen
 		this.uci = props.uci
 		this.san = props.san
+		this.legalMovesUcis = props.legalMovesUcis || []
 		this.childIds = props.childIds || []
 	}
 	
@@ -33,14 +34,15 @@ class GameNode_{
 		return this.parentGame.getNodeById(id)
 	}
 	
-	makeUciMove(uci, fen, san){
+	makeUciMove(uci, fen, san, legalMovesUcis){
 		let newId = this.id + "_" + uci
 		let node
 		if(this.childIds.includes(newId)){
 			let node = this.getNodeById(newId)
 		}else{
 			this.childIds.push(newId)
-			node = GameNode(this.parentGame, {id: newId, fen: fen, uci: uci, san: san})			
+			
+			node = GameNode(this.parentGame, {id: newId, fen: fen, uci: uci, san: san, legalMovesUcis: legalMovesUcis})			
 			node.parentId = this.id
 		}		
 		this.parentGame.addNode(node)
@@ -76,7 +78,7 @@ class Game_{
 	constructor(variantKey, fen){
 		this.variantKey = variantKey
 		let result = makeUciMoves(this.variantKey, fen)
-		this.currentNode = GameNode(this, {fen: result.fen})
+		this.currentNode = GameNode(this, {fen: result.fen, legalMovesUcis: result.legalMovesUcis})
 		this.nodes = {root: this.currentNode}
 	}
 	
@@ -84,7 +86,7 @@ class Game_{
 		let result = makeUciMoves(this.variantKey, this.currentNode.fen, [uci])
 		
 		if(result.success){			
-			this.currentNode.makeUciMove(uci, result.fen, result.sanMoves[0])
+			this.currentNode.makeUciMove(uci, result.fen, result.sanMoves[0], result.legalMovesUcis)
 			return true
 		}else return false
 	}
@@ -117,6 +119,10 @@ class Game_{
 	
 	fen(){
 		return this.currentNode.fen
+	}
+	
+	legalMovesUcis(){
+		return this.currentNode.legalMovesUcis
 	}
 }
 function Game(variantKey, fen){return new Game_(variantKey, fen)}

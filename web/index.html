@@ -40,6 +40,7 @@
 			this.numRanks = props.numRanks || 8
 			this.boardWidth = this.numFiles * this.squareSize
 			this.boardHeight = this.numRanks * this.squareSize
+			this.legalMovesWidth = props.legalMovesWidth || 70
 			
 			this.pieceSet = props.pieceSet || "alpha"
 
@@ -47,13 +48,16 @@
 
 			this.boardContainer = div().poa().w(this.boardWidth).h(this.boardHeight)
 			
-			this.por().a(this.squareContainer, this.boardContainer)
+			this.legalMovesContainer = div().poa().l(this.boardWidth).w(this.legalMovesWidth).h(this.boardHeight).bc("#eee")
+			
+			this.por().a(this.squareContainer, this.boardContainer, this.legalMovesContainer)
 			
 			this.imgCache = {}
 		}
 		
-		setFen(fen){
+		setFen(fen, legalMovesUcis){
 			this.fen = fen
+			this.legalMovesUcis = legalMovesUcis || []
 			
 			let raw = this.fen.split(" ")[0]
 			raw = raw.replace(/\//g, "")
@@ -90,24 +94,36 @@
 				}			
 			}		
 			
+			this.legalMovesContainer.x()
+				.addStyle("font-family", "monospace").ovfys().c("#007")
+				.a(this.legalMovesUcis.sort().map(uci => div()
+					.pad(3).mar(1).bc("#ffe").cursor("pointer")
+					.ae("click", _=>this.moveClicked(uci)).tac()
+					.html(uci))
+				 )
+			
 			return this
 		}		
+		
+		moveClicked(uci){
+			if(this.props.moveClickedCallback){
+				this.props.moveClickedCallback(uci)
+			}
+		}
 	}
 	function ShowBoard(props){return new ShowBoard_(props)}
 	
 	let game = Game('atomic')
 	
-	let sb = ShowBoard().setFen(game.fen()).draw()
+	let sb = ShowBoard({
+		moveClickedCallback: moveClickedCallback
+	}).setFen(game.fen(), game.legalMovesUcis()).draw()
 	
-	let i = 0
-	for(let uci of ["e2e4", "d7d5", "g1f3", "c8g4", "d2d4", "c7c6", "b1c3"]){
+	function moveClickedCallback(uci){
 		game.makeUciMove(uci)
-		let fen = game.fen()
-		setTimeout(_=>{			
-			sb.setFen(fen).draw()
-		}, ++i * 3000)
-	}	
-	
+		sb.setFen(game.fen(), game.legalMovesUcis()).draw()
+	}
+
 	let app = sb
 	
 	document.documentElement.appendChild(app.e)
