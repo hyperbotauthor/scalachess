@@ -174,11 +174,11 @@
 			
 			this.legalMovesContainer.x()
 				.addStyle("font-family", "monospace").ovfys().c("#007")
-				.a(this.legalMovesUcis.sort().map(uci => div()
+				.a(this.legalMovesUcis.sort((a,b) => (this.uciInfo[a] ? this.uciInfo[a].san : a).localeCompare((this.uciInfo[b] ? this.uciInfo[b].san : b))).map(uci => div()
 					.pad(3).mar(1).cursor("pointer")
-					.bc(this.uciInfo[uci] ? this.uciInfo[uci].bc : "#ffe")
+					.bc(this.uciInfo[uci].bc || "#ffe")
 					.ae("click", _=>this.moveClicked(uci)).tac()
-					.html(uci))
+					.html(this.uciInfo[uci].san))
 				 )
 			
 			return this
@@ -216,11 +216,17 @@
 	function setGame(g){
 		let uciInfo = {}
 		let first = true
+		for(let uci of g.currentNode.legalMovesUcis){
+			let hasNode = g.nodes[g.currentNode.id + "_" + uci]
+			g.makeUciMove(uci)
+			uciInfo[uci] = {
+				san: g.currentNode.san
+			}
+			if(hasNode) g.back(); else g.del()
+		}
 		for(let childId of g.currentNode.childIds){
 			let node = g.getNodeById(childId)
-			uciInfo[node.uci] = {
-				bc: first ? "#0f0" : "#aaf"
-			}
+			uciInfo[node.uci].bc = first ? "#0f0" : "#aaf"
 			first = false
 		}
 		sb.setFen(g.fen(),g.legalMovesUcis(), uciInfo).draw()
