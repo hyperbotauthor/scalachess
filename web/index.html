@@ -33,8 +33,10 @@
 			
 			props = props || {}
 			
-			this.pieceSize = props.pieceSize || 40
-			this.squareSize = props.squareSize || 50
+			this.uciInfo = {}
+			
+			this.squareSize = props.squareSize || 60
+			this.pieceSize = props.pieceSize || Math.floor(this.squareSize * 0.8)
 			this.pieceMargin = (this.squareSize - this.pieceSize) / 2
 			this.numFiles = props.numFiles || 8
 			this.numRanks = props.numRanks || 8
@@ -69,9 +71,10 @@
 			}
 		}
 		
-		setFen(fen, legalMovesUcis){
+		setFen(fen, legalMovesUcis, uciInfo){
 			this.fen = fen
 			this.legalMovesUcis = legalMovesUcis || []
+			this.uciInfo = uciInfo || {}
 			
 			let raw = this.fen.split(" ")[0]
 			raw = raw.replace(/\//g, "")
@@ -111,7 +114,8 @@
 			this.legalMovesContainer.x()
 				.addStyle("font-family", "monospace").ovfys().c("#007")
 				.a(this.legalMovesUcis.sort().map(uci => div()
-					.pad(3).mar(1).bc("#ffe").cursor("pointer")
+					.pad(3).mar(1).cursor("pointer")
+					.bc(this.uciInfo[uci] ? this.uciInfo[uci].bc : "#ffe")
 					.ae("click", _=>this.moveClicked(uci)).tac()
 					.html(uci))
 				 )
@@ -126,20 +130,31 @@
 		}
 	}
 	function ShowBoard(props){return new ShowBoard_(props)}
+									  
+	let sb = ShowBoard({
+		moveClickedCallback: moveClickedCallback,
+		controlButtonCallback: controlButtonCallback
+	})
 	
 	let game = Game(undefined, undefined, "chessgame")
 	
 	game.load()
 	
 	game.save()
-	
-	let sb = ShowBoard({
-		moveClickedCallback: moveClickedCallback,
-		controlButtonCallback: controlButtonCallback
-	}).setFen(game.fen(), game.legalMovesUcis()).draw()
+			
+	setGame(game)
 	
 	function setGame(g){
-		sb.setFen(g.fen(), g.legalMovesUcis()).draw()
+		let uciInfo = {}
+		let first = true
+		for(let childId of g.currentNode.childIds){
+			let node = g.getNodeById(childId)
+			uciInfo[node.uci] = {
+				bc: first ? "#0f0" : "#aaf"
+			}
+			first = false
+		}
+		sb.setFen(g.fen(),g.legalMovesUcis(), uciInfo).draw()
 	}
 	
 	function moveClickedCallback(uci){
