@@ -4,8 +4,7 @@ const LichessStrategy = require('passport-lichess').Strategy
 function initOauth(app, firestore, maxAge){
     app.use(require('cookie-parser')())
     app.use(require('body-parser').urlencoded({ extended: true }))
-    const session = require('express-session')
-    const FirestoreStore = require( 'firestore-store' )(session)
+    const session = require('express-session')    
     app.use(session({
         secret: 'keyboard cat',
         resave: false,

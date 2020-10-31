@@ -27,7 +27,6 @@
     "cookie-parser": "^1.4.4",
     "express": "^4.17.1",
     "express-session": "^1.17.0",
-    "firestore-store": "^2.0.1",
     "passport": "^0.4.1",
     "passport-lichess": "^1.1.0"
   }
