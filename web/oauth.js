@@ -5,14 +5,16 @@ function initOauth(app, firestore, maxAge){
     app.use(require('cookie-parser')())
     app.use(require('body-parser').urlencoded({ extended: true }))
     const session = require('express-session')    
-    app.use(session({
+	let props = {
         secret: 'keyboard cat',
         resave: process.env.RESAVE == "true",
         saveUninitialized: process.env.SAVE_UNINITIALIZED == "true",
         cookie: {
             maxAge: maxAge || ( 1 * 366 * 31 * 24 * 60 * 60 * 1000 )
         }
-    }))
+    }
+	console.log(props)
+    app.use(session(props))
     app.use(passport.initialize())
     app.use(passport.session())
 }
