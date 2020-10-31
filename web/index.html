@@ -36,6 +36,10 @@ class UciEngineWeb extends UciEngine{
     }
 	
 	issueCommand(command){		
+		if(!this.worker){
+			console.log("cannot issue engine command ( no worker )")
+			return
+		}
         this.worker.postMessage(`${command}`)
         logEngine(`issue command: ${command}`)
         return this
