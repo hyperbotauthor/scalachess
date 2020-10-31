@@ -19,10 +19,13 @@ class UciEngineWeb extends UciEngine{
 		
 		Stockfish().then(sf => {
 			sf.addMessageListener(line => {
+				//this.processLine(line)
 				console.log(line)
 			})
 			
 			this.worker = sf
+			
+			this.issueCommand("uci")
 		})
 
         this.initInfo()
@@ -83,7 +86,7 @@ let sfwasm = new UciEngineWeb()
 			
 			this.legalMovesContainer = div().poa().l(this.boardWidth).w(this.legalMovesWidth).h(this.boardHeight).bc("#eee")
 			
-			this.controlButtons = props.controlButtons || ["<<", "<", ">", ">>", "X", "F"]
+			this.controlButtons = props.controlButtons || ["<<", "<", ">", ">>", "X", "F", "Go", "Stop"]
 			
 			this.variantCombo = Combo({
 				options: this.variantKeys.map(key => ({
@@ -379,6 +382,26 @@ let sfwasm = new UciEngineWeb()
 			if(cb == "X") this.game.del()
 			if(cb == "F"){
 				this.game.flip = !this.game.flip				
+			}
+			if(cb == "Go"){				
+				sfwasm.setoption("UCI_Variant", this.game.variantKey.toLowerCase())
+				sfwasm.position("fen " + this.game.fen())
+				sfwasm.go({infinite: true})
+				this.watchEngine = setInterval(_=>{
+					let info = sfwasm.info
+					let depthInfos = info.depthInfos
+					if(depthInfos.length){
+						let currInfo = depthInfos[depthInfos.length - 1]
+						if(currInfo.score){
+							let engineDisplay = `${currInfo.depth} ${currInfo.score.unit} ${currInfo.score.value} ${currInfo.pv}`
+							this.showLineContainer.html(engineDisplay)
+						}						
+					}					
+				}, 1000)
+			}
+			if(cb == "Stop"){
+				sfwasm.issueCommand("stop")
+				clearInterval(this.watchEngine)
 			}
 
 			this.setGame()
