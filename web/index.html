@@ -1,6 +1,6 @@
 <div id="root"></div>
 
-<script src="https://unpkg.com/@easychessanimations/foo@1.0.27/lib/fooweb.js"></script>	
+<script src="https://unpkg.com/@easychessanimations/foo@1.0.29/lib/fooweb.js"></script>	
 <script src="https://unpkg.com/@easychessanimations/foo@1.0.27/lib/pieces.js"></script>	
 
 <script src="outopt.js"></script>
@@ -138,6 +138,14 @@
 			this.clickedSquare.op(0.5)
 		}
 		
+		rankFileSquareCoords(rank, file){
+			return Coords(rank * this.squareSize, file * this.squareSize)
+		}
+		
+		rankFilePieceCoords(rank, file){
+			return Coords(rank * this.squareSize + this.pieceMargin, file * this.squareSize + this.pieceMargin)
+		}
+		
 		draw(){
 			this.squareContainer.x()
 			this.boardContainer.x()
@@ -149,9 +157,12 @@
 			for(let file=0;file<this.numFiles;file++) for(let rank=0;rank<this.numRanks;rank++){
 				let i = file + rank * 8
 				
-				this.squareContainer.a(div().poa().w(this.squareSize).h(this.squareSize).t(rank * this.squareSize).l(file * this.squareSize).bc((file+rank)%2?"#aaa":"#ddd"))
+				this.squareContainer.a(div().poa().w(this.squareSize).h(this.squareSize)
+						.tl(this.rankFileSquareCoords(rank, file)).bc((file+rank)%2?"#aaa":"#ddd"))
 				
-				this.clickContainer.a(this.clickSquares[i] = div().poa().w(this.squareSize).h(this.squareSize).t(rank * this.squareSize).l(file * this.squareSize).bc("#00f").op(0).ae("click", this.clickSquareClicked.bind(this, i)))
+				this.clickContainer.a(this.clickSquares[i] = div().poa().w(this.squareSize).h(this.squareSize)
+						.tl(this.rankFileSquareCoords(rank, file)).bc("#00f").op(0)
+						.ae("click", this.clickSquareClicked.bind(this, i)))
 				
 				let p = this.raw.substring(i, i+1)		
 				
@@ -162,7 +173,7 @@
 						this.boardContainer.a(cachedImg)
 					}else{
 						let img = Image().setWidth(this.pieceSize).setHeight(this.pieceSize).poa()						
-						.l(file * this.squareSize + this.pieceMargin).t(rank * this.squareSize + this.pieceMargin)
+						.tl(this.rankFilePieceCoords(rank, file))
 						.load(PIECES_CSS[this.pieceSet][p.toLowerCase() == p ? "b" : "w"][p.toLowerCase()], _=>{
 							this.boardContainer.a(img)
 							this.imgCache[`${p}${i}`] = img
