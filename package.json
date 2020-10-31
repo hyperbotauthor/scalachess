@@ -1,8 +1,8 @@
 {
-  "name": "scalachess",
+  "name": "hypereasy",
   "version": "1.0.0",
-  "description": "Manage a chess game in Javascript using the scalachess library.",
-  "main": "out.js",
+  "description": "\"In browser all variant bot.\"",
+  "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -11,15 +11,17 @@
     "url": "git+https://github.com/hyperbotauthor/scalachess.git"
   },
   "keywords": [
-    "scalachess",
-    "Javascript",
-    "chess",
-    "game"
+    "browser",
+    "variant",
+    "bot"
   ],
-  "author": "hyperbotauthor",
+  "author": "hypebotauthor",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/hyperbotauthor/scalachess/issues"
   },
-  "homepage": "https://github.com/hyperbotauthor/scalachess#readme"
+  "homepage": "https://github.com/hyperbotauthor/scalachess#readme",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
 }
