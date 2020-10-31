@@ -17,15 +17,12 @@ class UciEngineWeb extends UciEngine{
 		
 		this.worker = null
 		
-		Stockfish().then(sf => {
+		StockfishMv().then(sf => {
 			sf.addMessageListener(line => {
-				//this.processLine(line)
-				console.log(line)
+				this.processLine(line)
 			})
 			
 			this.worker = sf
-			
-			this.issueCommand("uci")
 		})
 
         this.initInfo()
@@ -328,6 +325,8 @@ let sfwasm = new UciEngineWeb()
 				this.showLineContainer.t(this.sb.totalHeight()).l(0)
 			)
 			
+			this.analyzedDisplays = {}
+			
 			this.setGame()
 		}
 		
@@ -371,7 +370,52 @@ let sfwasm = new UciEngineWeb()
 			
 			this.game.save()
 			
-			this.showLineContainer.html(this.game.linePgn())
+			this.showLineContainer.html(this.game.linePgn() + (this.analyzedDisplays[this.game.fen()] ? ` [ eval ${this.analyzedDisplays[this.game.fen()]} ]` : ""))
+			
+			console.log("should run", this.shouldRun)
+			
+			if(sfwasm.running){
+				if(this.sfwasmTimeout) clearTimeout(this.sfwasmTimeout)
+				
+				this.sfwasmTimeout = setTimeout(_=>{
+					console.log("stop engine for restart")					
+					if(sfwasm.running){
+						sfwasm.setonbestmove(_=>{
+							console.log("restart engine")
+							this.go()
+						}, "restart")
+						sfwasm.stop()
+					}
+				}, 250)
+			}
+		}
+		
+		go(){
+			if(!this.shouldRun){
+				console.log("go command while should not run")
+				return
+			}
+			sfwasm.setoption("UCI_Variant", this.game.variantKey.toLowerCase())
+			this.analyzedFen = this.game.fen()
+			sfwasm.position("fen " + this.analyzedFen)
+			sfwasm.go({infinite: true})
+			this.watchEngine = setInterval(_=>{
+				if(this.shouldRun){
+					let info = sfwasm.info
+					let depthInfos = info.depthInfos
+					if(depthInfos.length){
+						let currInfo = depthInfos[depthInfos.length - 1]
+						if(currInfo.score){
+							let engineDisplay = `${currInfo.depth} ${currInfo.score.unit} ${currInfo.score.value} ${currInfo.pv}`
+							this.analyzedDisplays[this.analyzedFen] = engineDisplay
+							
+							this.showLineContainer.html(engineDisplay)
+						}						
+					}										
+				}else{
+					clearInterval(this.watchEngine)
+				}				
+			}, 1000)
 		}
 		
 		controlButtonCallback(cb){
@@ -384,24 +428,14 @@ let sfwasm = new UciEngineWeb()
 				this.game.flip = !this.game.flip				
 			}
 			if(cb == "Go"){				
-				sfwasm.setoption("UCI_Variant", this.game.variantKey.toLowerCase())
-				sfwasm.position("fen " + this.game.fen())
-				sfwasm.go({infinite: true})
-				this.watchEngine = setInterval(_=>{
-					let info = sfwasm.info
-					let depthInfos = info.depthInfos
-					if(depthInfos.length){
-						let currInfo = depthInfos[depthInfos.length - 1]
-						if(currInfo.score){
-							let engineDisplay = `${currInfo.depth} ${currInfo.score.unit} ${currInfo.score.value} ${currInfo.pv}`
-							this.showLineContainer.html(engineDisplay)
-						}						
-					}					
-				}, 1000)
+				this.shouldRun = true
+				
+				this.go()
 			}
 			if(cb == "Stop"){
-				sfwasm.issueCommand("stop")
-				clearInterval(this.watchEngine)
+				this.shouldRun = false
+				
+				sfwasm.issueCommand("stop")				
 			}
 
 			this.setGame()
