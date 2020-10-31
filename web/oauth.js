@@ -55,7 +55,7 @@ function addLichessStrategy(app, props){
     app.get(props.authURL + "/callback", 
         passport.authenticate(props.tag, { failureRedirect: prot + host + props.failureRedirect }),
             function(req, res) {
-				console.log("auth req", req)
+				console.log("auth req user", req.user)
                 res.redirect(prot + host + props.okRedirect)
             }
     )
