@@ -5,6 +5,7 @@ const app = express()
 const port = process.env.PORT || 3000
 
 app.get('/', (req, res) => {
+	if(req.query.logreq) console.log(req)
 	res.send(`user: _${req.user}_<br>
 <a href="/auth/lichess/bot">login</a>
 `)
