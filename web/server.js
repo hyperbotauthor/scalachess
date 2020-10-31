@@ -6,7 +6,7 @@ const app = express()
 const port = process.env.PORT || 3000
 
 app.get('/', (req, res) => {
-	if(req.query.logreq) console.log("cookies", req.cookies)
+	if(req.query.logreq) console.log("cookies", req.cookies, "headers", JSON.stringify(req.headers, null, 2))
 	res.send(`user: _${req.user}_<br>
 <a href="/auth/lichess/bot">login</a>
 `)
