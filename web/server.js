@@ -20,7 +20,7 @@ app.get('/', (req, res) => {
 	res.send(`
 <script>
 const USER = ${user ? JSON.stringify(user, null, 2) : "null"}
-document.title = "hypereasy ${user.id || ""}"
+document.title = "hypereasy ${user ? user.id : ""}"
 </script>
 ${user ? "logged in as <b>" + user.username + "</b>" : "<a href='/auth/lichess/bot'>login</a>" }
 `)
