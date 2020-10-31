@@ -8,14 +8,11 @@ function initOauth(app, firestore, maxAge){
     const FirestoreStore = require( 'firestore-store' )(session)
     app.use(session({
         secret: 'keyboard cat',
-        resave: true,
-        saveUninitialized: true,
+        resave: false,
+        saveUninitialized: false,
         cookie: {
             maxAge: maxAge || ( 1 * 366 * 31 * 24 * 60 * 60 * 1000 )
-        },
-        store: firestore ? new FirestoreStore({
-            database: firestore
-        }) : undefined
+        }
     }))
     app.use(passport.initialize())
     app.use(passport.session())
