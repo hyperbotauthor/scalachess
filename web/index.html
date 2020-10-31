@@ -1,7 +1,47 @@
 <div id="root"></div>
 
 <script src="https://unpkg.com/@easychessanimations/foo@1.0.30/lib/fooweb.js"></script>	
-<script src="https://unpkg.com/@easychessanimations/foo@1.0.27/lib/pieces.js"></script>	
+<script src="https://unpkg.com/@easychessanimations/foo@1.0.30/lib/pieces.js"></script>	
+<script src="https://unpkg.com/@easychessanimations/uci@1.0.29/lib/uci.js"></script>	
+
+<script src="stockfishwasm/stockfish.js"></script>
+
+<script>
+class UciEngineWeb extends UciEngine{
+	constructor(){
+		super()
+    }
+
+    spawn(){
+        if(this.worker) this.worker.close()
+		
+		Stockfish().then(sf => {
+			sf.addMessageListener(line => {
+				console.log(line)
+			})
+			
+			this.worker = sf
+		})
+
+        this.initInfo()
+
+        this.running = false
+        this.pondering = false
+        this.ponderAfter = false
+        this.onbestmove = null
+
+        logEngine(`spawned Stockfish wasm`)
+    }
+	
+	issueCommand(command){		
+        this.worker.postMessage(`${command}`)
+        logEngine(`issue command: ${command}`)
+        return this
+    }
+}
+	
+let sfwasm = new UciEngineWeb()
+</script>
 
 <script src="outopt.js"></script>
 
