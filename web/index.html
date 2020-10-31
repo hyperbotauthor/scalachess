@@ -241,6 +241,10 @@
 	function ShowBoard(props){return new ShowBoard_(props)}
 	
 	class ShowGame_ extends SmartdomElement_{
+		gameId(){
+			return this.id + "/game"	
+		}
+		
 		constructor(props){
 			super({...props, ...{tagName: "div"}})			
 			
@@ -258,7 +262,7 @@
 				clickedMoveCallback: this.clickedMoveCallback.bind(this)
 			}).bdrs("solid").bdrw(this.borderWidth).bdrc("#bbb").bdrr(10)
 			
-			this.game = Game(undefined, undefined, this.id + "/game")
+			this.game = Game(undefined, undefined, this.gameId())
 			
 			this.game.load()
 			
@@ -315,6 +319,7 @@
 			this.sb.setVariantKey(this.game.variantKey)
 			this.sb.setFen(this.game.fen(),this.game.legalMovesUcis(), uciInfo)			
 			this.sb.setFlip(this.game.flip)
+			
 			this.game.save()
 			
 			this.showLineContainer.html(this.game.linePgn())
@@ -334,7 +339,7 @@
 		}
 		
 		variantChangedCallback(variantKey){
-			this.game = Game(variantKey, undefined, "chessgame")
+			this.game = Game(variantKey, undefined, this.gameId())
 
 			this.setGame()
 		}

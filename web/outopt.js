@@ -1399,4 +1399,4 @@ function newGame(variantKey, fen){
 }
 
 // test
-console.log("test", makeUciMovesScala("standard", undefined, []))
+//console.log("test", makeUciMovesScala("standard", undefined, []))
