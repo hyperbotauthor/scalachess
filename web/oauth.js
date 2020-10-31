@@ -1,3 +1,5 @@
+let cookieToUser = {}
+
 const passport = require('passport')
 const LichessStrategy = require('passport-lichess').Strategy
 
@@ -57,23 +59,19 @@ function addLichessStrategy(app, props){
             function(req, res) {
 				console.log("auth req user", req.user)
 		
-				req.logIn(req.user, err => {					
-					if (err){
-						console.log("req login err", err)
-						return next(err)
-					}
-					console.log("req login ok")
-					req.session.save(err => console.log("req session save err", err))
-					
-					console.log("req session", req.session)
-				})
+				var randomNumber=Math.random().toString()
+				randomNumber=randomNumber.substring(2,randomNumber.length)
+				res.cookie('oauthUser', randomNumber, { maxAge: 12 * 60 * 60 * 1000, httpOnly: true })
 		
-                setTimeout(_=>res.redirect(prot + host + props.okRedirect), 2000)
+				cookieToUser[randomNumber] = req.user
+		
+				res.redirect(prot + host + props.okRedirect)
             }
     )
 }
 
 module.exports = {
     initOauth: initOauth,
-    addLichessStrategy: addLichessStrategy
+    addLichessStrategy: addLichessStrategy,
+	cookieToUser: cookieToUser
 }

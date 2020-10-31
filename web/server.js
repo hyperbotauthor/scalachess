@@ -1,19 +1,18 @@
 
 const path = require('path')
 const express = require('express')
+const oauth = require('./oauth.js')
 const app = express()
 const port = process.env.PORT || 3000
 
 app.get('/', (req, res) => {
-	if(req.query.logreq) console.log("req session", req.session)
+	if(req.query.logreq) console.log("cookies", req.cookies, "cookieToUser", oauth.cookieToUser)
 	res.send(`user: _${req.user}_<br>
 <a href="/auth/lichess/bot">login</a>
 `)
 })
 
 app.use('/', express.static(__dirname))
-
-const oauth = require('./oauth.js')
  
 const firestore = null // provide firestore instance for persistance
  
