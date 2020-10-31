@@ -7,8 +7,8 @@ function initOauth(app, firestore, maxAge){
     const session = require('express-session')    
     app.use(session({
         secret: 'keyboard cat',
-        resave: false,
-        saveUninitialized: false,
+        resave: process.env.RESAVE == "true",
+        saveUninitialized: process.env.SAVE_UNINITIALIZED == "true",
         cookie: {
             maxAge: maxAge || ( 1 * 366 * 31 * 24 * 60 * 60 * 1000 )
         }
