@@ -57,7 +57,7 @@ function addLichessStrategy(app, props){
             function(req, res) {
 				console.log("auth req user", req.user)
 		
-				req.logIn(req.user, err => {					
+				setTimeout(_=>req.logIn(req.user, err => {					
 					if (err){
 						console.log("req login err", err)
 						return next(err)
@@ -66,7 +66,7 @@ function addLichessStrategy(app, props){
 					req.session.save(err => console.log("req session save err", err))
 					
 					console.log("req session", req.session)
-				})
+				}), 2000)
 		
                 res.redirect(prot + host + props.okRedirect)
             }
