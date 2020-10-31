@@ -1,4 +1,7 @@
 cp /workspace/scalarepo/scalachess/target/scala-2.13/scalachess-fastopt.js ./
+cp /workspace/scalarepo/scalachess/target/scala-2.13/scalachess-opt.js ./
 cat scalachess-fastopt.js post.js > out.js
+cat scalachess-opt.js post.js > outopt.js
 echo "assembled out.js"
 cp out.js web/out.js
+cp outopt.js web/outopt.js

@@ -1,6 +1,9 @@
 scalachess-fastopt.js
+scalachess-opt.js
 out.js
+outopt.js
 !/web/out.js
+!/web/outopt.js
 
 project/project
 project/target

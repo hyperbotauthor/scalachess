@@ -175,9 +175,9 @@
 				.ffms().ovfys().c("#007")
 				.a(this.legalMovesUcis.sort(this.cmpUcis.bind(this)).map(uci => div()
 					.pad(3).mar(1).curp()
-					.bc(this.uciInfo[uci].bc || "#ffe")
+					.bc(this.uciInfo[uci] ? this.uciInfo[uci].bc : "#ffe")
 					.ae("click", _=>this.moveClicked(uci)).tac()
-					.html(this.uciInfo[uci].san))
+					.html(this.uciInfo[uci] ? this.uciInfo[uci].san : uci))
 				 )
 			
 			return this
@@ -185,7 +185,9 @@
 		
 		cmpUcis(a, b){
 			let infoA = this.uciInfo[a] || {san: a}
+			infoA.san = infoA.san || a
 			let infoB = this.uciInfo[b] || {san: b}
+			infoB.san = infoB.san || b
 			
 			if(infoA.first != infoB.first){
 				return (infoB.first ? 1 : 0) - (infoA.first ? 1 : 0)
@@ -198,8 +200,8 @@
 			return infoA.san.localeCompare(infoB.san)
 		}
 		
-		moveClicked(uci){
-			if(this.props.moveClickedCallback){
+		moveClicked(uci){			
+			if(this.props.moveClickedCallback){				
 				this.props.moveClickedCallback(uci)
 			}
 		}

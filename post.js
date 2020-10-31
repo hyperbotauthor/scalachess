@@ -164,13 +164,16 @@ class Game_{
 		}
 	}
 	
-	makeUciMove(uci){
+	makeUciMove(uci){		
 		let result = makeUciMoves(this.variantKey, this.currentNode.fen, [uci])
 		
 		if(result.success){			
 			this.currentNode.makeUciMove(uci, result.fen, result.sanMoves[0], result.legalMovesUcis)
 			return true
-		}else return false
+		}else{
+			console.log(result)
+			return false
+		}
 	}
 	
 	getNodeById(id){
