@@ -63,6 +63,7 @@ function addLichessStrategy(app, props){
 						return next(err)
 					}
 					console.log("req login ok")
+					req.session.save(err => console.log("req session save err", err))
 				})
 		
                 res.redirect(prot + host + props.okRedirect)
