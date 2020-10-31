@@ -17,7 +17,11 @@ app.get('/', (req, res) => {
 			user = oauth.cookieToUser[cookie]
 		}
 	}
-	res.send(`user: _${user}_<br>
+	res.send(`
+<script>
+const USER = ${user ? JSON.stringify(user, null, 2) : "null"}
+document.title = "hypereasy ${user || ""}"
+</script>
 <a href="/auth/lichess/bot">login</a>
 `)
 })
