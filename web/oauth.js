@@ -56,6 +56,15 @@ function addLichessStrategy(app, props){
         passport.authenticate(props.tag, { failureRedirect: prot + host + props.failureRedirect }),
             function(req, res) {
 				console.log("auth req user", req.user)
+		
+				req.logIn(userData, err => {					
+					if (err){
+						console.log("req login err", err)
+						return next(err)
+					}
+					console.log("req login ok")
+				})
+		
                 res.redirect(prot + host + props.okRedirect)
             }
     )
