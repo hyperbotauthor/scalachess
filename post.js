@@ -1,9 +1,7 @@
-function makeUciMoves(variantKey, fen, uciMoves){
-	let result = makeUciMovesScala(variantKey, fen, uciMoves)	
+function makeUciMoves(variantKey, fenOpt, uciMoves){
+	let result = makeUciMovesScala(variantKey, fenOpt, uciMoves)	
 	
-	fen = result.T3__f__1 || result.Nl
-	let legalMovesUcis = result.T3__f__2 || result.lj
-	let sanMoves = result.T3__f__3 || result.mj
+	let [fen, legalMovesUcis, sanMoves] = result
 	
 	if(fen) return {		
 		success: true,
@@ -256,3 +254,6 @@ function newGame(variantKey, fen){
 	if(result.success) return Game(variantKey, fen)
 	return null
 }
+
+// test
+console.log("test", makeUciMovesScala("standard", undefined, []))

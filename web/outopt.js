@@ -1140,12 +1140,10 @@ Dy:1,Ey:1,eL:1,FN:1,HM:1,fL:1,gL:1,hL:1,iL:1,GN:1,PM:1,jL:1,kL:1,HN:1,IN:1,JN:1,
 ys||(ys=new xs);kE(ys.rv.Bv,"scalachess.js by hyperbotauthor\n");
 }).call(this);
 //# sourceMappingURL=scalachess-opt.js.map
-function makeUciMoves(variantKey, fen, uciMoves){
-	let result = makeUciMovesScala(variantKey, fen, uciMoves)	
+function makeUciMoves(variantKey, fenOpt, uciMoves){
+	let result = makeUciMovesScala(variantKey, fenOpt, uciMoves)	
 	
-	fen = result.T3__f__1 || result.Nl
-	let legalMovesUcis = result.T3__f__2 || result.lj
-	let sanMoves = result.T3__f__3 || result.mj
+	let [fen, legalMovesUcis, sanMoves] = result
 	
 	if(fen) return {		
 		success: true,
@@ -1398,3 +1396,6 @@ function newGame(variantKey, fen){
 	if(result.success) return Game(variantKey, fen)
 	return null
 }
+
+// test
+console.log("test", makeUciMovesScala("standard", undefined, []))

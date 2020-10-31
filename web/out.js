@@ -913,20 +913,21 @@ class $c_Lchess_ChessApp$ extends $c_O {
     };
     return this.Lchess_ChessApp$__f_DEFAULT_VARIANT
   };
-  makeUciMovesScala__sjs_js_$bar__sjs_js_$bar__sjs_js_$bar__T3(variantKeyOptJs, fenOptJs, ucisJs) {
+  makeUciMovesScala__sjs_js_$bar__sjs_js_$bar__sjs_js_$bar__sjs_js_Tuple3(variantKeyOptJs, fenOptJs, ucisJs) {
     const variantKey = $as_T(((variantKeyOptJs === (void 0)) ? $m_Lchess_ChessApp$().DEFAULT_VARIANT__Lchess_variant_Standard$().Lchess_variant_Variant__f_key : variantKeyOptJs));
     const this$6 = $m_Lchess_variant_Variant$();
     const variantOpt = this$6.byKey__sci_Map().get__O__s_Option(variantKey);
     if (variantOpt.isEmpty__Z()) {
-      const $$x3 = $m_sjs_js_JSConverters$JSRichIterableOnce$();
-      const col = $m_sci_Nil$();
-      const $$x2 = $$x3.toJSArray$extension__sc_IterableOnce__sjs_js_Array(col);
       const $$x1 = $m_sjs_js_JSConverters$JSRichIterableOnce$();
+      const col = $m_sci_Nil$();
+      const _2 = $$x1.toJSArray$extension__sc_IterableOnce__sjs_js_Array(col);
+      const $$x2 = $m_sjs_js_JSConverters$JSRichIterableOnce$();
       $m_sci_List$();
       const array = ["invalid variant key"];
       const elems = new $c_sjsr_WrappedVarArgs(array);
       const col$1 = $m_sci_Nil$().prependedAll__sc_IterableOnce__sci_List(elems);
-      return new $c_T3("", $$x2, $$x1.toJSArray$extension__sc_IterableOnce__sjs_js_Array(col$1))
+      const _3 = $$x2.toJSArray$extension__sc_IterableOnce__sjs_js_Array(col$1);
+      return ["", _2, _3]
     };
     const x1 = ((fenOptJs === (void 0)) ? $m_s_None$() : new $c_s_Some(fenOptJs));
     let fenOpt;
@@ -948,15 +949,16 @@ class $c_Lchess_ChessApp$ extends $c_O {
       const fen$2 = $as_T(fenOptJs);
       const parsed = $m_Lchess_format_Forsyth$().$less$less$less$at__Lchess_variant_Variant__T__s_Option($as_Lchess_variant_Variant(variantOpt.get__O()), fen$2);
       if (parsed.isEmpty__Z()) {
-        const $$x6 = $m_sjs_js_JSConverters$JSRichIterableOnce$();
+        const $$x3 = $m_sjs_js_JSConverters$JSRichIterableOnce$();
         const col$2 = $m_sci_Nil$();
-        const $$x5 = $$x6.toJSArray$extension__sc_IterableOnce__sjs_js_Array(col$2);
+        const _2$1 = $$x3.toJSArray$extension__sc_IterableOnce__sjs_js_Array(col$2);
         const $$x4 = $m_sjs_js_JSConverters$JSRichIterableOnce$();
         $m_sci_List$();
         const array$1 = ["invalid fen"];
         const elems$1 = new $c_sjsr_WrappedVarArgs(array$1);
         const col$3 = $m_sci_Nil$().prependedAll__sc_IterableOnce__sci_List(elems$1);
-        return new $c_T3("", $$x5, $$x4.toJSArray$extension__sc_IterableOnce__sjs_js_Array(col$3))
+        const _3$1 = $$x4.toJSArray$extension__sc_IterableOnce__sjs_js_Array(col$3);
+        return ["", _2$1, _3$1]
       }
     };
     const elem = $m_Lchess_Game$().apply__s_Option__s_Option__Lchess_Game(variantOpt, fenOpt);
@@ -983,8 +985,8 @@ class $c_Lchess_ChessApp$ extends $c_O {
       if ((x1$1 instanceof $c_s_Some)) {
         const x2$1 = $as_s_Some(x1$1);
         const move = $as_Lchess_format_Uci$Move(x2$1.s_Some__f_value);
-        const this$50 = $as_Lchess_Game(elem$1);
-        const x1$2 = this$50.apply__I__I__s_Option__Lchess_MoveMetrics__Lcats_data_Validated(move.Lchess_format_Uci$Move__f_orig, move.Lchess_format_Uci$Move__f_dest, move.Lchess_format_Uci$Move__f_promotion, new $c_Lchess_MoveMetrics($m_s_None$(), $m_s_None$()));
+        const this$52 = $as_Lchess_Game(elem$1);
+        const x1$2 = this$52.apply__I__I__s_Option__Lchess_MoveMetrics__Lcats_data_Validated(move.Lchess_format_Uci$Move__f_orig, move.Lchess_format_Uci$Move__f_dest, move.Lchess_format_Uci$Move__f_promotion, new $c_Lchess_MoveMetrics($m_s_None$(), $m_s_None$()));
         matchEnd7: {
           if ((x1$2 instanceof $c_Lcats_data_Validated$Valid)) {
             const x2$2 = $as_Lcats_data_Validated$Valid(x1$2);
@@ -1000,11 +1002,11 @@ class $c_Lchess_ChessApp$ extends $c_O {
             const why = $as_T(x5.Lcats_data_Validated$Invalid__f_e);
             const xs$1 = $asArrayOf_T(elem$2, 1);
             const x$1 = ((uci + " invalid move ") + why);
-            const this$57 = $m_s_Array$();
+            const this$59 = $m_s_Array$();
             const newLength = ((1 + xs$1.u.length) | 0);
             let dest$1;
             if ($d_T.getClassOf().isAssignableFrom__jl_Class__Z($objectGetClass(xs$1).getComponentType__jl_Class())) {
-              dest$1 = ($d_T.getClassOf().isPrimitive__Z() ? this$57.copyOf__O__I__O(xs$1, newLength) : $m_ju_Arrays$().copyOf__AO__I__jl_Class__AO(xs$1, newLength, $d_T.getArrayOf().getClassOf()))
+              dest$1 = ($d_T.getClassOf().isPrimitive__Z() ? this$59.copyOf__O__I__O(xs$1, newLength) : $m_ju_Arrays$().copyOf__AO__I__jl_Class__AO(xs$1, newLength, $d_T.getArrayOf().getClassOf()))
             } else {
               const dest = $newArrayObject($d_T.getArrayOf(), [newLength]);
               $m_s_Array$().copy__O__I__O__I__I__V(xs$1, 0, dest, 0, xs$1.u.length);
@@ -1021,11 +1023,11 @@ class $c_Lchess_ChessApp$ extends $c_O {
         if ((x$2$1 === x1$1)) {
           const xs$2 = $asArrayOf_T(elem$2, 1);
           const x$3 = ("ill formatted uci " + uci);
-          const this$63 = $m_s_Array$();
+          const this$65 = $m_s_Array$();
           const newLength$1 = ((1 + xs$2.u.length) | 0);
           let dest$3;
           if ($d_T.getClassOf().isAssignableFrom__jl_Class__Z($objectGetClass(xs$2).getComponentType__jl_Class())) {
-            dest$3 = ($d_T.getClassOf().isPrimitive__Z() ? this$63.copyOf__O__I__O(xs$2, newLength$1) : $m_ju_Arrays$().copyOf__AO__I__jl_Class__AO(xs$2, newLength$1, $d_T.getArrayOf().getClassOf()))
+            dest$3 = ($d_T.getClassOf().isPrimitive__Z() ? this$65.copyOf__O__I__O(xs$2, newLength$1) : $m_ju_Arrays$().copyOf__AO__I__jl_Class__AO(xs$2, newLength$1, $d_T.getArrayOf().getClassOf()))
           } else {
             const dest$2 = $newArrayObject($d_T.getArrayOf(), [newLength$1]);
             $m_s_Array$().copy__O__I__O__I__I__V(xs$2, 0, dest$2, 0, xs$2.u.length);
@@ -1039,12 +1041,21 @@ class $c_Lchess_ChessApp$ extends $c_O {
       };
       i$1 = ((1 + i$1) | 0)
     };
+    if (($asArrayOf_T(elem$2, 1).u.length > 0)) {
+      const $$x5 = $m_sjs_js_JSConverters$JSRichIterableOnce$();
+      const col$4 = $m_sci_Nil$();
+      const _2$2 = $$x5.toJSArray$extension__sc_IterableOnce__sjs_js_Array(col$4);
+      const $$x6 = $m_sjs_js_JSConverters$JSRichIterableOnce$();
+      const coll = $asArrayOf_T(elem$2, 1);
+      const _3$2 = $$x6.toJSArray$extension__sc_IterableOnce__sjs_js_Array($m_s_Predef$().wrapRefArray__AO__scm_ArraySeq$ofRef(coll));
+      return ["", _2$2, _3$2]
+    };
     const legalMoves = $as_Lchess_Game(elem$1).Lchess_Game__f_situation.moves__sci_Map();
-    const p = new $c_sjsr_AnonFunction1(((this$4$1) => ((check$ifrefutable$1$2) => {
+    const p = new $c_sjsr_AnonFunction1(((this$5$1) => ((check$ifrefutable$1$2) => {
       const check$ifrefutable$1 = $as_T2(check$ifrefutable$1$2);
       return (check$ifrefutable$1 !== null)
     }))(this));
-    const $$x7 = $as_sc_IterableOps(new $c_sc_MapOps$WithFilter(legalMoves, p).map__F1__O(new $c_sjsr_AnonFunction1(((this$5$1) => ((x$1$2) => {
+    const $$x7 = $as_sc_IterableOps(new $c_sc_MapOps$WithFilter(legalMoves, p).map__F1__O(new $c_sjsr_AnonFunction1(((this$6$1) => ((x$1$2) => {
       const x$1$1 = $as_T2(x$1$2);
       if ((x$1$1 !== null)) {
         const moves = $as_sci_List(x$1$1._2__O());
@@ -1053,24 +1064,22 @@ class $c_Lchess_ChessApp$ extends $c_O {
         throw new $c_s_MatchError(x$1$1)
       }
     }))(this))));
-    const this$66 = $m_s_$less$colon$less$();
-    const legalMovesUcis = $as_sc_IterableOnceOps($as_sc_IterableOps($$x7.flatten__F1__O(this$66.s_$less$colon$less$__f_singleton)).map__F1__O(new $c_sjsr_AnonFunction1(((this$6$1) => ((move$2) => {
+    const this$74 = $m_s_$less$colon$less$();
+    let legalMovesUcis = $as_sc_IterableOnceOps($as_sc_IterableOps($$x7.flatten__F1__O(this$74.s_$less$colon$less$__f_singleton)).map__F1__O(new $c_sjsr_AnonFunction1(((this$7$1) => ((move$2) => {
       const move$1 = $as_Lchess_Move(move$2);
       return new $c_Lchess_format_Uci$Move(move$1.Lchess_Move__f_orig, move$1.Lchess_Move__f_dest, move$1.Lchess_Move__f_promotion).uci__T()
     }))(this)))).toList__sci_List();
-    if (($asArrayOf_T(elem$2, 1).u.length > 0)) {
-      const $$x10 = $m_sjs_js_JSConverters$JSRichIterableOnce$();
-      const col$4 = $m_sci_Nil$();
-      const $$x9 = $$x10.toJSArray$extension__sc_IterableOnce__sjs_js_Array(col$4);
-      const $$x8 = $m_sjs_js_JSConverters$JSRichIterableOnce$();
-      const coll = $asArrayOf_T(elem$2, 1);
-      return new $c_T3("", $$x9, $$x8.toJSArray$extension__sc_IterableOnce__sjs_js_Array($m_s_Predef$().wrapRefArray__AO__scm_ArraySeq$ofRef(coll)))
+    if ($as_Lchess_Game(elem$1).Lchess_Game__f_situation.end__Z()) {
+      legalMovesUcis = $m_sci_Nil$()
     };
     const this$ = $m_Lchess_format_Forsyth$().$greater$greater__Lchess_Game__T($as_Lchess_Game(elem$1));
-    const $$x12 = $m_sjs_js_JSConverters$JSRichIterableOnce$().toJSArray$extension__sc_IterableOnce__sjs_js_Array(legalMovesUcis);
-    const $$x11 = $m_sjs_js_JSConverters$JSRichIterableOnce$();
-    const col$5 = $as_Lchess_Game(elem$1).Lchess_Game__f_pgnMoves;
-    return new $c_T3(this$, $$x12, $$x11.toJSArray$extension__sc_IterableOnce__sjs_js_Array(col$5))
+    const $$x8 = $m_sjs_js_JSConverters$JSRichIterableOnce$();
+    const col$5 = legalMovesUcis;
+    const _2$3 = $$x8.toJSArray$extension__sc_IterableOnce__sjs_js_Array(col$5);
+    const $$x9 = $m_sjs_js_JSConverters$JSRichIterableOnce$();
+    const col$6 = $as_Lchess_Game(elem$1).Lchess_Game__f_pgnMoves;
+    const _3$3 = $$x9.toJSArray$extension__sc_IterableOnce__sjs_js_Array(col$6);
+    return [this$, _2$3, _3$3]
   };
 }
 const $d_Lchess_ChessApp$ = new $TypeData().initClass({
@@ -21972,6 +21981,9 @@ class $c_Lchess_Situation extends $c_O {
   };
   variantEnd__Z() {
     return this.Lchess_Situation__f_board.Lchess_Board__f_variant.specialEnd__Lchess_Situation__Z(this)
+  };
+  end__Z() {
+    return (((this.checkMate__Z() || this.staleMate__Z()) || this.autoDraw__Z()) || this.variantEnd__Z())
   };
   winner__s_Option() {
     return this.Lchess_Situation__f_board.Lchess_Board__f_variant.winner__Lchess_Situation__s_Option(this)
@@ -53939,17 +53951,15 @@ makeUciMovesScala = (function(arg, arg$2, arg$3) {
   const prep0 = arg;
   const prep1 = arg$2;
   const prep2 = arg$3;
-  return $m_Lchess_ChessApp$().makeUciMovesScala__sjs_js_$bar__sjs_js_$bar__sjs_js_$bar__T3(prep0, prep1, prep2)
+  return $m_Lchess_ChessApp$().makeUciMovesScala__sjs_js_$bar__sjs_js_$bar__sjs_js_$bar__sjs_js_Tuple3(prep0, prep1, prep2)
 });
 $s_Lchess_ChessApp__main__AT__V($makeNativeArrayWrapper($d_T.getArrayOf(), []));
 }).call(this);
 //# sourceMappingURL=scalachess-fastopt.js.map
-function makeUciMoves(variantKey, fen, uciMoves){
-	let result = makeUciMovesScala(variantKey, fen, uciMoves)	
+function makeUciMoves(variantKey, fenOpt, uciMoves){
+	let result = makeUciMovesScala(variantKey, fenOpt, uciMoves)	
 	
-	fen = result.T3__f__1 || result.Nl
-	let legalMovesUcis = result.T3__f__2 || result.lj
-	let sanMoves = result.T3__f__3 || result.mj
+	let [fen, legalMovesUcis, sanMoves] = result
 	
 	if(fen) return {		
 		success: true,
@@ -54202,3 +54212,6 @@ function newGame(variantKey, fen){
 	if(result.success) return Game(variantKey, fen)
 	return null
 }
+
+// test
+console.log("test", makeUciMovesScala("standard", undefined, []))
