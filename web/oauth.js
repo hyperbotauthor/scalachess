@@ -57,7 +57,7 @@ function addLichessStrategy(app, props){
             function(req, res) {
 				console.log("auth req user", req.user)
 		
-				req.logIn(userData, err => {					
+				req.logIn(req.user, err => {					
 					if (err){
 						console.log("req login err", err)
 						return next(err)
