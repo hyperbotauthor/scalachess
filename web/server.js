@@ -13,7 +13,7 @@ app.get('/', (req, res) => {
 
 app.use('/', express.static(__dirname))
 
-const oauth = require('@aestheticbookshelf/oauth')
+const oauth = require('./oauth.js')
  
 const firestore = null // provide firestore instance for persistance
  
