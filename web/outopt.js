@@ -1143,9 +1143,9 @@ ys||(ys=new xs);kE(ys.rv.Bv,"scalachess.js by hyperbotauthor\n");
 function makeUciMoves(variantKey, fen, uciMoves){
 	let result = makeUciMovesScala(variantKey, fen, uciMoves)	
 	
-	fen = result.T3__f__1
-	let legalMovesUcis = result.T3__f__2
-	let sanMoves = result.T3__f__3
+	fen = result.T3__f__1 || result.Nl
+	let legalMovesUcis = result.T3__f__2 || result.lj
+	let sanMoves = result.T3__f__3 || result.mj
 	
 	if(fen) return {		
 		success: true,
