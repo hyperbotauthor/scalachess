@@ -22,7 +22,7 @@ app.get('/', (req, res) => {
 const USER = ${user ? JSON.stringify(user, null, 2) : "null"}
 document.title = "hypereasy ${user ? user.id : ""}"
 </script>
-${user ? "logged in as <b>" + user.username + "</b> <a href='/logout'>log out/a>" : "<a href='/auth/lichess/bot'>login</a>" }
+${user ? "logged in as <b>" + user.username + "</b> <a href='/logout'>log out</a>" : "<a href='/auth/lichess/bot'>login</a>" }
 `)
 })
 
