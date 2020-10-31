@@ -24,7 +24,7 @@ oauth.addLichessStrategy(app, {
     tag: "lichess-bot",
     clientID: process.env.LICHESS_BOT_CLIENT_ID,
     clientSecret: process.env.LICHESS_BOT_CLIENT_SECRET,
-    authURL: "https://hypereasy.herokuapp.com/auth/lichess/bot",
+    authURL: "/auth/lichess/bot",
     scope: "challenge:read challenge:write bot:play",
     failureRedirect: "/?lichessbotlogin=failed",
     okRedirect: "/?lichessbotlogin=ok"
