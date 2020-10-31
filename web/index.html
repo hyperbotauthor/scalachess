@@ -1,6 +1,6 @@
 <div id="root"></div>
 
-<script src="https://unpkg.com/@easychessanimations/foo@1.0.29/lib/fooweb.js"></script>	
+<script src="https://unpkg.com/@easychessanimations/foo@1.0.30/lib/fooweb.js"></script>	
 <script src="https://unpkg.com/@easychessanimations/foo@1.0.27/lib/pieces.js"></script>	
 
 <script src="outopt.js"></script>
@@ -37,7 +37,7 @@
 			
 			this.legalMovesContainer = div().poa().l(this.boardWidth).w(this.legalMovesWidth).h(this.boardHeight).bc("#eee")
 			
-			this.controlButtons = props.controlButtons || ["<<", "<", ">", ">>", "X"]
+			this.controlButtons = props.controlButtons || ["<<", "<", ">", ">>", "X", "F"]
 			
 			this.variantCombo = Combo({
 				options: this.variantKeys.map(key => ({
@@ -61,6 +61,11 @@
 				.a(this.squareContainer, this.boardContainer, this.clickContainer, this.legalMovesContainer, this.controlPanel)
 			
 			this.imgCache = {}
+		}
+		
+		setFlip(flip){
+			this.flip = flip
+			this.draw()
 		}
 		
 		reset(){
@@ -138,12 +143,22 @@
 			this.clickedSquare.op(0.5)
 		}
 		
-		rankFileSquareCoords(rank, file){
-			return Coords(rank * this.squareSize, file * this.squareSize)
+		flipRank(rank, flip){
+			if(flip) return this.numRanks - 1 - rank
+			return rank
 		}
 		
-		rankFilePieceCoords(rank, file){
-			return Coords(rank * this.squareSize + this.pieceMargin, file * this.squareSize + this.pieceMargin)
+		flipFile(file, flip){
+			if(flip) return this.numFiles - 1 - file
+			return file
+		}
+		
+		rankFileSquareCoords(rank, file, flip){
+			return Coords(this.flipRank(rank, flip) * this.squareSize, this.flipFile(file, flip) * this.squareSize)
+		}
+		
+		rankFilePieceCoords(rank, file, flip){
+			return Coords(this.flipRank(rank, flip) * this.squareSize + this.pieceMargin, this.flipFile(file, flip) * this.squareSize + this.pieceMargin)
 		}
 		
 		draw(){
@@ -158,25 +173,25 @@
 				let i = file + rank * 8
 				
 				this.squareContainer.a(div().poa().w(this.squareSize).h(this.squareSize)
-						.tl(this.rankFileSquareCoords(rank, file)).bc((file+rank)%2?"#aaa":"#ddd"))
+						.tl(this.rankFileSquareCoords(rank, file, this.flip)).bc((file+rank)%2?"#aaa":"#ddd"))
 				
 				this.clickContainer.a(this.clickSquares[i] = div().poa().w(this.squareSize).h(this.squareSize)
-						.tl(this.rankFileSquareCoords(rank, file)).bc("#00f").op(0)
+						.tl(this.rankFileSquareCoords(rank, file, this.flip)).bc("#00f").op(0)
 						.ae("click", this.clickSquareClicked.bind(this, i)))
 				
 				let p = this.raw.substring(i, i+1)		
 				
 				if(p!="."){
-					let cachedImg = this.imgCache[`${p}${i}`]
+					let cachedImg = this.imgCache[`${p}${i}${!!this.flip}`]
 					
 					if(cachedImg){
 						this.boardContainer.a(cachedImg)
 					}else{
 						let img = Image().setWidth(this.pieceSize).setHeight(this.pieceSize).poa()						
-						.tl(this.rankFilePieceCoords(rank, file))
+						.tl(this.rankFilePieceCoords(rank, file, this.flip))
 						.load(PIECES_CSS[this.pieceSet][p.toLowerCase() == p ? "b" : "w"][p.toLowerCase()], _=>{
 							this.boardContainer.a(img)
-							this.imgCache[`${p}${i}`] = img
+							this.imgCache[`${p}${i}${!!this.flip}`] = img
 						})			
 					}					
 				}			
@@ -297,8 +312,9 @@
 				uciInfo[node.uci].first = first
 				first = false
 			}
-			this.sb.setFen(this.game.fen(),this.game.legalMovesUcis(), uciInfo).draw()
 			this.sb.setVariantKey(this.game.variantKey)
+			this.sb.setFen(this.game.fen(),this.game.legalMovesUcis(), uciInfo)			
+			this.sb.setFlip(this.game.flip)
 			this.game.save()
 			
 			this.showLineContainer.html(this.game.linePgn())
@@ -310,6 +326,9 @@
 			if(cb == "<<") this.game.tobegin()
 			if(cb == ">>") this.game.toend()
 			if(cb == "X") this.game.del()
+			if(cb == "F"){
+				this.game.flip = !this.game.flip				
+			}
 
 			this.setGame()
 		}

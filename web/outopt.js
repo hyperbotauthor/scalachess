@@ -1273,7 +1273,8 @@ class Game_{
 			id: this.id,
 			variantKey: this.variantKey,
 			currentNode: this.currentNode.serialize(),
-			nodes: nodesSerialized
+			nodes: nodesSerialized,
+			flip: !!this.flip
 		}
 	}
 	
@@ -1287,6 +1288,7 @@ class Game_{
 			this.nodes[id] = GameNode().fromblob(this, blob.nodes[id])
 		}
 		this.nodes[this.currentNode.id] = this.currentNode
+		this.flip = !!blob.flip
 		return this
 	}
 	
