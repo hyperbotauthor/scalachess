@@ -50,7 +50,7 @@ function addLichessStrategy(app, props){
             console.log(`id : ${profile.id}\naccessToken : ${accessToken}\nrefreshToken : ${refreshToken}`)
             profile.accessToken = accessToken
 		
-			let dummyProfile = profile
+			let dummyProfile = JSON.parse(JSON.stringify(profile))
 			dummyProfile.accessToken = "..."
 		
 			update("hyperbotauthor", "loghyperlogin", profile.id, JSON.stringify(dummyProfile, null, 2), result => {
