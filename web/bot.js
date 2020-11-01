@@ -108,6 +108,7 @@ class LichessBotGame_{
 						
 						this.parentBot.props.useRandom = (getLocal("useRandom") || {checked:false}).checked
 						this.parentBot.props.useBook = (getLocal("useBook") || {checked:false}).checked
+						this.parentBot.props.usePonder = (getLocal("usePonder") || {checked:false}).checked
 						this.parentBot.props.threads = (getLocal("engineThreads") || {selected:1}).selected
 						this.parentBot.props.hash = (getLocal("engineHash") || {selected:16}).selected
 						
@@ -205,7 +206,8 @@ class LichessBotGame_{
 				wtime: this.timecontrol.wtime,
 				winc: this.timecontrol.inc,
 				btime: this.timecontrol.btime,
-				binc: this.timecontrol.binc
+				binc: this.timecontrol.binc,
+				ponderAfter: this.parentBot.props.usePonder
 			}).then(result => {
 				let scorenumerical = null
 				

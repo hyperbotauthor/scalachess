@@ -88,7 +88,7 @@ For detailed instructions see <a href="https://lichess.org/forum/off-topic-discu
 		
 			items.unshift(argStr)
 
-			while(items.length > 100) items.pop()
+			while(items.length > 250) items.pop()
 
 			app.x().a(items.map(item=>
 				div()
@@ -110,6 +110,7 @@ For detailed instructions see <a href="https://lichess.org/forum/off-topic-discu
 	let botSettings = div().fl().a(
 		Labeled("Make random moves", CheckBox({id: "useRandom"})),
 		Labeled("Use book", CheckBox({id: "useBook"})).marl(10),
+		Labeled("Ponder", CheckBox({id: "usePonder"})).marl(10),
 		Labeled("Engine threads", Combo({id: "engineThreads", options: [...Array(8).keys()].map(key => ({value:(key+1), display: (key+1)}))})).marl(10),
 		Labeled("Engine hash", Combo({id: "engineHash", options: [...Array(5).keys()].map(key => ({value:Math.pow(2, key+4), display: Math.pow(2, key+4)}))})).marl(10)
 	)
