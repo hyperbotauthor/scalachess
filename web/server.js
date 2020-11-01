@@ -4,6 +4,20 @@ const express = require('express')
 const oauth = require('./oauth.js')
 const app = express()
 const port = process.env.PORT || 3000
+const fetch = require('node-fetch')
+
+const LICHESS_BOT_UPGRAGE_URL = LICHESS_BASE_URL + "/api/bot/account/upgrade"
+
+app.get('/upgrade', (req, res) => {
+	fetch(LICHESS_BOT_UPGRAGE_URL, {
+		method: "POST",
+		body: "",
+		headers: {
+			Authorization: `Bearer ${req.user.accessToken}`,
+			Accept: "application/json"
+		}
+	}).then(response => response.text().then(content => res.send(`Upgrade status : <b>${content}</b> .`)))
+})
 
 app.get('/', (req, res) => {
 	let user
@@ -27,7 +41,7 @@ document.title = "Hyper Easy ${user ? user.id : ""}"
 <script src="utils.js"></script>
 <script src="outopt.js"></script>
 <script src="bot.js"></script>
-${user ? "Logged in as <b>" + user.username + "</b> . <a href='/logout'>Log out</a> ." : "Make sure you are logged into lichess with your bot account, then <a href='/auth/lichess/bot'>login your bot using oauth</a> ." }
+${user ? "Logged in as <b>" + user.username + "</b> . <a href='/upgrade' rel='noopener noreferrer' target='_blank'>Request upgrade to bot</a> . <a href='/logout'>Log out</a> ." : "Make sure you are logged into lichess with your bot account, then <a href='/auth/lichess/bot'>login your bot using oauth</a> ." }
 <hr>
 <div id="logs"></div>
 <script src="https://unpkg.com/@easychessanimations/foo@1.0.30/lib/fooweb.js"></script>
