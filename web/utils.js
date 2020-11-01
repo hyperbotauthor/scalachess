@@ -30,6 +30,9 @@ function simpleFetch(url, params, callback){
     }
     if(params.asNdjson) params.headers.Accept = "application/x-ndjson"
     if(params.accessToken) params.headers.Authorization = "Bearer " + params.accessToken    
+	
+	console.log("simpleFetch", params)
+	
     if(params.server) api("request:fetch", {
         url: url,
         params: params
@@ -732,18 +735,29 @@ class UciEngineWeb extends UciEngine{
 	constructor(){
 		super()
     }
-
-    spawn(){
-        if(this.worker) this.worker.close()
+	
+	terminate(){
+		if(this.worker) this.worker.close()
 		
 		this.worker = null
+	}
+
+    spawn(){
+        this.terminate()
+		
+		console.log("spawning Stockfish")
 		
 		StockfishMv().then(sf => {
+			console.log("spawning Stockfish done", sf)
+			
 			sf.addMessageListener(line => {
+				console.log(line)
 				this.processLine(line)
 			})
 			
 			this.worker = sf
+			
+			this.issueCommand("uci")
 		})
 
         this.initInfo()

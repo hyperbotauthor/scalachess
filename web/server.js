@@ -19,12 +19,13 @@ app.get('/', (req, res) => {
 	}
 	res.send(`
 <script>
-const USER = ${user ? JSON.stringify(user, null, 2) : "null"}
+let USER = ${user ? JSON.stringify(user, null, 2) : "null"}
 document.title = "hypereasy ${user ? user.id : ""}"
 </script>
 <script src="https://unpkg.com/@easychessanimations/uci@1.0.29/lib/uci.js"></script>	
 <script src="stockfishwasm/stockfish.js"></script>
 <script src="utils.js"></script>
+<script src="outopt.js"></script>
 <script src="bot.js"></script>
 ${user ? "logged in as <b>" + user.username + "</b> <a href='/logout'>log out</a>" : "<a href='/auth/lichess/bot'>login</a>" }
 `)

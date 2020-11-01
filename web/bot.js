@@ -14,13 +14,13 @@ class LichessBotGame_{
         
         this.id = props.id        
 
-        // TODO this.engine = 
+        this.engine = new UciEngineWeb()
 
         this.ratingDiff = 0
 
         this.gameStateReader = new NdjsonReader(LICHESS_STREAM_GAME_STATE_URL + "/" + this.id, this.processGameEvent.bind(this), this.parentBot.token, this.processTermination.bind(this))
 
-        this.gameStateReader.stream()
+        setTimeout(_=>this.gameStateReader.stream(), 2000)
     }
 
     writeBotChat(rooms, msg){
@@ -35,13 +35,13 @@ class LichessBotGame_{
     processGameEvent(event){
         if(event.type == "chatLine") return
 
-        console.log(JSON.stringify(event, null, 2))
+        console.log("game event", event)
 
         if(event.type == "gameFull"){
             let gameFull = event
             this.gameFull = gameFull
 
-            this.botTurn = chessboard.WHITE
+            this.botWhite = true
 
             this.botRating = gameFull.white.rating || 1500
             this.oppRating = gameFull.black.rating || 1500
@@ -50,7 +50,7 @@ class LichessBotGame_{
             this.opponentName = gameFull.black.name
 
             if(gameFull.black.id == this.parentBot.userId){
-                this.botTurn = chessboard.BLACK
+                this.botWhite = false
 
                 this.botRating = gameFull.black.rating || 1500
                 this.oppRating = gameFull.white.rating || 1500
@@ -63,12 +63,7 @@ class LichessBotGame_{
 
             this.variant = gameFull.variant.key
 
-            this.testBoard = chessboard.ChessBoard().setfromfen(
-                gameFull.initialFen == "startpos" ? null : gameFull.initialFen,
-                this.variant
-            )
-
-            this.initialFen = this.testBoard.fen
+            this.initialFen = gameFull.initialFen
 
             this.state = gameFull.state
 
@@ -80,31 +75,25 @@ class LichessBotGame_{
         }
 
         if(this.gameFull && this.state){
-            this.board = chessboard.ChessBoard().setfromfen(
-                this.initialFen,
-                this.variant
-            )
-
-            let allMovesOk = true
-
-            this.moves = null
-
-            if(this.state.moves){
-                this.moves = this.state.moves.split(" ")
-                for(let algeb of this.moves){
-                    allMovesOk = allMovesOk && this.board.pushalgeb(algeb)
-                }
-            }                
-
-            this.currentFen = this.board.fen
-
-            console.log("allMovesOk", allMovesOk, this.board.toString())
-
-            if(allMovesOk){
-                if(this.board.turn == this.botTurn){
-                    let lms = this.board.legalmovesforallpieces()
-
-                    if(lms.length){
+			console.log("setting up board from state", this.state)
+			
+			this.moves = this.state.moves ? this.state.moves.split(" ") : []
+			
+			let result = makeUciMovesScala(this.variant, this.initialFen == "startpos" ? undefined : this.initialFen, this.moves)	
+			
+			console.log("set up result", result)
+			
+			let [fen, legalMovesUcis, sanMoves] = result
+			
+            if(fen){
+				this.currentFen = fen
+				
+				this.legalMoveUcis = legalMovesUcis
+				
+				this.isWhiteTurn = this.currentFen.match(/ w /)
+				
+                if((this.isWhiteTurn && this.botWhite) || ((!this.isWhiteTurn) && (!this.botWhite))){
+                    if(this.legalMoveUcis.length){
                         let reduceThinkingTime = this.parentBot.props.reduceThinkingTime || DEFAULT_REDUCE_THINKING_TIME
 
                         this.timecontrol = {
@@ -118,13 +107,9 @@ class LichessBotGame_{
                         if(this.timecontrol.btime > HOUR) this.timecontrol.btime = 10000                            
 
                         if(this.parentBot.props.makeRandomMoves){
-                            // TODO
+                            // IMPROVE
                         }else{
-                            let bookalgeb = null
-
-                            if(this.parentBot.props.useOwnBook){
-                                // TODO
-                            }
+                            /*let bookalgeb = null
 
                             ((
                                 this.parentBot.props.useBotBook ||
@@ -163,12 +148,38 @@ class LichessBotGame_{
                                 if(bookalgeb){
                                     this.playBotMove("book", {bestmove: bookalgeb, scorenumerical: null})
                                 }
-                                else{
+                                else{*/
                                     this.moveOverHead = parseInt(this.parentBot.props.moveOverHead || 500)
+							
+									this.engine
+										.setoption("UCI_Variant", this.variant)
+							
+									this.engine
+										.setoption("Move Overhead", this.moveOverHead)
+							
+									let specifier = this.initialFen == "startpos" ? "startpos" : `fen ${this.initialFen}`
+									
+									console.log("position", specifier, this.moves)
                                     
-                                    // TODO this.playBotMove.bind(this, "engine")
-                                }
-                            })                                
+                                    this.engine.position(specifier, this.moves)
+									
+									this.engine.gothen({wtime: this.timecontrol.wtime, winc: this.timecontrol.inc, btime: this.timecontrol.btime, binc: this.timecontrol.binc}).then(result => {
+										let scorenumerical = 0
+										if(result.depthInfos.length){
+											let score = result.depthInfos[result.depthInfos.length - 1].score
+											if(score.unit == "cp"){
+												scorenumerical = score.value
+											}else{
+												score.value > 0 ? 10000 - score.value : -10000 - score.value
+											}
+										}
+										this.playBotMove("engine", {
+											bestmove: result.bestmove,
+											scorenumerical: scorenumerical
+										})
+									})
+                                /*}
+                            })    */                            
                         }                            
                     }
                 }
@@ -177,12 +188,12 @@ class LichessBotGame_{
     }
 
     playBotMove(method, moveObj){
-        let move = this.board.algebtomove(moveObj.bestmove)
-
+		console.log("play bot move", method, moveObj)
+		
         let offeringDraw = false
 
-        if(move){
-            let msg = `My ${method} move : ${this.board.movetosan(move)} .`
+        if(moveObj.bestmove){
+            let msg = `My ${method} move : ${moveObj.bestmove} .`
 
             let randPercent = Math.round(Math.random() * 100)
 
@@ -201,7 +212,9 @@ class LichessBotGame_{
                 }
             }
 
-            if(offeringDraw) msg += " I would agree to a draw ."            
+            if(offeringDraw) msg += " I would agree to a draw ."     
+			
+			console.log("chat message", msg, "offeringDraw", offeringDraw)
 
             makeLichessBotMove(this.id, moveObj.bestmove, offeringDraw, this.parentBot.token).then(result => {
                 //
@@ -221,13 +234,15 @@ class LichessBotGame_{
 
         this.writeBotChat(["player", "spectator"], `Good game, ${this.opponentName} !`)
         this.poweredBy()
-        // TODO this.engine.terminate()
+        this.engine.terminate()
     }
 }
 function LichessBotGame(props){return new LichessBotGame_(props)}
 
 class LichessBot_{
     constructor(props){
+		console.log("creating bot", props)
+		
         this.props = props
 
         this.token = props.token
@@ -277,6 +292,8 @@ class LichessBot_{
     }
 
     stream(){
+		console.log("bot stream")
+		
         this.challengeReader = new NdjsonReader(LICHESS_STREAM_EVENTS_URL, this.processBotEvent.bind(this), this.token)
 
         this.challengeReader.stream()
@@ -284,10 +301,18 @@ class LichessBot_{
 }
 function LichessBot(props){return new LichessBot_(props)}
 
-const bot = LichessBot({
-	token: "",
-	userId: "normalbulletbot"
-})
+if(!USER){
+	USER = {
+		id: "normalbulletbot",
+		accessToken : ""
+	}
+}
 
-bot.stream()
+if(USER.accessToken){
+	const bot = LichessBot({
+		userId: USER.id,
+		token: USER.accessToken		
+	})
 
+	bot.stream()	
+}
