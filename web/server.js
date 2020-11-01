@@ -40,7 +40,7 @@ ${user ? "logged in as <b>" + user.username + "</b> <a href='/logout'>log out</a
 	
 	function newLog(...args){
 		args.forEach(arg => {
-			let argStr = typeof arg == "object" ? JSON.stringify(arg) : arg.toString()
+			let argStr = /*typeof arg == "object" ? JSON.stringify(arg) : */arg.toString()
 			
 			oldConsole.log(argStr)
 		
