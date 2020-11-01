@@ -152,7 +152,7 @@ class LichessBotGame_{
                                     this.moveOverHead = parseInt(this.parentBot.props.moveOverHead || 500)
 							
 									this.engine
-										.setoption("UCI_Variant", this.variant)
+										.setoption("UCI_Variant", this.variant.toLowerCase())
 							
 									this.engine
 										.setoption("Move Overhead", this.moveOverHead)
