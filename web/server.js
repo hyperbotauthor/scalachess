@@ -10,11 +10,28 @@ const LICHESS_BASE_URL        = "https://lichess.org"
 const LICHESS_BOT_UPGRAGE_URL = LICHESS_BASE_URL + "/api/bot/account/upgrade"
 
 app.get('/upgrade', (req, res) => {
+	let user
+	
+	if(req.headers.cookie){
+		let m = req.headers.cookie.match(/oauthUser=([0-9]+)/)
+		
+		if(m){
+			let cookie = m[1]
+			
+			user = oauth.cookieToUser[cookie]
+		}
+	}
+	
+	if(!user){
+		res.send(`Log in with your bot account to be able to upgrade.`)
+		return
+	}
+	
 	fetch(LICHESS_BOT_UPGRAGE_URL, {
 		method: "POST",
 		body: "",
 		headers: {
-			Authorization: `Bearer ${req.user.accessToken}`,
+			Authorization: `Bearer ${user.accessToken}`,
 			Accept: "application/json"
 		}
 	}).then(response => response.text().then(content => res.send(`Upgrade status : <b>${content}</b> .`)))
