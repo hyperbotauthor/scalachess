@@ -48,7 +48,7 @@ ${user ? "Logged in as <b>" + user.username + "</b> . <a href='/logout'>Log out<
 				}catch(err){}
 			}
 			
-			oldConsole.log(argStr)
+			oldConsole.log(arg)
 		
 			items.unshift(argStr)
 
