@@ -4,7 +4,7 @@ const DEFAULT_REDUCE_THINKING_TIME      = 1
 
 class LichessBotGame_{
     poweredBy(){
-        this.writeBotChat(["player", "spectator"], `${this.botName} powered by https://easychess.herokuapp.com .`)
+        this.writeBotChat(["player", "spectator"], `${this.botName} powered by https://github.com/hyperbotauthor/scalachess .`)
     }
 
     constructor(props){
