@@ -737,7 +737,7 @@ class UciEngineWeb extends UciEngine{
     }
 	
 	terminate(){
-		if(this.worker) this.worker.close()
+		if(this.worker) this.worker.terminate()
 		
 		this.worker = null
 	}
