@@ -105,87 +105,116 @@ class LichessBotGame_{
 
                         if(this.timecontrol.wtime > HOUR) this.timecontrol.wtime = 10000
                         if(this.timecontrol.btime > HOUR) this.timecontrol.btime = 10000                            
-
-                        if(this.parentBot.props.makeRandomMoves){
-                            // IMPROVE
-                        }else{
-                            /*let bookalgeb = null
-
-                            ((
-                                this.parentBot.props.useBotBook ||
-                                ( this.parentBot.props.allowFallBackToBotBook && (!bookalgeb) )
-                            ) ?
-                                (requestLichessBook(
-                                this.currentFen,
-                                this.variant,
-                                this.parentBot.props.lichessBookMaxMoves || LICHESS_BOOK_MAX_MOVES,
-                                (this.parentBot.props.lichessBookAvgRatings || LICHESS_BOOK_AVG_RATINGS),
-                                (this.parentBot.props.lichessBookTimeControls || LICHESS_BOOK_TIME_CONTROLS)
-                            )) : RP({moves: null})).then(result => {
-                                let bmoves = result.moves
-
-                                if(bmoves && bmoves.length){
-                                    let grandTotal = 0
-
-                                    for(let bmove of bmoves){
-                                        bmove.total = bmove.white + bmove.draws + bmove.black
-                                        grandTotal += bmove.total
-                                    }
-
-                                    let rand = Math.round(Math.random() * grandTotal)
-
-                                    let currentTotal = 0
-
-                                    for(let bmove of bmoves){
-                                        currentTotal += bmove.total                                            
-                                        if(currentTotal >= rand){
-                                            bookalgeb = bmove.uci
-                                            break
-                                        }                                            
-                                    }
-                                }
-
-                                if(bookalgeb){
-                                    this.playBotMove("book", {bestmove: bookalgeb, scorenumerical: null})
-                                }
-                                else{*/
-                                    this.moveOverHead = parseInt(this.parentBot.props.moveOverHead || 500)
+						
+						if(this.parentBot.props.useRandom){
+							let randomUci = this.legalMoveUcis[Math.floor(Math.random() * this.legalMoveUcis.length)]
 							
-									this.engine
-										.setoption("UCI_Variant", this.variant.toLowerCase())
-							
-									this.engine
-										.setoption("Move Overhead", this.moveOverHead)
-							
-									let specifier = this.initialFen == "startpos" ? "startpos" : `fen ${this.initialFen}`
-									
-									console.log("position", specifier, this.moves)
-                                    
-                                    this.engine.position(specifier, this.moves)
-									
-									this.engine.gothen({wtime: this.timecontrol.wtime, winc: this.timecontrol.inc, btime: this.timecontrol.btime, binc: this.timecontrol.binc}).then(result => {
-										let scorenumerical = 0
-										if(result.depthInfos.length){
-											let score = result.depthInfos[result.depthInfos.length - 1].score
-											if(score.unit == "cp"){
-												scorenumerical = score.value
-											}else{
-												score.value > 0 ? 10000 - score.value : -10000 - score.value
-											}
-										}
-										this.playBotMove("engine", {
-											bestmove: result.bestmove,
-											scorenumerical: scorenumerical
-										})
-									})
-                                /*}
-                            })    */                            
-                        }                            
+							this.playBotMove("random", {
+								bestmove: randomUci,
+								scorenumerical: null
+							})
+						}else this.findBookMoveThen().then(bookalgeb => {
+							if(bookalgeb){
+								this.playBotMove("book", {
+									bestmove: bookalgeb,
+									scorenumerical: null
+								})
+							}else{
+								this.findEngineMoveThen().then(result => {
+									this.playBotMove("book", result)
+								})
+							}
+						})
                     }
                 }
             }
         }
     }
+	
+	findBookMoveThen(){
+		if(!this.parentBot.props.useBook){
+			return RP(null)
+		}
+		
+		return P(resolve =>{
+			return requestLichessBook(
+				this.currentFen,
+				this.variant,
+				(this.parentBot.props.lichessBookMaxMoves || LICHESS_BOOK_MAX_MOVES),
+				(this.parentBot.props.lichessBookAvgRatings || LICHESS_BOOK_AVG_RATINGS),
+				(this.parentBot.props.lichessBookTimeControls || LICHESS_BOOK_TIME_CONTROLS)
+			).then(result => {
+				let bookalgeb = null
+				
+				let bmoves = result.moves
+
+				if(bmoves && bmoves.length){
+					let grandTotal = 0
+
+					for(let bmove of bmoves){
+						bmove.total = bmove.white + bmove.draws + bmove.black
+						grandTotal += bmove.total
+					}
+
+					let rand = Math.round(Math.random() * grandTotal)
+
+					let currentTotal = 0
+
+					for(let bmove of bmoves){
+						currentTotal += bmove.total                                            
+						if(currentTotal >= rand){
+							bookalgeb = bmove.uci
+							break
+						}                                            
+					}
+				
+					resolve(bookalgeb)
+				}	
+			})
+		})		
+	}
+	
+	findEngineMoveThen(){
+		return P(resolve => {
+			this.moveOverHead = parseInt(this.parentBot.props.moveOverHead || 500)
+
+			this.engine
+				.setoption("UCI_Variant", this.variant.toLowerCase())
+
+			this.engine
+				.setoption("Move Overhead", this.moveOverHead)
+
+			let specifier = this.initialFen == "startpos" ? "startpos" : `fen ${this.initialFen}`
+
+			console.log("position", specifier, this.moves)
+
+			this.engine.position(specifier, this.moves)
+
+			this.engine.gothen({
+				wtime: this.timecontrol.wtime,
+				winc: this.timecontrol.inc,
+				btime: this.timecontrol.btime,
+				binc: this.timecontrol.binc
+			}).then(result => {
+				let scorenumerical = null
+				
+				if(result.depthInfos.length){
+					let score = result.depthInfos[result.depthInfos.length - 1].score
+					
+					if(score.unit == "cp"){
+						scorenumerical = score.value
+					}else{
+						score.value > 0 ? 10000 - score.value : -10000 - score.value
+					}
+				}
+				
+				resolve({
+					bestmove: result.bestmove,
+					scorenumerical: scorenumerical
+				})
+			})
+		})
+	}
 
     playBotMove(method, moveObj){
 		console.log("play bot move", method, moveObj)
@@ -311,8 +340,10 @@ if(!USER){
 if(USER.accessToken){
 	const bot = LichessBot({
 		userId: USER.id,
-		token: USER.accessToken		
+		token: USER.accessToken
 	})
+	
+	console.log(bot)
 
 	bot.stream()	
 }
