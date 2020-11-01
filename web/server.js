@@ -40,9 +40,9 @@ ${user ? "logged in as <b>" + user.username + "</b> <a href='/logout'>log out</a
 	
 	function newLog(...args){
 		args.forEach(arg => {
-			oldConsole.log(arg)
-			
 			let argStr = arg.toString()
+			
+			oldConsole.log(argStr)
 		
 			items.unshift(argStr)
 
@@ -51,7 +51,7 @@ ${user ? "logged in as <b>" + user.username + "</b> <a href='/logout'>log out</a
 			app.x().a(items.map(item=>
 				div()
 					.pad(3).mar(3).bc("#eee")
-					.html(argStr)
+					.html(item)
 			))
 		})
 	}
