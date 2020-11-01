@@ -44,7 +44,7 @@ ${user ? "Logged in as <b>" + user.username + "</b> . <a href='/logout'>Log out<
 			
 			if(typeof arg == "object"){
 				try{
-					argStr = JSON.stringify(arg)
+					//argStr = JSON.stringify(arg)
 				}catch(err){}
 			}
 			
