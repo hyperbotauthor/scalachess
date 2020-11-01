@@ -63,6 +63,8 @@ ${user ? "Logged in as <b>" + user.username + "</b> . <a href='/upgrade' rel='no
 <hr>
 For detailed instructions see <a href="https://lichess.org/forum/off-topic-discussion/hyper-easy-all-variants-lichess-bot-running-in-your-browser#1" rel="noopener noreferrer" target="_blank">this forum post</a> .
 <hr>
+	<div id="botSettings"></div>
+<hr>
 <div id="logs"></div>
 <script src="https://unpkg.com/@easychessanimations/foo@1.0.30/lib/fooweb.js"></script>
 <script>
@@ -90,7 +92,7 @@ For detailed instructions see <a href="https://lichess.org/forum/off-topic-discu
 
 			app.x().a(items.map(item=>
 				div()
-					.pad(3).mar(3).bc("#eee")
+					.pad(3).mar(3).bc("#eee").ffms()
 					.html(item)
 			))
 		})
@@ -104,6 +106,17 @@ For detailed instructions see <a href="https://lichess.org/forum/off-topic-discu
 	}
 	
 	document.getElementById("logs").appendChild(app.e)	
+	
+	let botSettings = div().fl().a(
+		Labeled("Make random moves", CheckBox({id: "useRandom"})),
+		Labeled("Use book", CheckBox({id: "useBook"})).addStyle("margin-left", "10px")
+	)
+	
+	document.getElementById("botSettings").appendChild(botSettings.e)	
+	
+	console.log("Hyper Easy logs will be shown here, when reporting an error, always submit a copy of these logs")
+	
+	console.log("&nbsp;")
 	
 	console.log("Welcome to Hyper Easy !")
 </script>

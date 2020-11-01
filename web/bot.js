@@ -106,6 +106,9 @@ class LichessBotGame_{
                         if(this.timecontrol.wtime > HOUR) this.timecontrol.wtime = 10000
                         if(this.timecontrol.btime > HOUR) this.timecontrol.btime = 10000                            
 						
+						this.parentBot.props.useRandom = (getLocal("useRandom") || {checked:false}).checked
+						this.parentBot.props.useBook = (getLocal("useBook") || {checked:false}).checked
+						
 						if(this.parentBot.props.useRandom){
 							let randomUci = this.legalMoveUcis[Math.floor(Math.random() * this.legalMoveUcis.length)]
 							
@@ -167,9 +170,9 @@ class LichessBotGame_{
 							break
 						}                                            
 					}
-				
-					resolve(bookalgeb)
 				}	
+				
+				resolve(bookalgeb)
 			})
 		})		
 	}
