@@ -727,3 +727,42 @@ function getLichessTourneys(){
   }
 }
 */
+
+class UciEngineWeb extends UciEngine{
+	constructor(){
+		super()
+    }
+
+    spawn(){
+        if(this.worker) this.worker.close()
+		
+		this.worker = null
+		
+		StockfishMv().then(sf => {
+			sf.addMessageListener(line => {
+				this.processLine(line)
+			})
+			
+			this.worker = sf
+		})
+
+        this.initInfo()
+
+        this.running = false
+        this.pondering = false
+        this.ponderAfter = false
+        this.onbestmove = null
+
+        logEngine(`spawned Stockfish wasm`)
+    }
+	
+	issueCommand(command){		
+		if(!this.worker){
+			console.log("cannot issue engine command ( no worker )")
+			return
+		}
+        this.worker.postMessage(`${command}`)
+        logEngine(`issue command: ${command}`)
+        return this
+    }
+}
