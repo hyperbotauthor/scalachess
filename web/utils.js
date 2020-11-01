@@ -771,6 +771,7 @@ class UciEngineWeb extends UciEngine{
     }
 	
 	issueCommand(command){		
+		console.log("issuing engine command", command)
 		if(!this.worker){
 			console.log("cannot issue engine command ( no worker )")
 			return

@@ -66,7 +66,7 @@ For detailed instructions see <a href="https://lichess.org/forum/off-topic-discu
 	<div id="botSettings"></div>
 <hr>
 <div id="logs"></div>
-<script src="https://unpkg.com/@easychessanimations/foo@1.0.30/lib/fooweb.js"></script>
+<script src="https://unpkg.com/@easychessanimations/foo@1.0.33/lib/fooweb.js"></script>
 <script>
 	let oldConsole = console
 	
@@ -109,7 +109,9 @@ For detailed instructions see <a href="https://lichess.org/forum/off-topic-discu
 	
 	let botSettings = div().fl().a(
 		Labeled("Make random moves", CheckBox({id: "useRandom"})),
-		Labeled("Use book", CheckBox({id: "useBook"})).addStyle("margin-left", "10px")
+		Labeled("Use book", CheckBox({id: "useBook"})).marl(10),
+		Labeled("Engine threads", Combo({id: "engineThreads", options: [...Array(8).keys()].map(key => ({value:(key+1), display: (key+1)}))})).marl(10),
+		Labeled("Engine hash", Combo({id: "engineHash", options: [...Array(5).keys()].map(key => ({value:Math.pow(2, key+4), display: Math.pow(2, key+4)}))})).marl(10)
 	)
 	
 	document.getElementById("botSettings").appendChild(botSettings.e)	

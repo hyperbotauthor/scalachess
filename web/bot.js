@@ -108,6 +108,8 @@ class LichessBotGame_{
 						
 						this.parentBot.props.useRandom = (getLocal("useRandom") || {checked:false}).checked
 						this.parentBot.props.useBook = (getLocal("useBook") || {checked:false}).checked
+						this.parentBot.props.threads = (getLocal("engineThreads") || {selected:1}).selected
+						this.parentBot.props.hash = (getLocal("engineHash") || {selected:16}).selected
 						
 						if(this.parentBot.props.useRandom){
 							let randomUci = this.legalMoveUcis[Math.floor(Math.random() * this.legalMoveUcis.length)]
@@ -186,6 +188,12 @@ class LichessBotGame_{
 
 			this.engine
 				.setoption("Move Overhead", this.moveOverHead)
+			
+			this.engine
+				.setoption("Threads", this.parentBot.props.threads)
+			
+			this.engine
+				.setoption("Hash", this.parentBot.props.hash)
 
 			let specifier = this.initialFen == "startpos" ? "startpos" : `fen ${this.initialFen}`
 
