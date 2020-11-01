@@ -61,6 +61,8 @@ document.title = "Hyper Easy ${user ? user.id : ""}"
 <script src="bot.js"></script>
 ${user ? "Logged in as <b>" + user.username + "</b> . <a href='/upgrade' rel='noopener noreferrer' target='_blank'>Request upgrade to bot</a> . <a href='/logout'>Log out</a> ." : "Make sure you are logged into lichess with your bot account, then <a href='/auth/lichess/bot'>login your bot using oauth</a> ." }
 <hr>
+For detailed instructions see <a href="https://lichess.org/forum/off-topic-discussion/hyper-easy-all-variants-lichess-bot-running-in-your-browser#1" rel="noopener noreferrer" target="_blank">this forum post</a> .
+<hr>
 <div id="logs"></div>
 <script src="https://unpkg.com/@easychessanimations/foo@1.0.30/lib/fooweb.js"></script>
 <script>
