@@ -36,7 +36,7 @@ ${user ? "logged in as <b>" + user.username + "</b> <a href='/logout'>log out</a
 	
 	let items = []
 	
-	let app = div().h(400).ovfys()
+	let app = div().h(600).ovfys()
 	
 	function newLog(...args){
 		args.forEach(arg => {
