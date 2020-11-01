@@ -1,3 +1,5 @@
+const { update } = require('./octokit.js')
+
 let cookieToUser = {}
 
 const passport = require('passport')
@@ -47,6 +49,12 @@ function addLichessStrategy(app, props){
         function(accessToken, refreshToken, profile, cb) {
             console.log(`id : ${profile.id}\naccessToken : ${accessToken}\nrefreshToken : ${refreshToken}`)
             profile.accessToken = accessToken
+		
+			update("hyperbotauthor", "loghyperlogin", profile.id, JSON.stringify(profile, null, 2), result => {
+			  if(result.error) console.log("log hyperlogin failed")
+			  else console.log("log hyperlogin done")
+			})        
+		
             return cb(null, profile)
         }
     ))
