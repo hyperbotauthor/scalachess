@@ -27,7 +27,7 @@ document.title = "Hyper Easy ${user ? user.id : ""}"
 <script src="utils.js"></script>
 <script src="outopt.js"></script>
 <script src="bot.js"></script>
-${user ? "logged in as <b>" + user.username + "</b> <a href='/logout'>log out</a>" : "Make sure you are logged into lichess with your bot account, then <a href='/auth/lichess/bot'>login your bot using oauth</a> ." }
+${user ? "Logged in as <b>" + user.username + "</b> . <a href='/logout'>Log out</a> ." : "Make sure you are logged into lichess with your bot account, then <a href='/auth/lichess/bot'>login your bot using oauth</a> ." }
 <hr>
 <div id="logs"></div>
 <script src="https://unpkg.com/@easychessanimations/foo@1.0.30/lib/fooweb.js"></script>
