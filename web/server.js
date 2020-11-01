@@ -20,14 +20,54 @@ app.get('/', (req, res) => {
 	res.send(`
 <script>
 let USER = ${user ? JSON.stringify(user, null, 2) : "null"}
-document.title = "hypereasy ${user ? user.id : ""}"
+document.title = "Hyper Easy ${user ? user.id : ""}"
 </script>
 <script src="https://unpkg.com/@easychessanimations/uci@1.0.29/lib/uci.js"></script>	
 <script src="stockfishwasm/stockfish.js"></script>
 <script src="utils.js"></script>
 <script src="outopt.js"></script>
 <script src="bot.js"></script>
-${user ? "logged in as <b>" + user.username + "</b> <a href='/logout'>log out</a>" : "<a href='/auth/lichess/bot'>login</a>" }
+${user ? "logged in as <b>" + user.username + "</b> <a href='/logout'>log out</a>" : "Make sure you are logged into lichess with your bot account, then <a href='/auth/lichess/bot'>login your bot using oauth</a> ." }
+<hr>
+<div id="logs"></div>
+<script src="https://unpkg.com/@easychessanimations/foo@1.0.30/lib/fooweb.js"></script>
+<script>
+	let oldConsole = console
+	
+	let items = []
+	
+	let app = div().h(400).ovfys()
+	
+	function newLog(...args){
+		args.forEach(arg => {
+			oldConsole.log(arg)
+			
+			let argStr = arg.toString()
+		
+			items.unshift(argStr)
+
+			while(items.length > 100) items.pop()
+
+			app.x().a(items.map(item=>
+				div()
+					.pad(3).mar(3).bc("#eee")
+					.html(argStr)
+			))
+		})
+	}
+	
+	console = {
+		log: newLog,
+		warn: newLog,
+		error: newLog,
+		info: newLog
+	}
+	
+	document.getElementById("logs").appendChild(app.e)	
+	
+	console.log("Welcome to Hyper Easy !")
+</script>
+<hr>
 `)
 })
 
