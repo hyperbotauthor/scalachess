@@ -144,9 +144,9 @@ class LichessBotGame_{
     }	
 	
 	findBookMoveThen(){
-		console.log(`find book ${!!this.parentBot.props.useBook} , fenPlies : ${this.fenPlies} , bookDepth : ${this.bookDepth} , bookSpread : ${this.parentBot.props.bookSpread}`)
+		console.log(`find book ${!!this.parentBot.props.useBook} , fenPlies : ${this.fenPlies} , bookDepth : ${this.parentBot.props.bookDepth} , bookSpread : ${this.parentBot.props.bookSpread}`)
 		
-		if( (!this.parentBot.props.useBook) || (this.fenPlies > this.bookDepth) ){
+		if( (!this.parentBot.props.useBook) || (this.fenPlies > this.parentBot.props.bookDepth) ){
 			return RP(null)
 		}
 		

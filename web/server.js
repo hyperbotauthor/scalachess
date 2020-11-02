@@ -136,7 +136,7 @@ For detailed instructions see <a href="https://lichess.org/forum/off-topic-discu
 	console.log("Welcome to Hyper Easy !")
 </script>
 <hr>
-	Alternative bots : ${altLinks.map(altLink => genLink(altLink[0], altLink[1])).join(" | ")}
+	Alternative bots : ${altLinks.map(altLink => genLink(altLink[0], altLink[1])).join(" | ")} .
 `)
 })
 
