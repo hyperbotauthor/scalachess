@@ -29,7 +29,15 @@ class LichessBotGame_{
 		}
 
         setTimeout(_=>{
-			this.engine
+			let allowThreads = true
+			
+			if(typeof SINGLE != "undefined"){
+				allowThreads = !SINGLE
+			}
+			
+			console.log("allow threads", allowThreads)
+			
+			if(allowThreads) this.engine
 				.setoption("Threads", this.parentBot.props.threads)
 
 			this.engine
