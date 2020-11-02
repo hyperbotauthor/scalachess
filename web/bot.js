@@ -247,8 +247,8 @@ class LichessBotGame_{
 						
 						if(this.parentBot.props.scoreCallback){
 							let color = "#000"
-							if(scorenumerical > 300) color = "#00a"
-							else if(scorenumerical > 0) color = "#007"
+							if(scorenumerical > 300) color = "#0a0"
+							else if(scorenumerical > 0) color = "#070"
 							else if(scorenumerical < 0) color = "#700"
 							else if(scorenumerical < -300) color = "#a00"
 							this.parentBot.props.scoreCallback(`Score unit : ${score.unit} , Score value : ${score.value}`, color)
