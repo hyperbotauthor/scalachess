@@ -114,8 +114,8 @@ class LichessBotGame_{
 						this.parentBot.props.useBook = (getLocal("useBook") || {checked:false}).checked
 						this.parentBot.props.bookDepth = parseInt((getLocal("bookDepth") || {selected:1}).selected)
 						this.parentBot.props.bookSpread = parseInt((getLocal("bookSpread") || {selected:1}).selected)
-						this.parentBot.props.bookSpeeds = parseInt((getLocal("bookSpeeds") || {selectedKeys:[]}).selectedKeys)
-						this.parentBot.props.bookRatings = parseInt((getLocal("bookRatings") || {selectedKeys:[]}).selectedKeys)
+						this.parentBot.props.bookSpeeds = (getLocal("bookSpeeds") || {selectedKeys:[]}).selectedKeys
+						this.parentBot.props.bookRatings = (getLocal("bookRatings") || {selectedKeys:[]}).selectedKeys
 						this.parentBot.props.usePonder = (getLocal("usePonder") || {checked:false}).checked
 						this.parentBot.props.threads = (getLocal("engineThreads") || {selected:1}).selected
 						this.parentBot.props.hash = (getLocal("engineHash") || {selected:16}).selected
