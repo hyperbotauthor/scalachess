@@ -1,3 +1,5 @@
+const SINGLE = document.location.href.match(/single=true/)
+
 const path = require('path')
 const express = require('express')
 const oauth = require('./oauth.js')
@@ -65,11 +67,12 @@ let USER = ${user ? JSON.stringify(user, null, 2) : "null"}
 document.title = "Hyper Easy ${user ? user.id : ""}"
 </script>
 <script src="https://unpkg.com/@easychessanimations/uci@1.0.29/lib/uci.js"></script>	
-<script src="stockfishwasm/stockfish.js"></script>
+<script src="${SINGLE ? "single/stockfish.js" : "stockfishwasm/stockfish.js"}"></script>
 <script src="utils.js"></script>
 <script src="outopt.js"></script>
 <script src="bot.js"></script>
-${user ? "Logged in as <b>" + user.username + "</b> . <a href='/upgrade' rel='noopener noreferrer' target='_blank'>Request upgrade to bot</a> . <a href='/logout'>Log out</a> ." : "Make sure you are logged into lichess with your bot account, then <a href='/auth/lichess/bot'>login your bot using oauth</a> ." }
+${user ? "Logged in as <b>" + user.username + "</b> . <a href='/upgrade' rel='noopener noreferrer' target='_blank'>Request upgrade to bot</a> . <a href='/logout'>Log out</a> ." : "Make sure you are logged into lichess with your bot account, then <a href='/auth/lichess/bot'>login your bot using oauth</a> ." } 
+<a href="/?single=true">Use single threaded Stockfish</a> .
 <hr>
 For detailed instructions see <a href="https://lichess.org/forum/off-topic-discussion/hyper-easy-all-variants-lichess-bot-running-in-your-browser#1" rel="noopener noreferrer" target="_blank">this forum post</a> . ${genLink("https://github.com/hyperbotauthor/scalachess/issues", "Open an issue on GitHub")} . ${genLink("https://discord.gg/8m3Muay", "Join Hyper Bot Discord")} . ${genLink("https://lichess.org/team/hyperchessbot-team", "Join Hyper Chess Bot Team")} .
 	<hr>

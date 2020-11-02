@@ -747,7 +747,7 @@ class UciEngineWeb extends UciEngine{
 		
 		console.log("spawning Stockfish")
 		
-		StockfishMv().then(sf => {
+		(Stockfish || StockfishMv)().then(sf => {
 			console.log("spawning Stockfish done", sf)
 			
 			sf.addMessageListener(line => {
