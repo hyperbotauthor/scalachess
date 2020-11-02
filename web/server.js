@@ -66,7 +66,7 @@ document.title = "Hyper Easy ${user ? user.id : ""}"
 const SINGLE = document.location.href.match(/single=true/)
 </script>
 <script src="https://unpkg.com/@easychessanimations/uci@1.0.29/lib/uci.js"></script>	
-<script src="${SINGLE ? "single/stockfish.js" : "stockfishwasm/stockfish.js"}"></script>
+<script src="${req.query.SINGLE ? "single/stockfish.js" : "stockfishwasm/stockfish.js"}"></script>
 <script src="utils.js"></script>
 <script src="outopt.js"></script>
 <script src="bot.js"></script>
