@@ -83,7 +83,7 @@ For detailed instructions see <a href="https://lichess.org/forum/off-topic-discu
 	<div id="botSettings"></div>
 <hr>
 <div id="logs"></div>
-<script src="https://unpkg.com/@easychessanimations/foo@1.0.33/lib/fooweb.js"></script>
+<script src="https://unpkg.com/@easychessanimations/foo@1.0.39/lib/fooweb.js"></script>
 <script src="smartdom.js"></script>
 <script>
 	let oldConsole = console
