@@ -92,6 +92,10 @@ class LichessBotGame_{
 				
 				this.isWhiteTurn = this.currentFen.match(/ w /)
 				
+				let fenPlies = parseInt(this.currentFen.split(" ")[5])
+				if(isNaN(fenPlies)) fenPlies = 0
+				this.fenPlies = fenPlies + (this.isWhiteTurn ? 0 : 1)
+				
                 if((this.isWhiteTurn && this.botWhite) || ((!this.isWhiteTurn) && (!this.botWhite))){
                     if(this.legalMoveUcis.length){
                         let reduceThinkingTime = this.parentBot.props.reduceThinkingTime || DEFAULT_REDUCE_THINKING_TIME
@@ -108,6 +112,8 @@ class LichessBotGame_{
 						
 						this.parentBot.props.useRandom = (getLocal("useRandom") || {checked:false}).checked
 						this.parentBot.props.useBook = (getLocal("useBook") || {checked:false}).checked
+						this.parentBot.props.bookDepth = parseInt((getLocal("bookDepth") || {selected:1}).selected)
+						this.parentBot.props.bookSpread = parseInt((getLocal("bookSpread") || {selected:1}).selected)
 						this.parentBot.props.usePonder = (getLocal("usePonder") || {checked:false}).checked
 						this.parentBot.props.threads = (getLocal("engineThreads") || {selected:1}).selected
 						this.parentBot.props.hash = (getLocal("engineHash") || {selected:16}).selected
@@ -135,10 +141,10 @@ class LichessBotGame_{
                 }
             }
         }
-    }
+    }	
 	
 	findBookMoveThen(){
-		if(!this.parentBot.props.useBook){
+		if( (!this.parentBot.props.useBook) || (this.fenPlies > this.bookDepth) ){
 			return RP(null)
 		}
 		
@@ -146,7 +152,7 @@ class LichessBotGame_{
 			return requestLichessBook(
 				this.currentFen,
 				this.variant,
-				(this.parentBot.props.lichessBookMaxMoves || LICHESS_BOOK_MAX_MOVES),
+				(this.parentBot.props.bookSpread || LICHESS_BOOK_MAX_MOVES),
 				(this.parentBot.props.lichessBookAvgRatings || LICHESS_BOOK_AVG_RATINGS),
 				(this.parentBot.props.lichessBookTimeControls || LICHESS_BOOK_TIME_CONTROLS)
 			).then(result => {
