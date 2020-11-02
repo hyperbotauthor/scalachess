@@ -83,7 +83,7 @@ For detailed instructions see <a href="https://lichess.org/forum/off-topic-discu
 	
 	let items = []
 	
-	let app = div().h(450).ovfys()
+	let app = div().h(400).ovfs()
 	
 	function newLog(...args){
 		args.forEach(arg => {
