@@ -226,10 +226,12 @@ class LichessBotGame_{
 				if(result.depthInfos.length){
 					let score = result.depthInfos[result.depthInfos.length - 1].score
 					
-					if(score.unit == "cp"){
-						scorenumerical = score.value
-					}else{
-						score.value > 0 ? 10000 - score.value : -10000 - score.value
+					if(score){
+						if(score.unit == "cp"){
+							scorenumerical = score.value
+						}else{
+							score.value > 0 ? 10000 - score.value : -10000 - score.value
+						}	
 					}
 				}
 				
