@@ -230,8 +230,12 @@ class LichessBotGame_{
 						if(score.unit == "cp"){
 							scorenumerical = score.value
 						}else{
-							score.value > 0 ? 10000 - score.value : -10000 - score.value
+							scorenumerical = score.value > 0 ? 10000 - score.value : -10000 - score.value
 						}	
+						
+						if(this.parentBot.props.scoreCallback){
+							this.parentBot.props.scoreCallback(score, scorenumerical)
+						}
 					}
 				}
 				
@@ -367,7 +371,10 @@ if(!USER){
 if(USER.accessToken){
 	const bot = LichessBot({
 		userId: USER.id,
-		token: USER.accessToken
+		token: USER.accessToken,
+		scoreCallback: (score, scorenumerical) => {
+			document.getElementById("score").innerHTML = `Score unit : ${score.unit} , score value : ${score.value}`
+		}
 	})
 	
 	console.log(bot)
