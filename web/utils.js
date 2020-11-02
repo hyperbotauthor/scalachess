@@ -768,7 +768,9 @@ class UciEngineWeb extends UciEngine{
 			this.worker = new Worker("/single/stockfish.wasm.js")
 
         	this.worker.onmessage = message => {
-            	this.processLine(message.data.toString())
+				let line = message.data.toString()
+				console.log(line)
+            	this.processLine(line)
         	}
 		}
 
