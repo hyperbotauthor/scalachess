@@ -35,7 +35,7 @@ class LichessBotGame_{
 				.setoption("Move Overhead", this.parentBot.props.moveOverhead)
 			
 			this.gameStateReader.stream()
-		}, 10000)
+		}, 5000)
     }
 
     writeBotChat(rooms, msg){
