@@ -19,6 +19,10 @@ class LichessBotGame_{
         this.ratingDiff = 0
 
         this.gameStateReader = new NdjsonReader(LICHESS_STREAM_GAME_STATE_URL + "/" + this.id, this.processGameEvent.bind(this), this.parentBot.token, this.processTermination.bind(this))
+		
+		this.parentBot.props.threads = (getLocal("engineThreads") || {selected:1}).selected
+		this.parentBot.props.hash = (getLocal("engineHash") || {selected:16}).selected
+		this.parentBot.props.moveOverhead = (getLocal("engineMoveOverhead") || {selected:200}).selected
 
         setTimeout(_=>{
 			this.engine
@@ -131,9 +135,6 @@ class LichessBotGame_{
 						this.parentBot.props.bookSpeeds = (getLocal("bookSpeeds") || {selectedKeys:[]}).selectedKeys
 						this.parentBot.props.bookRatings = (getLocal("bookRatings") || {selectedKeys:[]}).selectedKeys
 						this.parentBot.props.usePonder = (getLocal("usePonder") || {checked:false}).checked
-						this.parentBot.props.threads = (getLocal("engineThreads") || {selected:1}).selected
-						this.parentBot.props.hash = (getLocal("engineHash") || {selected:16}).selected
-						this.parentBot.props.moveOverhead = (getLocal("engineMoveOverhead") || {selected:200}).selected
 						
 						if(this.parentBot.props.useRandom){
 							let randomUci = this.legalMoveUcis[Math.floor(Math.random() * this.legalMoveUcis.length)]
