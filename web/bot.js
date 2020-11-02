@@ -156,7 +156,7 @@ class LichessBotGame_{
 								if(this.parentBot.props.scoreCallback){
 									this.parentBot.props.scoreCallback(`Book move ${bookalgeb} .`)
 								}
-		}
+		
 								this.playBotMove("book", {
 									bestmove: bookalgeb,
 									scorenumerical: null
