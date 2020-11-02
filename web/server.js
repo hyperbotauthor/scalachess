@@ -44,7 +44,7 @@ altLinks = [
 	["https://github.com/ShailChoksi/lichess-bot", "lichess-bot"],
 	["https://github.com/tailuge/bot-o-tron", "bot-o-tron"],
 	["https://github.com/hyperchessbot/hyperbot", "Hyper Bot"],
-	["https://easychess.herokuapp.com/?nolog=true", "easychess"]
+	["https://easychess.herokuapp.com", "easychess"]
 ]
 
 app.get('/', (req, res) => {
