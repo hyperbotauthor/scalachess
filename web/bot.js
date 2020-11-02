@@ -15,21 +15,23 @@ class LichessBotGame_{
         this.id = props.id        
 
         this.engine = new UciEngineWeb()
-			
-		this.engine
-			.setoption("Threads", this.parentBot.props.threads)
-
-		this.engine
-			.setoption("Hash", this.parentBot.props.hash)
-
-		this.engine
-			.setoption("Move Overhead", this.parentBot.props.moveOverhead)
-
+		
         this.ratingDiff = 0
 
         this.gameStateReader = new NdjsonReader(LICHESS_STREAM_GAME_STATE_URL + "/" + this.id, this.processGameEvent.bind(this), this.parentBot.token, this.processTermination.bind(this))
 
-        setTimeout(_=>this.gameStateReader.stream(), 2000)
+        setTimeout(_=>{
+			this.engine
+				.setoption("Threads", this.parentBot.props.threads)
+
+			this.engine
+				.setoption("Hash", this.parentBot.props.hash)
+
+			this.engine
+				.setoption("Move Overhead", this.parentBot.props.moveOverhead)
+			
+			this.gameStateReader.stream()
+		}, 3000)
     }
 
     writeBotChat(rooms, msg){
