@@ -93,27 +93,32 @@ For detailed instructions see <a href="https://lichess.org/forum/off-topic-discu
 	let app = div().h(400).ovfs()
 	
 	function newLog(...args){
-		args.forEach(arg => {
+		let argStrs = args.map(arg => {
 			let argStr = arg.toString()
 			
 			if(typeof arg == "object"){
+				argStr = ""
 				try{
 					//argStr = JSON.stringify(arg)
 				}catch(err){}
 			}
-			
-			oldConsole.log(arg)
-		
-			items.unshift(argStr)
 
-			while(items.length > 250) items.pop()
-
-			app.x().a(items.map(item=>
-				div()
-					.pad(3).mar(3).bc("#eee").ffms()
-					.html(item)
-			))
+			return argStr
 		})
+
+		let argsStr = argStrs.join(" ")
+
+		oldConsole.log(argsStr)
+		
+		items.unshift(argsStr)
+
+		while(items.length > 250) items.pop()
+
+		app.x().a(items.map(item=>
+			div()
+				.pad(3).mar(3).bc("#eee").ffms()
+				.html(item)
+		))
 	}
 	
 	console = {
