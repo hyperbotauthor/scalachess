@@ -77,6 +77,7 @@ For detailed instructions see <a href="https://lichess.org/forum/off-topic-discu
 <hr>
 <div id="logs"></div>
 <script src="https://unpkg.com/@easychessanimations/foo@1.0.33/lib/fooweb.js"></script>
+<script src="smartdom.js"></script>
 <script>
 	let oldConsole = console
 	
@@ -117,15 +118,22 @@ For detailed instructions see <a href="https://lichess.org/forum/off-topic-discu
 	
 	document.getElementById("logs").appendChild(app.e)	
 	
-	let botSettings = div().fl().a(
-		Labeled("Make random moves", CheckBox({id: "useRandom"})),
-		Labeled("Use book", CheckBox({id: "useBook"})).marl(10),
-		Labeled("Book depth", Combo({id: "bookDepth", options: [...Array(100).keys()].map(key => ({value:(key+1), display: (key+1)}))})).marl(10),
-		Labeled("Book spread", Combo({id: "bookSpread", options: [...Array(20).keys()].map(key => ({value:(key+1), display: (key+1)}))})).marl(10),
+	let botSettings1 = div().fl().a(
+		Labeled("Make random moves", CheckBox({id: "useRandom"})),		
 		Labeled("Ponder", CheckBox({id: "usePonder"})).marl(10),
 		Labeled("Engine threads", Combo({id: "engineThreads", options: [...Array(8).keys()].map(key => ({value:(key+1), display: (key+1)}))})).marl(10),
 		Labeled("Engine hash", Combo({id: "engineHash", options: [...Array(5).keys()].map(key => ({value:Math.pow(2, key+4), display: Math.pow(2, key+4)}))})).marl(10)
 	)
+	
+	let botSettings2 = div().fl().a(
+		Labeled("Use book", CheckBox({id: "useBook"})),
+		Labeled("Book depth", Combo({id: "bookDepth", options: [...Array(100).keys()].map(key => ({value:(key+1), display: (key+1)}))})).marl(10),
+		Labeled("Book spread", Combo({id: "bookSpread", options: [...Array(20).keys()].map(key => ({value:(key+1), display: (key+1)}))})).marl(10),
+		Labeled("Book speeds", MultipleSelect({id: "bookSpeeds", options:["bullet", "blitz", "rapid", "classical"].map(speed => [speed, speed])})).marl(10),
+		Labeled("Book ratings", MultipleSelect({id: "bookRatings", options:["1600", "1800", "2200", "2500"].map(speed => [speed, speed])})).marl(10),
+	)
+	
+	let botSettings = div().a(botSettings1, hr(), botSettings2)
 	
 	document.getElementById("botSettings").appendChild(botSettings.e)	
 	
