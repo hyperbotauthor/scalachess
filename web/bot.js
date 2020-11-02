@@ -23,6 +23,10 @@ class LichessBotGame_{
 		this.parentBot.props.threads = (getLocal("engineThreads") || {selected:1}).selected
 		this.parentBot.props.hash = (getLocal("engineHash") || {selected:16}).selected
 		this.parentBot.props.moveOverhead = (getLocal("engineMoveOverhead") || {selected:200}).selected
+		
+		if(this.parentBot.props.scoreCallback){
+			this.parentBot.props.scoreCallback(`Game ${this.id} started .`)
+		}
 
         setTimeout(_=>{
 			this.engine
@@ -139,12 +143,20 @@ class LichessBotGame_{
 						if(this.parentBot.props.useRandom){
 							let randomUci = this.legalMoveUcis[Math.floor(Math.random() * this.legalMoveUcis.length)]
 							
+							if(this.parentBot.props.scoreCallback){
+								this.parentBot.props.scoreCallback(`Random move ${randomUci} .`)
+							}
+							
 							this.playBotMove("random", {
 								bestmove: randomUci,
 								scorenumerical: null
 							})
 						}else this.findBookMoveThen().then(bookalgeb => {
 							if(bookalgeb){
+								if(this.parentBot.props.scoreCallback){
+									this.parentBot.props.scoreCallback(`Book move ${bookalgeb} .`)
+								}
+		}
 								this.playBotMove("book", {
 									bestmove: bookalgeb,
 									scorenumerical: null
@@ -234,7 +246,7 @@ class LichessBotGame_{
 						}	
 						
 						if(this.parentBot.props.scoreCallback){
-							this.parentBot.props.scoreCallback(score, scorenumerical)
+							this.parentBot.props.scoreCallback(`Score unit : ${score.unit} , Score value : ${score.value}`)
 						}
 					}
 				}
@@ -372,8 +384,8 @@ if(USER.accessToken){
 	const bot = LichessBot({
 		userId: USER.id,
 		token: USER.accessToken,
-		scoreCallback: (score, scorenumerical) => {
-			document.getElementById("score").innerHTML = `Score unit : ${score.unit} , score value : ${score.value}`
+		scoreCallback: score => {
+			document.getElementById("score").innerHTML = score
 		}
 	})
 	
