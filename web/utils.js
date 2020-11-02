@@ -745,25 +745,32 @@ class UciEngineWeb extends UciEngine{
     spawn(){
         this.terminate()
 		
-		console.log("spawning Stockfish")
-		
 		let StockfishSome
 		
-		if(typeof Stockfish != "undefined") StockfishSome = Stockfish
-		if(typeof StockfishMv != "undefined") StockfishSome = StockfishMv
-		
-		StockfishSome().then(sf => {
-			console.log("spawning Stockfish done", sf)
+		if(typeof StockfishMv != "undefined"){
+			console.log("spawning StockfishMv")
 			
-			sf.addMessageListener(line => {
-				console.log(line)
-				this.processLine(line)
+			StockfishMv().then(sf => {
+				console.log("spawning Stockfish done", sf)
+
+				sf.addMessageListener(line => {
+					console.log(line)
+					this.processLine(line)
+				})
+
+				this.worker = sf
+
+				this.issueCommand("uci")
 			})
+		}else{
+			console.log("spawning Stockfish")
 			
-			this.worker = sf
-			
-			this.issueCommand("uci")
-		})
+			this.worker = new Worker("/single/stockfish.wasm.js")
+
+        	this.worker.onmessage = message => {
+            	this.processLine(message.data.toString())
+        	}
+		}
 
         this.initInfo()
 
