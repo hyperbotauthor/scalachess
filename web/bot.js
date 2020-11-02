@@ -94,7 +94,7 @@ class LichessBotGame_{
 				
 				let fenPlies = parseInt(this.currentFen.split(" ")[5])
 				if(isNaN(fenPlies)) fenPlies = 0
-				this.fenPlies = fenPlies + (this.isWhiteTurn ? 0 : 1)
+				this.fenPlies = fenPlies * 2 + (this.isWhiteTurn ? 0 : 1)
 				
                 if((this.isWhiteTurn && this.botWhite) || ((!this.isWhiteTurn) && (!this.botWhite))){
                     if(this.legalMoveUcis.length){
