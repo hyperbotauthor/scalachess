@@ -151,7 +151,7 @@ class LichessBotGame_{
 								})
 							}else{
 								this.findEngineMoveThen().then(result => {
-									this.playBotMove("book", result)
+									this.playBotMove("engine", result)
 								})
 							}
 						})
