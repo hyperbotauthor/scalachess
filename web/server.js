@@ -60,7 +60,7 @@ app.get('/', (req, res) => {
 		}
 	}
 	
-	const SINGLE = req.query.SINGLE
+	const SINGLE = req.query.single == "true"
 	
 	console.log("SINGLE", SINGLE)
 	
