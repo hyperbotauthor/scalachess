@@ -15,9 +15,6 @@ class LichessBotGame_{
         this.id = props.id        
 
         this.engine = new UciEngineWeb()
-		
-		this.engine
-			.setoption("UCI_Variant", this.variant.toLowerCase())
 			
 		this.engine
 			.setoption("Threads", this.parentBot.props.threads)
@@ -74,6 +71,9 @@ class LichessBotGame_{
             this.ratingDiff = this.oppRating - this.botRating
 
             this.variant = gameFull.variant.key
+			
+			this.engine
+				.setoption("UCI_Variant", this.variant.toLowerCase())
 
             this.initialFen = gameFull.initialFen
 
