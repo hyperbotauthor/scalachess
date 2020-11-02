@@ -122,7 +122,8 @@ For detailed instructions see <a href="https://lichess.org/forum/off-topic-discu
 		Labeled("Make random moves", CheckBox({id: "useRandom"})),		
 		Labeled("Ponder", CheckBox({id: "usePonder"})).marl(10),
 		Labeled("Engine threads", Combo({id: "engineThreads", options: [...Array(8).keys()].map(key => ({value:(key+1), display: (key+1)}))})).marl(10),
-		Labeled("Engine hash", Combo({id: "engineHash", options: [...Array(5).keys()].map(key => ({value:Math.pow(2, key+4), display: Math.pow(2, key+4)}))})).marl(10)
+		Labeled("Engine hash", Combo({id: "engineHash", options: [...Array(5).keys()].map(key => ({value:Math.pow(2, key+4), display: Math.pow(2, key+4)}))})).marl(10),
+		Labeled("Move overhead", Combo({id: "engineMoveOverhead", options: [...Array(49).keys()].map(key => ({value:(key+2)*100, display: (key+2)*100}))})).marl(10),
 	)
 	
 	let botSettings2 = div().fl().a(

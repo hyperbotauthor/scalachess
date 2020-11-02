@@ -119,6 +119,7 @@ class LichessBotGame_{
 						this.parentBot.props.usePonder = (getLocal("usePonder") || {checked:false}).checked
 						this.parentBot.props.threads = (getLocal("engineThreads") || {selected:1}).selected
 						this.parentBot.props.hash = (getLocal("engineHash") || {selected:16}).selected
+						this.parentBot.props.moveOverhead = (getLocal("engineMoveOverhead") || {selected:200}).selected
 						
 						if(this.parentBot.props.useRandom){
 							let randomUci = this.legalMoveUcis[Math.floor(Math.random() * this.legalMoveUcis.length)]
@@ -192,19 +193,17 @@ class LichessBotGame_{
 	
 	findEngineMoveThen(){
 		return P(resolve => {
-			this.moveOverHead = parseInt(this.parentBot.props.moveOverHead || 500)
-
 			this.engine
 				.setoption("UCI_Variant", this.variant.toLowerCase())
-
-			this.engine
-				.setoption("Move Overhead", this.moveOverHead)
 			
 			this.engine
 				.setoption("Threads", this.parentBot.props.threads)
 			
 			this.engine
 				.setoption("Hash", this.parentBot.props.hash)
+			
+			this.engine
+				.setoption("Move Overhead", this.parentBot.props.moveOverhead)
 
 			let specifier = this.initialFen == "startpos" ? "startpos" : `fen ${this.initialFen}`
 
