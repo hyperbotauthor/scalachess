@@ -213,7 +213,7 @@ class LichessBotGame_{
 
 			this.engine.gothen({
 				wtime: this.timecontrol.wtime,
-				winc: this.timecontrol.inc,
+				winc: this.timecontrol.winc,
 				btime: this.timecontrol.btime,
 				binc: this.timecontrol.binc,
 				ponderAfter: this.parentBot.props.usePonder
