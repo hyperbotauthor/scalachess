@@ -40,7 +40,7 @@ class LichessBotGame_{
 			if(allowThreads) this.engine
 				.setoption("Threads", this.parentBot.props.threads)
 
-			this.engine
+			if(allowThreads) this.engine
 				.setoption("Hash", this.parentBot.props.hash)
 
 			this.engine
