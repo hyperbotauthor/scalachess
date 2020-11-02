@@ -747,7 +747,12 @@ class UciEngineWeb extends UciEngine{
 		
 		console.log("spawning Stockfish")
 		
-		(Stockfish || StockfishMv)().then(sf => {
+		let StockfishSome
+		
+		if(typeof Stockfish != "undefined") StockfishSome = Stockfish
+		if(typeof StockfishMv != "undefined") StockfishSome = StockfishMv
+		
+		StockfishSome().then(sf => {
 			console.log("spawning Stockfish done", sf)
 			
 			sf.addMessageListener(line => {
