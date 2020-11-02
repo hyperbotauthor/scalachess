@@ -36,6 +36,17 @@ app.get('/upgrade', (req, res) => {
 	}).then(response => response.text().then(content => res.send(`Upgrade status : <b>${content}</b> .`)))
 })
 
+function genLink(href, display){
+	return `<a href="${href}" rel="noopener noreferrer" target="_blank">${display}</a>`
+}
+
+altLinks = [
+	["https://github.com/ShailChoksi/lichess-bot", "lichess-bot"],
+	["https://github.com/tailuge/bot-o-tron", "bot-o-tron"],
+	["https://github.com/hyperchessbot/hyperbot", "Hyper Bot"],
+	["https://easychess.herokuapp.com/?nolog=true", "easychess"]
+]
+
 app.get('/', (req, res) => {
 	let user
 	
@@ -71,7 +82,7 @@ For detailed instructions see <a href="https://lichess.org/forum/off-topic-discu
 	
 	let items = []
 	
-	let app = div().h(500).ovfys()
+	let app = div().h(450).ovfys()
 	
 	function newLog(...args){
 		args.forEach(arg => {
@@ -125,6 +136,7 @@ For detailed instructions see <a href="https://lichess.org/forum/off-topic-discu
 	console.log("Welcome to Hyper Easy !")
 </script>
 <hr>
+	Alternative bots : ${altLinks.map(altLink => genLink(altLink[0], altLink[1])).join(" | ")}
 `)
 })
 
