@@ -71,7 +71,7 @@ const SINGLE = document.location.href.match(/single=true/)
 <script src="outopt.js"></script>
 <script src="bot.js"></script>
 ${user ? "Logged in as <b>" + user.username + "</b> . <a href='/upgrade' rel='noopener noreferrer' target='_blank'>Request upgrade to bot</a> . <a href='/logout'>Log out</a> ." : "Make sure you are logged into lichess with your bot account, then <a href='/auth/lichess/bot'>login your bot using oauth</a> ." } 
-<a href="/?single=true">Use single threaded Stockfish</a> .
+<a href="${req.query.SINGLE ? "/?single=false" : "/?single=true"}">Use ${req.query.SINGLE ? "multi" : "single"} threaded Stockfish</a> .
 <hr>
 For detailed instructions see <a href="https://lichess.org/forum/off-topic-discussion/hyper-easy-all-variants-lichess-bot-running-in-your-browser#1" rel="noopener noreferrer" target="_blank">this forum post</a> . ${genLink("https://github.com/hyperbotauthor/scalachess/issues", "Open an issue on GitHub")} . ${genLink("https://discord.gg/8m3Muay", "Join Hyper Bot Discord")} . ${genLink("https://lichess.org/team/hyperchessbot-team", "Join Hyper Chess Bot Team")} .
 	<hr>
