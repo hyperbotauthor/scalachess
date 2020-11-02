@@ -15,6 +15,18 @@ class LichessBotGame_{
         this.id = props.id        
 
         this.engine = new UciEngineWeb()
+		
+		this.engine
+			.setoption("UCI_Variant", this.variant.toLowerCase())
+			
+		this.engine
+			.setoption("Threads", this.parentBot.props.threads)
+
+		this.engine
+			.setoption("Hash", this.parentBot.props.hash)
+
+		this.engine
+			.setoption("Move Overhead", this.parentBot.props.moveOverhead)
 
         this.ratingDiff = 0
 
@@ -193,18 +205,6 @@ class LichessBotGame_{
 	
 	findEngineMoveThen(){
 		return P(resolve => {
-			this.engine
-				.setoption("UCI_Variant", this.variant.toLowerCase())
-			
-			this.engine
-				.setoption("Threads", this.parentBot.props.threads)
-			
-			this.engine
-				.setoption("Hash", this.parentBot.props.hash)
-			
-			this.engine
-				.setoption("Move Overhead", this.parentBot.props.moveOverhead)
-
 			let specifier = this.initialFen == "startpos" ? "startpos" : `fen ${this.initialFen}`
 
 			console.log("position", specifier, this.moves)
