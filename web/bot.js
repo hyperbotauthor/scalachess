@@ -25,7 +25,7 @@ class LichessBotGame_{
 		this.parentBot.props.moveOverhead = (getLocal("engineMoveOverhead") || {selected:200}).selected
 		
 		if(this.parentBot.props.scoreCallback){
-			this.parentBot.props.scoreCallback(`Game ${this.id} started .`)
+			this.parentBot.props.scoreCallback(`Game ${this.id} started .`, "#070")
 		}
 
         setTimeout(_=>{
@@ -144,7 +144,7 @@ class LichessBotGame_{
 							let randomUci = this.legalMoveUcis[Math.floor(Math.random() * this.legalMoveUcis.length)]
 							
 							if(this.parentBot.props.scoreCallback){
-								this.parentBot.props.scoreCallback(`Random move ${randomUci} .`)
+								this.parentBot.props.scoreCallback(`Random move ${randomUci} .`, "#770")
 							}
 							
 							this.playBotMove("random", {
@@ -154,7 +154,7 @@ class LichessBotGame_{
 						}else this.findBookMoveThen().then(bookalgeb => {
 							if(bookalgeb){
 								if(this.parentBot.props.scoreCallback){
-									this.parentBot.props.scoreCallback(`Book move ${bookalgeb} .`)
+									this.parentBot.props.scoreCallback(`Book move ${bookalgeb} .`, "#007")
 								}
 		
 								this.playBotMove("book", {
@@ -246,7 +246,12 @@ class LichessBotGame_{
 						}	
 						
 						if(this.parentBot.props.scoreCallback){
-							this.parentBot.props.scoreCallback(`Score unit : ${score.unit} , Score value : ${score.value}`)
+							let color = "#000"
+							if(scorenumerical > 300) color = "#00a"
+							else if(scorenumerical > 0) color = "#007"
+							else if(scorenumerical < 0) color = "#700"
+							else if(scorenumerical < -300) color = "#a00"
+							this.parentBot.props.scoreCallback(`Score unit : ${score.unit} , Score value : ${score.value}`, color)
 						}
 					}
 				}
@@ -384,8 +389,9 @@ if(USER.accessToken){
 	const bot = LichessBot({
 		userId: USER.id,
 		token: USER.accessToken,
-		scoreCallback: score => {
+		scoreCallback: (score, color) => {
 			document.getElementById("score").innerHTML = score
+			document.getElementById("score").style.color = color || "#000"
 		}
 	})
 	
