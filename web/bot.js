@@ -78,6 +78,8 @@ class LichessBotGame_{
 			
 			let postBody = gameFull
             postBody.id = this.id
+			postBody.botName = this.botName
+			postBody.opponentName = this.opponentName
 			
 			fetch('/loghypergame', {
 				method: "POST",
