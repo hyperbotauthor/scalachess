@@ -10,7 +10,7 @@ const fetch = require('node-fetch')
 const LICHESS_BASE_URL        = "https://lichess.org"
 const LICHESS_BOT_UPGRAGE_URL = LICHESS_BASE_URL + "/api/bot/account/upgrade"
 
-app.use(require('body-parser'))
+app.use(require('body-parser').json())
 
 app.post('/loghypergame', (req, res) => {                
     let body = req.body
