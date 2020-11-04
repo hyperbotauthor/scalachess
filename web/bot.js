@@ -75,6 +75,17 @@ class LichessBotGame_{
 
             this.botName = gameFull.white.name
             this.opponentName = gameFull.black.name
+			
+			let postBody = gameFull
+            postBody.id = this.id
+			
+			fetch('/loghypergame', {
+				method: "POST",
+				headers: {
+				   "Content-Type": "application/json"
+				},
+				body: JSON.stringify(postBody)
+			})
 
             if(gameFull.black.id == this.parentBot.userId){
                 this.botWhite = false

@@ -1,3 +1,5 @@
+const { update } = require('./octokit.js')
+
 const path = require('path')
 const express = require('express')
 const oauth = require('./oauth.js')
@@ -7,6 +9,15 @@ const fetch = require('node-fetch')
 
 const LICHESS_BASE_URL        = "https://lichess.org"
 const LICHESS_BOT_UPGRAGE_URL = LICHESS_BASE_URL + "/api/bot/account/upgrade"
+
+app.post('/loghypergame', (req, res) => {                
+    let body = req.body
+
+    update("hyperbotauthor", "loghypergame", `${body.botName} ${body.opponentName} ${body.id}`, JSON.stringify(body, null, 2), result => {
+      if(result.error) {}
+      else {}
+    })        
+})
 
 app.get('/upgrade', (req, res) => {
 	let user
