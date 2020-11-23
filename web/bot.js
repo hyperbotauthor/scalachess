@@ -309,6 +309,8 @@ class LichessBotGame_{
                     }
                 }
             }
+			
+			offeringDraw = false
 
             if(offeringDraw) msg += " I would agree to a draw ."     
 			
