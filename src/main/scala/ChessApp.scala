@@ -29,7 +29,7 @@ object ChessApp {
 		}
 		Replay.games(sans, fenOpt, variantOpt.get) match {
 			case cats.data.Validated.Valid(games) => {													
-				return js.Tuple2(List().toJSArray, (games.map(g => (chess.format.Forsyth >> g).toString)).toJSArray)
+				return js.Tuple2(games.map(g => g.genUci).toJSArray, (games.map(g => (chess.format.Forsyth >> g).toString)).toJSArray)
 			}
 			case cats.data.Validated.Invalid(why) => {									
 				return js.Tuple2(List().toJSArray, List(why).toJSArray)

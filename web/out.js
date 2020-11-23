@@ -1019,17 +1019,13 @@ class $c_Lchess_ChessApp$ extends $c_O {
       const x2$2 = $as_Lcats_data_Validated$Valid(x1$2);
       const games = $as_sci_List(x2$2.Lcats_data_Validated$Valid__f_a);
       const $$x5 = $m_sjs_js_JSConverters$JSRichIterableOnce$();
-      const col$4 = $m_sci_Nil$();
-      const _1$2 = $$x5.toJSArray$extension__sc_IterableOnce__sjs_js_Array(col$4);
-      const $$x6 = $m_sjs_js_JSConverters$JSRichIterableOnce$();
       const f = ((this$2$1) => ((g$2) => {
         const g = $as_Lchess_Game(g$2);
-        const this$ = $m_Lchess_format_Forsyth$().$greater$greater__Lchess_Game__T(g);
-        return this$
+        return g.Lchess_Game__f_genUci
       }))(this);
-      let col$5;
+      let col$4;
       if ((games === $m_sci_Nil$())) {
-        col$5 = $m_sci_Nil$()
+        col$4 = $m_sci_Nil$()
       } else {
         const arg1 = games.head__O();
         const h = new $c_sci_$colon$colon(f(arg1), $m_sci_Nil$());
@@ -1042,7 +1038,31 @@ class $c_Lchess_ChessApp$ extends $c_O {
           t = nx;
           rest = $as_sci_List(rest.tail__O())
         };
-        col$5 = h
+        col$4 = h
+      };
+      const _1$2 = $$x5.toJSArray$extension__sc_IterableOnce__sjs_js_Array(col$4);
+      const $$x6 = $m_sjs_js_JSConverters$JSRichIterableOnce$();
+      const f$1 = ((this$3$1) => ((g$3$2) => {
+        const g$3 = $as_Lchess_Game(g$3$2);
+        const this$ = $m_Lchess_format_Forsyth$().$greater$greater__Lchess_Game__T(g$3);
+        return this$
+      }))(this);
+      let col$5;
+      if ((games === $m_sci_Nil$())) {
+        col$5 = $m_sci_Nil$()
+      } else {
+        const arg1$2 = games.head__O();
+        const h$1 = new $c_sci_$colon$colon(f$1(arg1$2), $m_sci_Nil$());
+        let t$1 = h$1;
+        let rest$1 = $as_sci_List(games.tail__O());
+        while ((rest$1 !== $m_sci_Nil$())) {
+          const arg1$3 = rest$1.head__O();
+          const nx$1 = new $c_sci_$colon$colon(f$1(arg1$3), $m_sci_Nil$());
+          t$1.sci_$colon$colon__f_next = nx$1;
+          t$1 = nx$1;
+          rest$1 = $as_sci_List(rest$1.tail__O())
+        };
+        col$5 = h$1
       };
       const _2$2 = $$x6.toJSArray$extension__sc_IterableOnce__sjs_js_Array(col$5);
       return [_1$2, _2$2]
@@ -12040,7 +12060,7 @@ class $c_Lchess_Game$ extends $c_O {
     const $$x1 = new $c_Lchess_Situation($m_Lchess_Board$().apply__sc_Iterable__Lchess_Castles__Lchess_variant_Variant__Lchess_Board(variant.pieces__sci_Map(), variant.castles__Lchess_Castles(), variant), $m_Lchess_package$().White__Lchess_Color$White$());
     const this$3 = $m_s_package$().s_package$__f_Vector;
     const elems = $m_sci_Nil$();
-    return new $c_Lchess_Game($$x1, this$3.from__sc_IterableOnce__sci_Vector(elems), $m_s_None$(), 0, 0)
+    return new $c_Lchess_Game($$x1, this$3.from__sc_IterableOnce__sci_Vector(elems), $m_s_None$(), 0, 0, "")
   };
   apply__s_Option__s_Option__Lchess_Game(variantOption, fen) {
     const variant = $as_Lchess_variant_Variant(($m_Lchess_package$(), (variantOption.isEmpty__Z() ? $m_Lchess_variant_Standard$() : variantOption.get__O())));
@@ -12065,7 +12085,8 @@ class $c_Lchess_Game$ extends $c_O {
       const x$3$1 = g.Lchess_Game__f_pgnMoves;
       const x$4 = g.Lchess_Game__f_clock;
       const x$5 = g.Lchess_Game__f_startedAtTurn;
-      return new $c_Lchess_Game(x$1, x$3$1, x$4, x$2, x$5)
+      const x$6 = g.Lchess_Game__f_genUci;
+      return new $c_Lchess_Game(x$1, x$3$1, x$4, x$2, x$5, x$6)
     }
   };
 }
@@ -13202,22 +13223,43 @@ const $p_Lchess_Replay$__recursiveGames__Lchess_Game__sci_List__Lcats_data_Valid
         const move = $as_Lchess_Move(a$3);
         newGame = game.apply__Lchess_Move__Lchess_Game(move)
       };
+      let uci;
+      if ((moveOrDrop instanceof $c_s_util_Right)) {
+        const x2$3 = $as_s_util_Right(moveOrDrop);
+        const b$1 = x2$3.s_util_Right__f_value;
+        const x$7 = $as_Lchess_Drop(b$1);
+        uci = x$7.toUci__Lchess_format_Uci$Drop().uci__T()
+      } else {
+        if ((!(moveOrDrop instanceof $c_s_util_Left))) {
+          throw new $c_s_MatchError(moveOrDrop)
+        };
+        const x3$1 = $as_s_util_Left(moveOrDrop);
+        const a$4 = x3$1.s_util_Left__f_value;
+        const x$6 = $as_Lchess_Move(a$4);
+        uci = new $c_Lchess_format_Uci$Move(x$6.Lchess_Move__f_orig, x$6.Lchess_Move__f_dest, x$6.Lchess_Move__f_promotion).uci__T()
+      };
       const this$5 = $p_Lchess_Replay$__recursiveGames__Lchess_Game__sci_List__Lcats_data_Validated($m_Lchess_Replay$(), newGame, rest);
       if ((this$5 instanceof $c_Lcats_data_Validated$Invalid)) {
-        const x2$3 = $as_Lcats_data_Validated$Invalid(this$5);
-        return x2$3
+        const x2$4 = $as_Lcats_data_Validated$Invalid(this$5);
+        return x2$4
       } else {
         if ((!(this$5 instanceof $c_Lcats_data_Validated$Valid))) {
           throw new $c_s_MatchError(this$5)
         };
         const x4 = $as_Lcats_data_Validated$Valid(this$5);
-        const a$4 = x4.Lcats_data_Validated$Valid__f_a;
-        const x$6 = $as_sci_List(a$4);
-        return new $c_Lcats_data_Validated$Valid(new $c_sci_$colon$colon(newGame, x$6))
+        const a$5 = x4.Lcats_data_Validated$Valid__f_a;
+        const x$8 = $as_sci_List(a$5);
+        const x$2 = newGame.Lchess_Game__f_situation;
+        const x$3 = newGame.Lchess_Game__f_pgnMoves;
+        const x$4 = newGame.Lchess_Game__f_clock;
+        const x$5 = newGame.Lchess_Game__f_turns;
+        const x$6$1 = newGame.Lchess_Game__f_startedAtTurn;
+        const rassoc$2 = new $c_Lchess_Game(x$2, x$3, x$4, x$5, x$6$1, uci);
+        return new $c_Lcats_data_Validated$Valid(new $c_sci_$colon$colon(rassoc$2, x$8))
       }
     } else if ((this$4 instanceof $c_Lcats_data_Validated$Invalid)) {
-      const x3$1 = $as_Lcats_data_Validated$Invalid(this$4);
-      return x3$1
+      const x3$2 = $as_Lcats_data_Validated$Invalid(this$4);
+      return x3$2
     } else {
       throw new $c_s_MatchError(this$4)
     }
@@ -13232,7 +13274,8 @@ const $p_Lchess_Replay$__makeGame__Lchess_variant_Variant__s_Option__Lchess_Game
   const x$3 = g.Lchess_Game__f_pgnMoves;
   const x$4 = g.Lchess_Game__f_clock;
   const x$5 = g.Lchess_Game__f_turns;
-  return new $c_Lchess_Game(x$2, x$3, x$4, x$5, x$1)
+  const x$6 = g.Lchess_Game__f_genUci;
+  return new $c_Lchess_Game(x$2, x$3, x$4, x$5, x$1, x$6)
 });
 class $c_Lchess_Replay$ extends $c_O {
   games__sc_Iterable__s_Option__Lchess_variant_Variant__Lcats_data_Validated(moveStrs, initialFen, variant) {
@@ -13252,8 +13295,8 @@ class $c_Lchess_Replay$ extends $c_O {
         };
         const x4 = $as_Lcats_data_Validated$Valid(this$2);
         const a$1 = x4.Lcats_data_Validated$Valid__f_a;
-        const x$7 = $as_sci_List(a$1);
-        return new $c_Lcats_data_Validated$Valid(new $c_sci_$colon$colon(game, x$7))
+        const x$9 = $as_sci_List(a$1);
+        return new $c_Lcats_data_Validated$Valid(new $c_sci_$colon$colon(game, x$9))
       }
     } else if ((this$1 instanceof $c_Lcats_data_Validated$Invalid)) {
       const x3 = $as_Lcats_data_Validated$Invalid(this$1);
@@ -23884,18 +23927,20 @@ const $p_Lchess_Game__applyClock__Lchess_MoveMetrics__Z__s_Option = (function($t
   }
 });
 class $c_Lchess_Game extends $c_O {
-  constructor(situation, pgnMoves, clock, turns, startedAtTurn) {
+  constructor(situation, pgnMoves, clock, turns, startedAtTurn, genUci) {
     super();
     this.Lchess_Game__f_situation = null;
     this.Lchess_Game__f_pgnMoves = null;
     this.Lchess_Game__f_clock = null;
     this.Lchess_Game__f_turns = 0;
     this.Lchess_Game__f_startedAtTurn = 0;
+    this.Lchess_Game__f_genUci = null;
     this.Lchess_Game__f_situation = situation;
     this.Lchess_Game__f_pgnMoves = pgnMoves;
     this.Lchess_Game__f_clock = clock;
     this.Lchess_Game__f_turns = turns;
-    this.Lchess_Game__f_startedAtTurn = startedAtTurn
+    this.Lchess_Game__f_startedAtTurn = startedAtTurn;
+    this.Lchess_Game__f_genUci = genUci
   };
   apply__I__I__s_Option__Lchess_MoveMetrics__Lcats_data_Validated(orig, dest, promotion, metrics) {
     const this$1 = this.Lchess_Game__f_situation.move__I__I__s_Option__Lcats_data_Validated(orig, dest, promotion);
@@ -23933,7 +23978,8 @@ class $c_Lchess_Game extends $c_O {
     const x$3 = $as_sci_Vector(this$1.appended__O__O(elem));
     const x$4 = $p_Lchess_Game__applyClock__Lchess_MoveMetrics__Z__s_Option(this, move.Lchess_Move__f_metrics, newSituation.status__s_Option().isEmpty__Z());
     const x$5 = this.Lchess_Game__f_startedAtTurn;
-    return new $c_Lchess_Game(newSituation, x$3, x$4, x$2, x$5)
+    const x$6 = this.Lchess_Game__f_genUci;
+    return new $c_Lchess_Game(newSituation, x$3, x$4, x$2, x$5, x$6)
   };
   applyDrop__Lchess_Drop__Lchess_Game(drop) {
     const newSituation = drop.situationAfter__Lchess_Situation();
@@ -23943,7 +23989,8 @@ class $c_Lchess_Game extends $c_O {
     const x$3 = $as_sci_Vector(this$1.appended__O__O(elem));
     const x$4 = $p_Lchess_Game__applyClock__Lchess_MoveMetrics__Z__s_Option(this, drop.Lchess_Drop__f_metrics, newSituation.status__s_Option().isEmpty__Z());
     const x$5 = this.Lchess_Game__f_startedAtTurn;
-    return new $c_Lchess_Game(newSituation, x$3, x$4, x$2, x$5)
+    const x$6 = this.Lchess_Game__f_genUci;
+    return new $c_Lchess_Game(newSituation, x$3, x$4, x$2, x$5, x$6)
   };
   halfMoveClock__I() {
     return this.Lchess_Game__f_situation.Lchess_Situation__f_board.Lchess_Board__f_history.Lchess_History__f_halfMoveClock
@@ -23955,7 +24002,7 @@ class $c_Lchess_Game extends $c_O {
     return "Game"
   };
   productArity__I() {
-    return 5
+    return 6
   };
   productElement__I__O(x$1) {
     switch (x$1) {
@@ -23977,6 +24024,10 @@ class $c_Lchess_Game extends $c_O {
       }
       case 4: {
         return this.Lchess_Game__f_startedAtTurn;
+        break
+      }
+      case 5: {
+        return this.Lchess_Game__f_genUci;
         break
       }
       default: {
@@ -24011,7 +24062,11 @@ class $c_Lchess_Game extends $c_O {
     const data$5 = this.Lchess_Game__f_startedAtTurn;
     acc = $m_sr_Statics$().mix__I__I__I(hash$5, data$5);
     const hash$6 = acc;
-    return $m_sr_Statics$().finalizeHash__I__I__I(hash$6, 5)
+    const x$3 = this.Lchess_Game__f_genUci;
+    const data$6 = $m_sr_Statics$().anyHash__O__I(x$3);
+    acc = $m_sr_Statics$().mix__I__I__I(hash$6, data$6);
+    const hash$7 = acc;
+    return $m_sr_Statics$().finalizeHash__I__I__I(hash$7, 6)
   };
   toString__T() {
     return $m_sr_ScalaRunTime$()._toString__s_Product__T(this)
@@ -24021,26 +24076,32 @@ class $c_Lchess_Game extends $c_O {
       return true
     } else if ((x$1 instanceof $c_Lchess_Game)) {
       const Game$1 = $as_Lchess_Game(x$1);
-      let $$x2;
+      let $$x3;
       if (((this.Lchess_Game__f_turns === Game$1.Lchess_Game__f_turns) && (this.Lchess_Game__f_startedAtTurn === Game$1.Lchess_Game__f_startedAtTurn))) {
         const x = this.Lchess_Game__f_situation;
         const x$2 = Game$1.Lchess_Game__f_situation;
-        $$x2 = ((x === null) ? (x$2 === null) : x.equals__O__Z(x$2))
+        $$x3 = ((x === null) ? (x$2 === null) : x.equals__O__Z(x$2))
+      } else {
+        $$x3 = false
+      };
+      let $$x2;
+      if ($$x3) {
+        const x$3 = this.Lchess_Game__f_pgnMoves;
+        const x$4 = Game$1.Lchess_Game__f_pgnMoves;
+        $$x2 = ((x$3 === null) ? (x$4 === null) : x$3.equals__O__Z(x$4))
       } else {
         $$x2 = false
       };
       let $$x1;
       if ($$x2) {
-        const x$3 = this.Lchess_Game__f_pgnMoves;
-        const x$4 = Game$1.Lchess_Game__f_pgnMoves;
-        $$x1 = ((x$3 === null) ? (x$4 === null) : x$3.equals__O__Z(x$4))
+        const x$5 = this.Lchess_Game__f_clock;
+        const x$6 = Game$1.Lchess_Game__f_clock;
+        $$x1 = ((x$5 === null) ? (x$6 === null) : x$5.equals__O__Z(x$6))
       } else {
         $$x1 = false
       };
       if ($$x1) {
-        const x$5 = this.Lchess_Game__f_clock;
-        const x$6 = Game$1.Lchess_Game__f_clock;
-        return ((x$5 === null) ? (x$6 === null) : x$5.equals__O__Z(x$6))
+        return (this.Lchess_Game__f_genUci === Game$1.Lchess_Game__f_genUci)
       } else {
         return false
       }
@@ -63885,4 +63946,4 @@ function newGame(variantKey, fen){
 }
 
 // test
-console.log("test", makeSanMovesScala("standard", undefined, ["e4", "e5"]))
+console.log("test", makeSanMovesScala("standard", undefined, ["e4", "e5", "Nf3", "Nc6"]))
