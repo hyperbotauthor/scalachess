@@ -80,7 +80,7 @@ let sfwasm = new UciEngineWeb()
 			this.numRanks = props.numRanks || 8
 			this.boardWidth = this.numFiles * this.squareSize
 			this.boardHeight = this.numRanks * this.squareSize
-			this.legalMovesWidth = props.legalMovesWidth || 300
+			this.legalMovesWidth = props.legalMovesWidth || 250
 			this.controlPanelHeight = props.controlPanelHeight || 40
 			
 			this.variantKeys = props.variantKeys || ["standard"]
@@ -262,7 +262,7 @@ let sfwasm = new UciEngineWeb()
 					.pad(3).mar(1).curp()
 					.bc(this.uciInfo[uci] ? this.uciInfo[uci].bc : "#ffe")
 					.ae("click", _=>this.moveClicked(uci))
-																		 .html(this.uciInfo[uci] ? `${this.uciInfo[uci].san.padEnd(6, ' ')}${this.uciInfo[uci].plays ? ` plays ${this.uciInfo[uci].plays.toString().padStart(6, ' ')} , score ${(Math.round(this.uciInfo[uci].score/this.uciInfo[uci].plays*100)).toString().padStart(8, ' ')} %`: ""}`.replace(/ /g, "&nbsp;") : uci))
+																		 .html(this.uciInfo[uci] ? `${this.uciInfo[uci].san.padEnd(6, ' ')}${this.uciInfo[uci].plays ? ` plays ${this.uciInfo[uci].plays.toString().padStart(6, ' ')} , perf ${(Math.round(this.uciInfo[uci].score/this.uciInfo[uci].plays*100)).toString().padStart(4, ' ')} %`: ""}`.replace(/ /g, "&nbsp;") : uci))
 				 )
 			
 			return this
