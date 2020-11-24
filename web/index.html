@@ -18,6 +18,8 @@
 <script src="stockfishwasm/stockfish.js"></script>
 
 <script>
+let params = (new URL(document.location)).searchParams
+	
 class UciEngineWeb extends UciEngine{
 	constructor(){
 		super()
@@ -375,11 +377,24 @@ let sfwasm = new UciEngineWeb()
 				uciInfo[node.uci].first = first
 				first = false
 			}
+			
+			const fen = this.game.fen()
+			const legalMovesUcis = this.game.legalMovesUcis()
+			const variantKey = this.game.variantKey
+			
 			this.sb.setVariantKey(this.game.variantKey)
-			this.sb.setFen(this.game.fen(),this.game.legalMovesUcis(), uciInfo)			
+			this.sb.setFen(fen, legalMovesUcis, uciInfo)			
 			this.sb.setFlip(this.game.flip)
 			
 			this.game.save()
+			
+			let app = params.get("app")
+			
+			if(app){
+				fetch(`https://${app}.herokuapp.com/book/?fen=${fen}&variant=${variantKey}`, {headers: {Accept: "applcation/json"}}).then(response => response.text().then(content => {
+					console.log(content)
+				}))
+			}
 			
 			this.showLineContainer.html(this.game.linePgn() + (this.analyzedDisplays[this.game.fen()] ? ` [ eval ${this.analyzedDisplays[this.game.fen()]} ]` : ""))
 			
