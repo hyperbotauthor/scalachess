@@ -80,7 +80,7 @@ let sfwasm = new UciEngineWeb()
 			this.numRanks = props.numRanks || 8
 			this.boardWidth = this.numFiles * this.squareSize
 			this.boardHeight = this.numRanks * this.squareSize
-			this.legalMovesWidth = props.legalMovesWidth || 70
+			this.legalMovesWidth = props.legalMovesWidth || 300
 			this.controlPanelHeight = props.controlPanelHeight || 40
 			
 			this.variantKeys = props.variantKeys || ["standard"]
@@ -261,8 +261,8 @@ let sfwasm = new UciEngineWeb()
 				.a(this.legalMovesUcis.sort(this.cmpUcis.bind(this)).map(uci => div()
 					.pad(3).mar(1).curp()
 					.bc(this.uciInfo[uci] ? this.uciInfo[uci].bc : "#ffe")
-					.ae("click", _=>this.moveClicked(uci)).tac()
-					.html(this.uciInfo[uci] ? this.uciInfo[uci].san : uci))
+					.ae("click", _=>this.moveClicked(uci))
+																		 .html(this.uciInfo[uci] ? `${this.uciInfo[uci].san.padEnd(6, ' ')}${this.uciInfo[uci].plays ? ` plays ${this.uciInfo[uci].plays.toString().padStart(6, ' ')} , score ${this.uciInfo[uci].score.toString().padStart(8, ' ')}`: ""}`.replace(/ /g, "&nbsp;") : uci))
 				 )
 			
 			return this
@@ -273,6 +273,10 @@ let sfwasm = new UciEngineWeb()
 			infoA.san = infoA.san || a
 			let infoB = this.uciInfo[b] || {san: b}
 			infoB.san = infoB.san || b
+			
+			if(infoA.plays != infoB.plays){
+				return (infoB.plays || 0) - (infoA.plays || 0)
+			}
 			
 			if(infoA.first != infoB.first){
 				return (infoB.first ? 1 : 0) - (infoA.first ? 1 : 0)
@@ -391,8 +395,22 @@ let sfwasm = new UciEngineWeb()
 			let app = params.get("app")
 			
 			if(app){
-				fetch(`https://${app}.herokuapp.com/book/?fen=${fen}&variant=${variantKey}`, {headers: {Accept: "applcation/json"}}).then(response => response.text().then(content => {
-					console.log(content)
+				fetch(`https://${app}.herokuapp.com/book/?fen=${fen}&variant=${variantKey}`, {headers: {Accept: "application/json"}}).then(response => response.text().then(content => {
+					try{
+						const blob = JSON.parse(content)
+						
+						if(this.game.fen() == fen){
+							for(let item of blob){
+								uciInfo[item.uci].plays = item.plays
+								uciInfo[item.uci].score = item.score
+							}
+							
+							this.sb.setFen(fen, legalMovesUcis, uciInfo)			
+							this.sb.setFlip(this.game.flip)
+						}
+					}catch(err){
+						console.log("could not parse book content", err)
+					}
 				}))
 			}
 			
