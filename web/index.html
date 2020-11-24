@@ -262,7 +262,7 @@ let sfwasm = new UciEngineWeb()
 					.pad(3).mar(1).curp()
 					.bc(this.uciInfo[uci] ? this.uciInfo[uci].bc : "#ffe")
 					.ae("click", _=>this.moveClicked(uci))
-																		 .html(this.uciInfo[uci] ? `${this.uciInfo[uci].san.padEnd(6, ' ')}${this.uciInfo[uci].plays ? ` plays ${this.uciInfo[uci].plays.toString().padStart(6, ' ')} , score ${(Math.round(this.uciInfo[uci].score/this.uciInfo[uci].plays)).toString().padStart(8, ' ')} %`: ""}`.replace(/ /g, "&nbsp;") : uci))
+																		 .html(this.uciInfo[uci] ? `${this.uciInfo[uci].san.padEnd(6, ' ')}${this.uciInfo[uci].plays ? ` plays ${this.uciInfo[uci].plays.toString().padStart(6, ' ')} , score ${(Math.round(this.uciInfo[uci].score/this.uciInfo[uci].plays*100)).toString().padStart(8, ' ')} %`: ""}`.replace(/ /g, "&nbsp;") : uci))
 				 )
 			
 			return this
