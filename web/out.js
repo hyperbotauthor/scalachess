@@ -946,7 +946,10 @@ const $d_Lchess_Castles$Can = new $TypeData().initClass({
 });
 $c_Lchess_Castles$Can.prototype.$classData = $d_Lchess_Castles$Can;
 const $s_Lchess_ChessApp__main__AT__V = (function(args) {
-  $m_Lchess_ChessApp$().main__AT__V(args)
+  $m_Lchess_ChessApp$();
+  const this$3 = $m_s_Console$();
+  const this$4 = this$3.out__Ljava_io_PrintStream();
+  this$4.java$lang$JSConsoleBasedPrintStream$$printString__T__V("scalachess.js by hyperbotauthor\n")
 });
 class $c_Lchess_ChessApp$ extends $c_O {
   constructor() {
@@ -1379,15 +1382,6 @@ class $c_Lchess_ChessApp$ extends $c_O {
     const col$6 = $as_Lchess_Game(elem$1).Lchess_Game__f_pgnMoves;
     const _3$3 = $$x9.toJSArray$extension__sc_IterableOnce__sjs_js_Array(col$6);
     return [this$, _2$3, _3$3]
-  };
-  main__AT__V(args) {
-    const this$2 = $m_s_Console$();
-    const this$3 = this$2.out__Ljava_io_PrintStream();
-    this$3.java$lang$JSConsoleBasedPrintStream$$printString__T__V("scalachess.js by hyperbotauthor\n");
-    const x = this.parsePgn__T__sjs_js_Tuple2("[Event \"Casual Racing Kings game\"]\n[Site \"https://lichess.org/oaQqCIYx\"]\n[Date \"2020.11.25\"]\n[White \"chesshyperbot\"]\n[Black \"sChessNoob\"]\n[Result \"1-0\"]\n[UTCDate \"2020.11.25\"]\n[UTCTime \"15:17:16\"]\n[WhiteElo \"2008\"]\n[BlackElo \"1500\"]\n[WhiteTitle \"BOT\"]\n[Variant \"Racing Kings\"]\n[TimeControl \"180+0\"]\n[ECO \"?\"]\n[Opening \"?\"]\n[Termination \"Normal\"]\n[FEN \"8/8/8/8/8/8/krbnNBRK/qrbnNBRQ w - - 0 1\"]\n[SetUp \"1\"]\n[Annotator \"lichess.org\"]\n\n1. Kg3 Kb3 2. Kf4 { Black resigns. } 1-0");
-    const this$5 = $m_s_Console$();
-    const this$6 = this$5.out__Ljava_io_PrintStream();
-    this$6.java$lang$JSConsoleBasedPrintStream$$printString__T__V((x + "\n"))
   };
 }
 const $d_Lchess_ChessApp$ = new $TypeData().initClass({
@@ -69312,10 +69306,12 @@ function parsePgnFull(pgn){
 	let result = {
 		tags: {},
 		tagsList: parseResult[0],
-		fens: parseResult[1]
+		fensList: parseResult[1],
+		fens: []
 	}
 	
 	result.tagsList.forEach(tag => result.tags[tag[0]] = tag[1])
+	result.fensList.forEach(fen => result.fens.push({uci: fen[0], san: fen[1], fen: fen[2]}))
 	
 	return result
 }

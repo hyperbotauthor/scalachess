@@ -1733,10 +1733,12 @@ function parsePgnFull(pgn){
 	let result = {
 		tags: {},
 		tagsList: parseResult[0],
-		fens: parseResult[1]
+		fensList: parseResult[1],
+		fens: []
 	}
 	
 	result.tagsList.forEach(tag => result.tags[tag[0]] = tag[1])
+	result.fensList.forEach(fen => result.fens.push({uci: fen[0], san: fen[1], fen: fen[2]}))
 	
 	return result
 }
