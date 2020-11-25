@@ -272,7 +272,7 @@ function parsePgnFull(pgn){
 }
 
 // test
-console.log("test", parsePgnFull(`[Event "Casual Racing Kings game"]
+const testPgn = `[Event "Casual Racing Kings game"]
 [Site "https://lichess.org/oaQqCIYx"]
 [Date "2020.11.25"]
 [White "chesshyperbot"]
@@ -292,7 +292,9 @@ console.log("test", parsePgnFull(`[Event "Casual Racing Kings game"]
 [SetUp "1"]
 [Annotator "lichess.org"]
 
-1. Kg3 Kb3 2. Kf4 { Black resigns. } 1-0`))
+1. Kg3 Kb3 2. Kf4 { Black resigns. } 1-0`
+
+//console.log("test", parsePgnFull(testPgn))
 
 if(typeof module != "undefined"){
     module.exports = {
