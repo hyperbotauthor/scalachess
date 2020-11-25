@@ -315,7 +315,7 @@ const testPgnCrazyhouse = `[Event "Casual Crazyhouse game"]
 1. d4 d5 2. Nf3 { D02 Queen's Pawn Game: Zukertort Variation } Bf5 3. e3 e6 4. Bd3 Bxd3 5. Qxd3 Nf6 6. B@g5 B@a6 7. Qd2 Ne4 8. Bxd8 Nxd2 9. Kxd2 Bb4+ 10. Nc3 Q@e2# { Black wins by checkmate. } 0-1`
 
 //console.log("test", parsePgnFull(testPgnRacingKings))
-console.log("test", parsePgnFull(testPgnCrazyhouse))
+//console.log("test", parsePgnFull(testPgnCrazyhouse))
 
 if(typeof module != "undefined"){
     module.exports = {

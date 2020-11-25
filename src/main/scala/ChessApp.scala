@@ -129,7 +129,21 @@ object ChessApp {
 					}		
 				}
 				case None => {
-					errors :+= ("ill formatted uci " + uci)
+					format.Uci(uci) match {
+						case Some(drop) => {
+							g(drop) match {
+								case cats.data.Validated.Valid((ng, _)) => {									
+									g = ng
+								}
+								case cats.data.Validated.Invalid(why) => {									
+									errors :+= (uci + " invalid drop " + why)
+								}
+							}		
+						}
+						case None => {
+							errors :+= ("ill formatted uci " + uci)
+						}
+					}			
 				}
 			}			
 		})
