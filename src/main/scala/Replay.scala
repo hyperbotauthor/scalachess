@@ -54,7 +54,7 @@ object Replay {
         san(game.situation) flatMap { moveOrDrop =>
           val newGame = moveOrDrop.fold(game.apply, game.applyDrop)
 		  val uci = moveOrDrop.fold(_.toUci.uci, _.toUci.uci)
-          recursiveGames(newGame, rest) map { newGame.copy(genUci = uci) :: _ }
+          recursiveGames(newGame, rest) map { newGame.copy(genUci = uci, genSan = san.toString) :: _ }
         }
     }
 

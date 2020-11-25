@@ -11,7 +11,8 @@ case class Game(
     clock: Option[Clock] = None,
     turns: Int = 0, // plies
     startedAtTurn: Int = 0,
-	genUci: String = ""
+	genUci: String = "",
+	genSan: String = ""
 ) {
   def apply(
       orig: Pos,

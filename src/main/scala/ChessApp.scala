@@ -11,9 +11,10 @@ object ChessApp {
 		pgn: String
 	):js.Tuple2[
 		js.Array[js.Tuple2[String, String]],
-		js.Array[js.Tuple2[String, String]]
+		js.Array[js.Tuple3[String, String, String]]
 	] = {
 		val emptyResult = js.Array[js.Tuple2[String, String]]()
+		val emptyResult3 = js.Array[js.Tuple3[String, String, String]]()
 		
 		chess.format.pgn.Parser.full(pgn) match {
 			case cats.data.Validated.Valid(parsedPgn) => {
@@ -40,19 +41,24 @@ object ChessApp {
 				if(variantName == "From Position") variantKey = "fromPosition"							
 				
 				Replay.games(parsedPgn.strMoves, if(fen == "") None else Some(chess.format.FEN(fen)), variant.Variant(variantKey).get) match {
-			case cats.data.Validated.Valid(games) => {													
-				val fens = games.map(g => js.Tuple2(g.genUci, (chess.format.Forsyth >> g).toString)).toJSArray
+			case cats.data.Validated.Valid(games) => {			
+				var i = 0
+				val fens = games.map(g => {
+					val san = if(i==0) "" else parsedPgn.strMoves(i-1)
+					i += 1
+					js.Tuple3(g.genUci, san, (chess.format.Forsyth >> g).toString)
+				}).toJSArray
 				return js.Tuple2(tags, fens)
 			}
 			case cats.data.Validated.Invalid(_) => {													
 				println("replay error")
-				return js.Tuple2(emptyResult, emptyResult)
+				return js.Tuple2(emptyResult, emptyResult3)
 			}
 		}
 			}
 			case cats.data.Validated.Invalid(_) => {
 				println("parse error")
-				return js.Tuple2(emptyResult, emptyResult)
+				return js.Tuple2(emptyResult, emptyResult3)
 			}
 		}
 	}	

@@ -255,5 +255,47 @@ function newGame(variantKey, fen){
 	return null
 }
 
+function parsePgnFull(pgn){
+	let parseResult = parsePgn(pgn)
+	
+	let result = {
+		tags: {},
+		tagsList: parseResult[0],
+		fens: parseResult[1]
+	}
+	
+	result.tagsList.forEach(tag => result.tags[tag[0]] = tag[1])
+	
+	return result
+}
+
 // test
-//console.log("test", makeSanMovesScala("standard", undefined, ["e4", "e5", "Nf3", "Nc6"]))
+console.log("test", parsePgnFull(`[Event "Casual Racing Kings game"]
+[Site "https://lichess.org/oaQqCIYx"]
+[Date "2020.11.25"]
+[White "chesshyperbot"]
+[Black "sChessNoob"]
+[Result "1-0"]
+[UTCDate "2020.11.25"]
+[UTCTime "15:17:16"]
+[WhiteElo "2008"]
+[BlackElo "1500"]
+[WhiteTitle "BOT"]
+[Variant "Racing Kings"]
+[TimeControl "180+0"]
+[ECO "?"]
+[Opening "?"]
+[Termination "Normal"]
+[FEN "8/8/8/8/8/8/krbnNBRK/qrbnNBRQ w - - 0 1"]
+[SetUp "1"]
+[Annotator "lichess.org"]
+
+1. Kg3 Kb3 2. Kf4 { Black resigns. } 1-0`))
+
+if(typeof module != "undefined"){
+    module.exports = {
+        makeSanMovesScala: makeSanMovesScala,
+        makeUciMoves: makeUciMoves,
+		parsePgnFull: parsePgnFull
+    }
+}

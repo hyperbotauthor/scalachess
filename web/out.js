@@ -965,26 +965,36 @@ class $c_Lchess_ChessApp$ extends $c_O {
   };
   parsePgn__T__sjs_js_Tuple2(pgn) {
     const emptyResult = [];
+    const emptyResult3 = [];
     const x1 = $m_Lchess_format_pgn_Parser$().full__T__Lcats_data_Validated(pgn);
     if ((x1 instanceof $c_Lcats_data_Validated$Valid)) {
       const x2 = $as_Lcats_data_Validated$Valid(x1);
       const parsedPgn = $as_Lchess_format_pgn_ParsedPgn(x2.Lcats_data_Validated$Valid__f_a);
+      const fen = new $c_sr_ObjectRef("");
+      const variantName = new $c_sr_ObjectRef("");
       const $$x1 = $m_sjs_js_JSConverters$JSRichIterableOnce$();
-      const this$3 = parsedPgn.Lchess_format_pgn_ParsedPgn__f_tags;
-      const f = ((this$1) => ((tag$2) => {
+      const this$5 = parsedPgn.Lchess_format_pgn_ParsedPgn__f_tags;
+      const f = ((this$3, fen$1, variantName$1) => ((tag$2) => {
         const tag = $as_Lchess_format_pgn_Tag(tag$2);
-        const _1 = tag.Lchess_format_pgn_Tag__f_name.lowercase__T();
+        const name = tag.Lchess_format_pgn_Tag__f_name.lowercase__T();
+        const value = tag.Lchess_format_pgn_Tag__f_value;
+        if ((name === "fen")) {
+          fen$1.sr_ObjectRef__f_elem = value
+        };
+        if ((name === "variant")) {
+          variantName$1.sr_ObjectRef__f_elem = value
+        };
         const _2 = tag.Lchess_format_pgn_Tag__f_value;
-        return [_1, _2]
-      }))(this);
+        return [name, _2]
+      }))(this, fen, variantName);
       let col;
-      if ((this$3 === $m_sci_Nil$())) {
+      if ((this$5 === $m_sci_Nil$())) {
         col = $m_sci_Nil$()
       } else {
-        const arg1 = this$3.head__O();
+        const arg1 = this$5.head__O();
         const h = new $c_sci_$colon$colon(f(arg1), $m_sci_Nil$());
         let t = h;
-        let rest = $as_sci_List(this$3.tail__O());
+        let rest = $as_sci_List(this$5.tail__O());
         while ((rest !== $m_sci_Nil$())) {
           const arg1$1 = rest.head__O();
           const nx = new $c_sci_$colon$colon(f(arg1$1), $m_sci_Nil$());
@@ -995,9 +1005,92 @@ class $c_Lchess_ChessApp$ extends $c_O {
         col = h
       };
       const tags = $$x1.toJSArray$extension__sc_IterableOnce__sjs_js_Array(col);
-      return [tags, emptyResult]
+      let variantKey = "standard";
+      if (($as_T(variantName.sr_ObjectRef__f_elem) === "Chess960")) {
+        variantKey = "chess960"
+      };
+      if (($as_T(variantName.sr_ObjectRef__f_elem) === "Crazyhouse")) {
+        variantKey = "crazyhouse"
+      };
+      if (($as_T(variantName.sr_ObjectRef__f_elem) === "King of the Hill")) {
+        variantKey = "kingOfTheHill"
+      };
+      if (($as_T(variantName.sr_ObjectRef__f_elem) === "Three-check")) {
+        variantKey = "threeCheck"
+      };
+      if (($as_T(variantName.sr_ObjectRef__f_elem) === "Antichess")) {
+        variantKey = "antichess"
+      };
+      if (($as_T(variantName.sr_ObjectRef__f_elem) === "Atomic")) {
+        variantKey = "atomic"
+      };
+      if (($as_T(variantName.sr_ObjectRef__f_elem) === "Horde")) {
+        variantKey = "horde"
+      };
+      if (($as_T(variantName.sr_ObjectRef__f_elem) === "Racing Kings")) {
+        variantKey = "racingKings"
+      };
+      if (($as_T(variantName.sr_ObjectRef__f_elem) === "From Position")) {
+        variantKey = "fromPosition"
+      };
+      const $$x4 = $m_Lchess_Replay$();
+      const $$x3 = parsedPgn.Lchess_format_pgn_ParsedPgn__f_strMoves;
+      const $$x2 = (($as_T(fen.sr_ObjectRef__f_elem) === "") ? $m_s_None$() : new $c_s_Some(new $c_Lchess_format_FEN($as_T(fen.sr_ObjectRef__f_elem))));
+      const this$7 = $m_Lchess_variant_Variant$();
+      const key = variantKey;
+      const x1$2 = $$x4.games__sc_Iterable__s_Option__Lchess_variant_Variant__Lcats_data_Validated($$x3, $$x2, $as_Lchess_variant_Variant(this$7.byKey__sci_Map().get__O__s_Option(key).get__O()));
+      if ((x1$2 instanceof $c_Lcats_data_Validated$Valid)) {
+        const x2$2 = $as_Lcats_data_Validated$Valid(x1$2);
+        const games = $as_sci_List(x2$2.Lcats_data_Validated$Valid__f_a);
+        const i = new $c_sr_IntRef(0);
+        const $$x5 = $m_sjs_js_JSConverters$JSRichIterableOnce$();
+        const f$1 = ((this$2$1, i$1, parsedPgn$1) => ((g$2) => {
+          const g = $as_Lchess_Game(g$2);
+          let san;
+          if ((i$1.sr_IntRef__f_elem === 0)) {
+            san = ""
+          } else {
+            const this$9 = parsedPgn$1.Lchess_format_pgn_ParsedPgn__f_strMoves;
+            const n = (((-1) + i$1.sr_IntRef__f_elem) | 0);
+            san = $as_T($f_sc_LinearSeqOps__apply__I__O(this$9, n))
+          };
+          i$1.sr_IntRef__f_elem = ((1 + i$1.sr_IntRef__f_elem) | 0);
+          const _1 = g.Lchess_Game__f_genUci;
+          const this$ = $m_Lchess_format_Forsyth$().$greater$greater__Lchess_Game__T(g);
+          return [_1, san, this$]
+        }))(this, i, parsedPgn);
+        let col$1;
+        if ((games === $m_sci_Nil$())) {
+          col$1 = $m_sci_Nil$()
+        } else {
+          const arg1$2 = games.head__O();
+          const h$1 = new $c_sci_$colon$colon(f$1(arg1$2), $m_sci_Nil$());
+          let t$1 = h$1;
+          let rest$1 = $as_sci_List(games.tail__O());
+          while ((rest$1 !== $m_sci_Nil$())) {
+            const arg1$3 = rest$1.head__O();
+            const nx$1 = new $c_sci_$colon$colon(f$1(arg1$3), $m_sci_Nil$());
+            t$1.sci_$colon$colon__f_next = nx$1;
+            t$1 = nx$1;
+            rest$1 = $as_sci_List(rest$1.tail__O())
+          };
+          col$1 = h$1
+        };
+        const fens = $$x5.toJSArray$extension__sc_IterableOnce__sjs_js_Array(col$1);
+        return [tags, fens]
+      } else if ((x1$2 instanceof $c_Lcats_data_Validated$Invalid)) {
+        const this$15 = $m_s_Console$();
+        const this$16 = this$15.out__Ljava_io_PrintStream();
+        this$16.java$lang$JSConsoleBasedPrintStream$$printString__T__V("replay error\n");
+        return [emptyResult, emptyResult3]
+      } else {
+        throw new $c_s_MatchError(x1$2)
+      }
     } else if ((x1 instanceof $c_Lcats_data_Validated$Invalid)) {
-      return [emptyResult, emptyResult]
+      const this$19 = $m_s_Console$();
+      const this$20 = this$19.out__Ljava_io_PrintStream();
+      this$20.java$lang$JSConsoleBasedPrintStream$$printString__T__V("parse error\n");
+      return [emptyResult, emptyResult3]
     } else {
       throw new $c_s_MatchError(x1)
     }
@@ -1291,7 +1384,7 @@ class $c_Lchess_ChessApp$ extends $c_O {
     const this$2 = $m_s_Console$();
     const this$3 = this$2.out__Ljava_io_PrintStream();
     this$3.java$lang$JSConsoleBasedPrintStream$$printString__T__V("scalachess.js by hyperbotauthor\n");
-    const x = this.parsePgn__T__sjs_js_Tuple2("[Event \"Rated Bullet game\"]\n[Site \"https://lichess.org/ThLY5cAr\"]\n[Date \"2020.11.25\"]\n[White \"hyperchessbotauthor\"]\n[Black \"Flezama\"]\n[Result \"1-0\"]\n[UTCDate \"2020.11.25\"]\n[UTCTime \"02:01:03\"]\n[WhiteElo \"1898\"]\n[BlackElo \"1924\"]\n[WhiteRatingDiff \"+6\"]\n[BlackRatingDiff \"-6\"]\n[Variant \"Standard\"]\n[TimeControl \"60+0\"]\n[ECO \"A00\"]\n[Opening \"Saragossa Opening\"]\n[Termination \"Time forfeit\"]\n[Annotator \"lichess.org\"]\n\n1. c3 { A00 Saragossa Opening } c5 2. d3 Nc6 3. Qc2 e5 4. e4 d5 5. Nf3 dxe4 6. dxe4 Nf6 7. Be2 Be6 8. Bg5 Qb6 9. Nbd2 Be7 10. O-O h6 11. Bxf6 Bxf6 12. Bc4 O-O 13. Bxe6 fxe6 14. Rfe1 Rad8 15. Nc4 Qc7 16. Rad1 b5 17. Ne3 Rd7 18. Qb3 Rxd1 19. Qxe6+ Kh7 20. Rxd1 Rd8 21. Rd5 Rxd5 22. exd5 Na5 23. Nf5 c4 24. g3 Qc5 25. Kg2 b4 26. h4 bxc3 27. bxc3 Qa3 28. d6 Qxc3 29. d7 Qd3 30. Ne7 Nb7 31. Nxe5 { White wins on time. } 1-0\n");
+    const x = this.parsePgn__T__sjs_js_Tuple2("[Event \"Casual Racing Kings game\"]\n[Site \"https://lichess.org/oaQqCIYx\"]\n[Date \"2020.11.25\"]\n[White \"chesshyperbot\"]\n[Black \"sChessNoob\"]\n[Result \"1-0\"]\n[UTCDate \"2020.11.25\"]\n[UTCTime \"15:17:16\"]\n[WhiteElo \"2008\"]\n[BlackElo \"1500\"]\n[WhiteTitle \"BOT\"]\n[Variant \"Racing Kings\"]\n[TimeControl \"180+0\"]\n[ECO \"?\"]\n[Opening \"?\"]\n[Termination \"Normal\"]\n[FEN \"8/8/8/8/8/8/krbnNBRK/qrbnNBRQ w - - 0 1\"]\n[SetUp \"1\"]\n[Annotator \"lichess.org\"]\n\n1. Kg3 Kb3 2. Kf4 { Black resigns. } 1-0");
     const this$5 = $m_s_Console$();
     const this$6 = this$5.out__Ljava_io_PrintStream();
     this$6.java$lang$JSConsoleBasedPrintStream$$printString__T__V((x + "\n"))
@@ -4645,7 +4738,28 @@ class $c_Lchess_format_pgn_Parser$ extends $c_O {
               const x4$2 = $as_Lcats_data_Validated$Valid(this$35);
               const a$8 = x4$2.Lcats_data_Validated$Valid__f_a;
               const sans = $as_Lchess_format_pgn_Sans(a$8).Lchess_format_pgn_Sans__f_value;
-              return new $c_Lcats_data_Validated$Valid(new $c_Lchess_format_pgn_ParsedPgn(init$1, tags$1, sans))
+              const f$2 = ((this$36) => ((sm$2) => {
+                const sm = $as_Lchess_format_pgn_Parser$StrMove(sm$2);
+                return sm.Lchess_format_pgn_Parser$StrMove__f_san
+              }))(this);
+              let $$x4;
+              if ((strMoves$1 === $m_sci_Nil$())) {
+                $$x4 = $m_sci_Nil$()
+              } else {
+                const arg1$3 = strMoves$1.head__O();
+                const h = new $c_sci_$colon$colon(f$2(arg1$3), $m_sci_Nil$());
+                let t = h;
+                let rest = $as_sci_List(strMoves$1.tail__O());
+                while ((rest !== $m_sci_Nil$())) {
+                  const arg1$4 = rest.head__O();
+                  const nx = new $c_sci_$colon$colon(f$2(arg1$4), $m_sci_Nil$());
+                  t.sci_$colon$colon__f_next = nx;
+                  t = nx;
+                  rest = $as_sci_List(rest.tail__O())
+                };
+                $$x4 = h
+              };
+              return new $c_Lcats_data_Validated$Valid(new $c_Lchess_format_pgn_ParsedPgn(init$1, tags$1, sans, $$x4))
             }
           } else {
             if ((!(this$32 instanceof $c_Lcats_data_Validated$Invalid))) {
@@ -4669,9 +4783,9 @@ class $c_Lchess_format_pgn_Parser$ extends $c_O {
       }
     } catch (e) {
       if (false) {
-        const this$37 = $m_s_Console$();
-        const this$38 = this$37.out__Ljava_io_PrintStream();
-        this$38.java$lang$JSConsoleBasedPrintStream$$printString__T__V((pgn + "\n"));
+        const this$38 = $m_s_Console$();
+        const this$39 = this$38.out__Ljava_io_PrintStream();
+        this$39.java$lang$JSConsoleBasedPrintStream$$printString__T__V((pgn + "\n"));
         $m_s_sys_package$().error__T__E("### StackOverflowError ### in PGN parser")
       } else {
         throw e
@@ -12809,7 +12923,7 @@ class $c_Lchess_Game$ extends $c_O {
     const $$x1 = new $c_Lchess_Situation($m_Lchess_Board$().apply__sc_Iterable__Lchess_Castles__Lchess_variant_Variant__Lchess_Board(variant.pieces__sci_Map(), variant.castles__Lchess_Castles(), variant), $m_Lchess_package$().White__Lchess_Color$White$());
     const this$3 = $m_s_package$().s_package$__f_Vector;
     const elems = $m_sci_Nil$();
-    return new $c_Lchess_Game($$x1, this$3.from__sc_IterableOnce__sci_Vector(elems), $m_s_None$(), 0, 0, "")
+    return new $c_Lchess_Game($$x1, this$3.from__sc_IterableOnce__sci_Vector(elems), $m_s_None$(), 0, 0, "", "")
   };
   apply__s_Option__s_Option__Lchess_Game(variantOption, fen) {
     const variant = $as_Lchess_variant_Variant(($m_Lchess_package$(), (variantOption.isEmpty__Z() ? $m_Lchess_variant_Standard$() : variantOption.get__O())));
@@ -12835,7 +12949,8 @@ class $c_Lchess_Game$ extends $c_O {
       const x$4 = g.Lchess_Game__f_clock;
       const x$5 = g.Lchess_Game__f_startedAtTurn;
       const x$6 = g.Lchess_Game__f_genUci;
-      return new $c_Lchess_Game(x$1, x$3$1, x$4, x$2, x$5, x$6)
+      const x$7 = g.Lchess_Game__f_genSan;
+      return new $c_Lchess_Game(x$1, x$3$1, x$4, x$2, x$5, x$6, x$7)
     }
   };
 }
@@ -13998,12 +14113,13 @@ const $p_Lchess_Replay$__recursiveGames__Lchess_Game__sci_List__Lcats_data_Valid
         const x4 = $as_Lcats_data_Validated$Valid(this$5);
         const a$5 = x4.Lcats_data_Validated$Valid__f_a;
         const x$8 = $as_sci_List(a$5);
-        const x$2 = newGame.Lchess_Game__f_situation;
-        const x$3 = newGame.Lchess_Game__f_pgnMoves;
-        const x$4 = newGame.Lchess_Game__f_clock;
-        const x$5 = newGame.Lchess_Game__f_turns;
-        const x$6$1 = newGame.Lchess_Game__f_startedAtTurn;
-        const rassoc$2 = new $c_Lchess_Game(x$2, x$3, x$4, x$5, x$6$1, uci);
+        const x$2 = san.toString__T();
+        const x$3 = newGame.Lchess_Game__f_situation;
+        const x$4 = newGame.Lchess_Game__f_pgnMoves;
+        const x$5 = newGame.Lchess_Game__f_clock;
+        const x$6$1 = newGame.Lchess_Game__f_turns;
+        const x$7$1 = newGame.Lchess_Game__f_startedAtTurn;
+        const rassoc$2 = new $c_Lchess_Game(x$3, x$4, x$5, x$6$1, x$7$1, uci, x$2);
         return new $c_Lcats_data_Validated$Valid(new $c_sci_$colon$colon(rassoc$2, x$8))
       }
     } else if ((this$4 instanceof $c_Lcats_data_Validated$Invalid)) {
@@ -14024,7 +14140,8 @@ const $p_Lchess_Replay$__makeGame__Lchess_variant_Variant__s_Option__Lchess_Game
   const x$4 = g.Lchess_Game__f_clock;
   const x$5 = g.Lchess_Game__f_turns;
   const x$6 = g.Lchess_Game__f_genUci;
-  return new $c_Lchess_Game(x$2, x$3, x$4, x$5, x$1, x$6)
+  const x$7 = g.Lchess_Game__f_genSan;
+  return new $c_Lchess_Game(x$2, x$3, x$4, x$5, x$1, x$6, x$7)
 });
 class $c_Lchess_Replay$ extends $c_O {
   games__sc_Iterable__s_Option__Lchess_variant_Variant__Lcats_data_Validated(moveStrs, initialFen, variant) {
@@ -14710,7 +14827,7 @@ class $c_Lchess_format_pgn_Metas$ extends $c_O {
   };
   empty__Lchess_format_pgn_Metas() {
     if ((!this.Lchess_format_pgn_Metas$__f_bitmap$init$0)) {
-      throw new $c_s_UninitializedFieldError("Uninitialized field: /workspace/scalarepo/scalachess/src/main/scala/format/pgn/parsingModel.scala: 124")
+      throw new $c_s_UninitializedFieldError("Uninitialized field: /workspace/scalarepo/scalachess/src/main/scala/format/pgn/parsingModel.scala: 125")
     };
     return this.Lchess_format_pgn_Metas$__f_empty
   };
@@ -14741,7 +14858,7 @@ class $c_Lchess_format_pgn_Sans$ extends $c_O {
   };
   empty__sci_List() {
     if ((!this.Lchess_format_pgn_Sans$__f_bitmap$init$0)) {
-      throw new $c_s_UninitializedFieldError("Uninitialized field: /workspace/scalarepo/scalachess/src/main/scala/format/pgn/parsingModel.scala: 16")
+      throw new $c_s_UninitializedFieldError("Uninitialized field: /workspace/scalarepo/scalachess/src/main/scala/format/pgn/parsingModel.scala: 17")
     };
     return this.Lchess_format_pgn_Sans$__f_empty
   };
@@ -25645,7 +25762,7 @@ const $p_Lchess_Game__applyClock__Lchess_MoveMetrics__Z__s_Option = (function($t
   }
 });
 class $c_Lchess_Game extends $c_O {
-  constructor(situation, pgnMoves, clock, turns, startedAtTurn, genUci) {
+  constructor(situation, pgnMoves, clock, turns, startedAtTurn, genUci, genSan) {
     super();
     this.Lchess_Game__f_situation = null;
     this.Lchess_Game__f_pgnMoves = null;
@@ -25653,12 +25770,14 @@ class $c_Lchess_Game extends $c_O {
     this.Lchess_Game__f_turns = 0;
     this.Lchess_Game__f_startedAtTurn = 0;
     this.Lchess_Game__f_genUci = null;
+    this.Lchess_Game__f_genSan = null;
     this.Lchess_Game__f_situation = situation;
     this.Lchess_Game__f_pgnMoves = pgnMoves;
     this.Lchess_Game__f_clock = clock;
     this.Lchess_Game__f_turns = turns;
     this.Lchess_Game__f_startedAtTurn = startedAtTurn;
-    this.Lchess_Game__f_genUci = genUci
+    this.Lchess_Game__f_genUci = genUci;
+    this.Lchess_Game__f_genSan = genSan
   };
   apply__I__I__s_Option__Lchess_MoveMetrics__Lcats_data_Validated(orig, dest, promotion, metrics) {
     const this$1 = this.Lchess_Game__f_situation.move__I__I__s_Option__Lcats_data_Validated(orig, dest, promotion);
@@ -25697,7 +25816,8 @@ class $c_Lchess_Game extends $c_O {
     const x$4 = $p_Lchess_Game__applyClock__Lchess_MoveMetrics__Z__s_Option(this, move.Lchess_Move__f_metrics, newSituation.status__s_Option().isEmpty__Z());
     const x$5 = this.Lchess_Game__f_startedAtTurn;
     const x$6 = this.Lchess_Game__f_genUci;
-    return new $c_Lchess_Game(newSituation, x$3, x$4, x$2, x$5, x$6)
+    const x$7 = this.Lchess_Game__f_genSan;
+    return new $c_Lchess_Game(newSituation, x$3, x$4, x$2, x$5, x$6, x$7)
   };
   applyDrop__Lchess_Drop__Lchess_Game(drop) {
     const newSituation = drop.situationAfter__Lchess_Situation();
@@ -25708,7 +25828,8 @@ class $c_Lchess_Game extends $c_O {
     const x$4 = $p_Lchess_Game__applyClock__Lchess_MoveMetrics__Z__s_Option(this, drop.Lchess_Drop__f_metrics, newSituation.status__s_Option().isEmpty__Z());
     const x$5 = this.Lchess_Game__f_startedAtTurn;
     const x$6 = this.Lchess_Game__f_genUci;
-    return new $c_Lchess_Game(newSituation, x$3, x$4, x$2, x$5, x$6)
+    const x$7 = this.Lchess_Game__f_genSan;
+    return new $c_Lchess_Game(newSituation, x$3, x$4, x$2, x$5, x$6, x$7)
   };
   halfMoveClock__I() {
     return this.Lchess_Game__f_situation.Lchess_Situation__f_board.Lchess_Board__f_history.Lchess_History__f_halfMoveClock
@@ -25720,7 +25841,7 @@ class $c_Lchess_Game extends $c_O {
     return "Game"
   };
   productArity__I() {
-    return 6
+    return 7
   };
   productElement__I__O(x$1) {
     switch (x$1) {
@@ -25746,6 +25867,10 @@ class $c_Lchess_Game extends $c_O {
       }
       case 5: {
         return this.Lchess_Game__f_genUci;
+        break
+      }
+      case 6: {
+        return this.Lchess_Game__f_genSan;
         break
       }
       default: {
@@ -25784,7 +25909,11 @@ class $c_Lchess_Game extends $c_O {
     const data$6 = $m_sr_Statics$().anyHash__O__I(x$3);
     acc = $m_sr_Statics$().mix__I__I__I(hash$6, data$6);
     const hash$7 = acc;
-    return $m_sr_Statics$().finalizeHash__I__I__I(hash$7, 6)
+    const x$4 = this.Lchess_Game__f_genSan;
+    const data$7 = $m_sr_Statics$().anyHash__O__I(x$4);
+    acc = $m_sr_Statics$().mix__I__I__I(hash$7, data$7);
+    const hash$8 = acc;
+    return $m_sr_Statics$().finalizeHash__I__I__I(hash$8, 7)
   };
   toString__T() {
     return $m_sr_ScalaRunTime$()._toString__s_Product__T(this)
@@ -25818,8 +25947,8 @@ class $c_Lchess_Game extends $c_O {
       } else {
         $$x1 = false
       };
-      if ($$x1) {
-        return (this.Lchess_Game__f_genUci === Game$1.Lchess_Game__f_genUci)
+      if (($$x1 && (this.Lchess_Game__f_genUci === Game$1.Lchess_Game__f_genUci))) {
+        return (this.Lchess_Game__f_genSan === Game$1.Lchess_Game__f_genSan)
       } else {
         return false
       }
@@ -27813,20 +27942,22 @@ const $d_Lchess_format_pgn_Metas = new $TypeData().initClass({
 });
 $c_Lchess_format_pgn_Metas.prototype.$classData = $d_Lchess_format_pgn_Metas;
 class $c_Lchess_format_pgn_ParsedPgn extends $c_O {
-  constructor(initialPosition, tags, sans) {
+  constructor(initialPosition, tags, sans, strMoves) {
     super();
     this.Lchess_format_pgn_ParsedPgn__f_initialPosition = null;
     this.Lchess_format_pgn_ParsedPgn__f_tags = null;
     this.Lchess_format_pgn_ParsedPgn__f_sans = null;
+    this.Lchess_format_pgn_ParsedPgn__f_strMoves = null;
     this.Lchess_format_pgn_ParsedPgn__f_initialPosition = initialPosition;
     this.Lchess_format_pgn_ParsedPgn__f_tags = tags;
-    this.Lchess_format_pgn_ParsedPgn__f_sans = sans
+    this.Lchess_format_pgn_ParsedPgn__f_sans = sans;
+    this.Lchess_format_pgn_ParsedPgn__f_strMoves = strMoves
   };
   productPrefix__T() {
     return "ParsedPgn"
   };
   productArity__I() {
-    return 3
+    return 4
   };
   productElement__I__O(x$1) {
     switch (x$1) {
@@ -27840,6 +27971,10 @@ class $c_Lchess_format_pgn_ParsedPgn extends $c_O {
       }
       case 2: {
         return new $c_Lchess_format_pgn_Sans(this.Lchess_format_pgn_ParsedPgn__f_sans);
+        break
+      }
+      case 3: {
+        return this.Lchess_format_pgn_ParsedPgn__f_strMoves;
         break
       }
       default: {
@@ -27864,18 +27999,26 @@ class $c_Lchess_format_pgn_ParsedPgn extends $c_O {
       const ParsedPgn$1 = $as_Lchess_format_pgn_ParsedPgn(x$1);
       const x = this.Lchess_format_pgn_ParsedPgn__f_initialPosition;
       const x$2 = ParsedPgn$1.Lchess_format_pgn_ParsedPgn__f_initialPosition;
-      let $$x1;
+      let $$x2;
       if (((x === null) ? (x$2 === null) : x.equals__O__Z(x$2))) {
         const x$3 = this.Lchess_format_pgn_ParsedPgn__f_tags;
         const x$4 = ParsedPgn$1.Lchess_format_pgn_ParsedPgn__f_tags;
-        $$x1 = ((x$3 === null) ? (x$4 === null) : x$3.equals__O__Z(x$4))
+        $$x2 = ((x$3 === null) ? (x$4 === null) : x$3.equals__O__Z(x$4))
+      } else {
+        $$x2 = false
+      };
+      let $$x1;
+      if ($$x2) {
+        const x$5 = this.Lchess_format_pgn_ParsedPgn__f_sans;
+        const x$6 = ParsedPgn$1.Lchess_format_pgn_ParsedPgn__f_sans;
+        $$x1 = ((x$5 === null) ? (x$6 === null) : x$5.equals__O__Z(x$6))
       } else {
         $$x1 = false
       };
       if ($$x1) {
-        const x$5 = this.Lchess_format_pgn_ParsedPgn__f_sans;
-        const x$6 = ParsedPgn$1.Lchess_format_pgn_ParsedPgn__f_sans;
-        return ((x$5 === null) ? (x$6 === null) : x$5.equals__O__Z(x$6))
+        const x$7 = this.Lchess_format_pgn_ParsedPgn__f_strMoves;
+        const x$8 = ParsedPgn$1.Lchess_format_pgn_ParsedPgn__f_strMoves;
+        return ((x$7 === null) ? (x$8 === null) : x$7.equals__O__Z(x$8))
       } else {
         return false
       }
@@ -69163,5 +69306,47 @@ function newGame(variantKey, fen){
 	return null
 }
 
+function parsePgnFull(pgn){
+	let parseResult = parsePgn(pgn)
+	
+	let result = {
+		tags: {},
+		tagsList: parseResult[0],
+		fens: parseResult[1]
+	}
+	
+	result.tagsList.forEach(tag => result.tags[tag[0]] = tag[1])
+	
+	return result
+}
+
 // test
-//console.log("test", makeSanMovesScala("standard", undefined, ["e4", "e5", "Nf3", "Nc6"]))
+console.log("test", parsePgnFull(`[Event "Casual Racing Kings game"]
+[Site "https://lichess.org/oaQqCIYx"]
+[Date "2020.11.25"]
+[White "chesshyperbot"]
+[Black "sChessNoob"]
+[Result "1-0"]
+[UTCDate "2020.11.25"]
+[UTCTime "15:17:16"]
+[WhiteElo "2008"]
+[BlackElo "1500"]
+[WhiteTitle "BOT"]
+[Variant "Racing Kings"]
+[TimeControl "180+0"]
+[ECO "?"]
+[Opening "?"]
+[Termination "Normal"]
+[FEN "8/8/8/8/8/8/krbnNBRK/qrbnNBRQ w - - 0 1"]
+[SetUp "1"]
+[Annotator "lichess.org"]
+
+1. Kg3 Kb3 2. Kf4 { Black resigns. } 1-0`))
+
+if(typeof module != "undefined"){
+    module.exports = {
+        makeSanMovesScala: makeSanMovesScala,
+        makeUciMoves: makeUciMoves,
+		parsePgnFull: parsePgnFull
+    }
+}
