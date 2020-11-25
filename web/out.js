@@ -1,4 +1,4 @@
-let makeSanMovesScala,makeUciMovesScala;
+let makeSanMovesScala,parsePgn,makeUciMovesScala;
 (function(){
 'use strict';
 const $linkingInfo = Object.freeze({
@@ -946,10 +946,7 @@ const $d_Lchess_Castles$Can = new $TypeData().initClass({
 });
 $c_Lchess_Castles$Can.prototype.$classData = $d_Lchess_Castles$Can;
 const $s_Lchess_ChessApp__main__AT__V = (function(args) {
-  $m_Lchess_ChessApp$();
-  const this$3 = $m_s_Console$();
-  const this$4 = this$3.out__Ljava_io_PrintStream();
-  this$4.java$lang$JSConsoleBasedPrintStream$$printString__T__V("scalachess.js by hyperbotauthor\n")
+  $m_Lchess_ChessApp$().main__AT__V(args)
 });
 class $c_Lchess_ChessApp$ extends $c_O {
   constructor() {
@@ -965,6 +962,45 @@ class $c_Lchess_ChessApp$ extends $c_O {
       throw new $c_s_UninitializedFieldError("Uninitialized field: /workspace/scalarepo/scalachess/src/main/scala/ChessApp.scala: 8")
     };
     return this.Lchess_ChessApp$__f_DEFAULT_VARIANT
+  };
+  parsePgn__T__sjs_js_Tuple2(pgn) {
+    const emptyResult = [];
+    const x1 = $m_Lchess_format_pgn_Parser$().full__T__Lcats_data_Validated(pgn);
+    if ((x1 instanceof $c_Lcats_data_Validated$Valid)) {
+      const x2 = $as_Lcats_data_Validated$Valid(x1);
+      const parsedPgn = $as_Lchess_format_pgn_ParsedPgn(x2.Lcats_data_Validated$Valid__f_a);
+      const $$x1 = $m_sjs_js_JSConverters$JSRichIterableOnce$();
+      const this$3 = parsedPgn.Lchess_format_pgn_ParsedPgn__f_tags;
+      const f = ((this$1) => ((tag$2) => {
+        const tag = $as_Lchess_format_pgn_Tag(tag$2);
+        const _1 = tag.Lchess_format_pgn_Tag__f_name.lowercase__T();
+        const _2 = tag.Lchess_format_pgn_Tag__f_value;
+        return [_1, _2]
+      }))(this);
+      let col;
+      if ((this$3 === $m_sci_Nil$())) {
+        col = $m_sci_Nil$()
+      } else {
+        const arg1 = this$3.head__O();
+        const h = new $c_sci_$colon$colon(f(arg1), $m_sci_Nil$());
+        let t = h;
+        let rest = $as_sci_List(this$3.tail__O());
+        while ((rest !== $m_sci_Nil$())) {
+          const arg1$1 = rest.head__O();
+          const nx = new $c_sci_$colon$colon(f(arg1$1), $m_sci_Nil$());
+          t.sci_$colon$colon__f_next = nx;
+          t = nx;
+          rest = $as_sci_List(rest.tail__O())
+        };
+        col = h
+      };
+      const tags = $$x1.toJSArray$extension__sc_IterableOnce__sjs_js_Array(col);
+      return [tags, emptyResult]
+    } else if ((x1 instanceof $c_Lcats_data_Validated$Invalid)) {
+      return [emptyResult, emptyResult]
+    } else {
+      throw new $c_s_MatchError(x1)
+    }
   };
   makeSanMovesScala__sjs_js_$bar__sjs_js_$bar__sjs_js_Array__sjs_js_Tuple2(variantKeyOptJs, fenOptJs, sans) {
     const variantKey = $as_T(((variantKeyOptJs === (void 0)) ? $m_Lchess_ChessApp$().DEFAULT_VARIANT__Lchess_variant_Standard$().Lchess_variant_Variant__f_key : variantKeyOptJs));
@@ -1250,6 +1286,15 @@ class $c_Lchess_ChessApp$ extends $c_O {
     const col$6 = $as_Lchess_Game(elem$1).Lchess_Game__f_pgnMoves;
     const _3$3 = $$x9.toJSArray$extension__sc_IterableOnce__sjs_js_Array(col$6);
     return [this$, _2$3, _3$3]
+  };
+  main__AT__V(args) {
+    const this$2 = $m_s_Console$();
+    const this$3 = this$2.out__Ljava_io_PrintStream();
+    this$3.java$lang$JSConsoleBasedPrintStream$$printString__T__V("scalachess.js by hyperbotauthor\n");
+    const x = this.parsePgn__T__sjs_js_Tuple2("[Event \"Rated Bullet game\"]\n[Site \"https://lichess.org/ThLY5cAr\"]\n[Date \"2020.11.25\"]\n[White \"hyperchessbotauthor\"]\n[Black \"Flezama\"]\n[Result \"1-0\"]\n[UTCDate \"2020.11.25\"]\n[UTCTime \"02:01:03\"]\n[WhiteElo \"1898\"]\n[BlackElo \"1924\"]\n[WhiteRatingDiff \"+6\"]\n[BlackRatingDiff \"-6\"]\n[Variant \"Standard\"]\n[TimeControl \"60+0\"]\n[ECO \"A00\"]\n[Opening \"Saragossa Opening\"]\n[Termination \"Time forfeit\"]\n[Annotator \"lichess.org\"]\n\n1. c3 { A00 Saragossa Opening } c5 2. d3 Nc6 3. Qc2 e5 4. e4 d5 5. Nf3 dxe4 6. dxe4 Nf6 7. Be2 Be6 8. Bg5 Qb6 9. Nbd2 Be7 10. O-O h6 11. Bxf6 Bxf6 12. Bc4 O-O 13. Bxe6 fxe6 14. Rfe1 Rad8 15. Nc4 Qc7 16. Rad1 b5 17. Ne3 Rd7 18. Qb3 Rxd1 19. Qxe6+ Kh7 20. Rxd1 Rd8 21. Rd5 Rxd5 22. exd5 Na5 23. Nf5 c4 24. g3 Qc5 25. Kg2 b4 26. h4 bxc3 27. bxc3 Qa3 28. d6 Qxc3 29. d7 Qd3 30. Ne7 Nb7 31. Nxe5 { White wins on time. } 1-0\n");
+    const this$5 = $m_s_Console$();
+    const this$6 = this$5.out__Ljava_io_PrintStream();
+    this$6.java$lang$JSConsoleBasedPrintStream$$printString__T__V((x + "\n"))
   };
 }
 const $d_Lchess_ChessApp$ = new $TypeData().initClass({
@@ -4442,10 +4487,196 @@ function $isArrayOf_Lchess_format_pgn_Glyph$PositionAssessment(obj, depth) {
 function $asArrayOf_Lchess_format_pgn_Glyph$PositionAssessment(obj, depth) {
   return (($isArrayOf_Lchess_format_pgn_Glyph$PositionAssessment(obj, depth) || (obj === null)) ? obj : $throwArrayCastException(obj, "Lchess.format.pgn.Glyph$PositionAssessment;", depth))
 }
+const $p_Lchess_format_pgn_Parser$__ensureTagsNewline__T__T = (function($thiz, pgn) {
+  const groupNames = $m_sci_Nil$();
+  const this$4 = $ct_s_util_matching_Regex__T__sci_Seq__(new $c_s_util_matching_Regex(), "\"\\]\\s*(\\d+\\.)", groupNames);
+  const this$5 = new $c_s_util_matching_Regex$MatchIterator(pgn, this$4, this$4.s_util_matching_Regex__f_scala$util$matching$Regex$$groupNames);
+  const it = new $c_s_util_matching_Regex$MatchIterator$$anon$4(this$5);
+  while (it.hasNext__Z()) {
+    const arg1 = it.next__s_util_matching_Regex$Match();
+    const rs = ("\"]\n" + $f_s_util_matching_Regex$MatchData__group__I__T(arg1, 1));
+    it.matcher__ju_regex_Matcher().appendReplacement__jl_StringBuffer__T__ju_regex_Matcher(it.s_util_matching_Regex$MatchIterator$$anon$4__f_scala$util$matching$Regex$Replacement$$sb, rs)
+  };
+  return $f_s_util_matching_Regex$Replacement__replaced__T(it)
+});
 class $c_Lchess_format_pgn_Parser$ extends $c_O {
   constructor() {
     super();
     this.Lchess_format_pgn_Parser$__f_bitmap$init$0 = 0
+  };
+  full__T__Lcats_data_Validated(pgn) {
+    try {
+      const this$5 = new $c_sc_StringOps$$anon$1(pgn, true);
+      const f = new $c_sjsr_AnonFunction1(((this$4) => ((x$1$2) => {
+        const x$1 = $as_T(x$1$2);
+        return $f_T__trim__T(x$1)
+      }))(this));
+      const this$7 = new $c_sc_Iterator$$anon$9(this$5, f);
+      const p = new $c_sjsr_AnonFunction1(((this$2$1) => ((x$2$2) => {
+        const x$2 = $as_T(x$2$2);
+        return $m_sc_StringOps$().headOption$extension__T__s_Option(x$2).contains__O__Z($bC(37))
+      }))(this));
+      const this$8 = new $c_sc_Iterator$$anon$6(this$7, p, true);
+      const this$9 = $f_sc_IterableOnceOps__mkString__T__T__T__T(this$8, "", "\n", "");
+      const this$11 = $as_T(this$9.split("[pgn]").join(""));
+      const this$13 = $as_T(this$11.split("[/pgn]").join(""));
+      const this$15 = $as_T(this$13.split("\u2011").join("-"));
+      const this$17 = $as_T(this$15.split("\u2013").join("-"));
+      const preprocessed = $as_T(this$17.split("e.p.").join(""));
+      $m_Lchess_package$();
+      const this$19 = this.chess$format$pgn$Parser$$splitTagAndMoves__T__Lcats_data_Validated(preprocessed);
+      let a$1;
+      if ((this$19 instanceof $c_Lcats_data_Validated$Invalid)) {
+        const x2 = $as_Lcats_data_Validated$Invalid(this$19);
+        a$1 = x2
+      } else {
+        if ((!(this$19 instanceof $c_Lcats_data_Validated$Valid))) {
+          throw new $c_s_MatchError(this$19)
+        };
+        const x4 = $as_Lcats_data_Validated$Valid(this$19);
+        const a = x4.Lcats_data_Validated$Valid__f_a;
+        const splitted = $as_T2(a);
+        const tagStr = $as_T(splitted._1__O());
+        const moveStr = $as_T(splitted._2__O());
+        a$1 = new $c_Lcats_data_Validated$Valid(new $c_T3(splitted, tagStr, moveStr))
+      };
+      const this$21 = new $c_Lornicar_scalalib_OrnicarValidated(a$1);
+      const this$22 = this$21.Lornicar_scalalib_OrnicarValidated__f_validated;
+      if ((this$22 instanceof $c_Lcats_data_Validated$Valid)) {
+        const x2$1 = $as_Lcats_data_Validated$Valid(this$22);
+        const a$2 = x2$1.Lcats_data_Validated$Valid__f_a;
+        const x$8 = $as_T3(a$2);
+        if ((x$8 === null)) {
+          throw new $c_s_MatchError(x$8)
+        };
+        const tagStr$1 = $as_T(x$8.T3__f__2);
+        const moveStr$1 = $as_T(x$8.T3__f__3);
+        $m_Lchess_package$();
+        const a$3 = $m_Lchess_format_pgn_Parser$TagParser$().apply__T__Lcats_data_Validated(tagStr$1);
+        const this$24 = new $c_Lornicar_scalalib_OrnicarValidated(a$3);
+        const this$25 = this$24.Lornicar_scalalib_OrnicarValidated__f_validated;
+        if ((this$25 instanceof $c_Lcats_data_Validated$Valid)) {
+          const x2$2 = $as_Lcats_data_Validated$Valid(this$25);
+          const a$4 = x2$2.Lcats_data_Validated$Valid__f_a;
+          const preTags = $as_Lchess_format_pgn_Tags(a$4).Lchess_format_pgn_Tags__f_value;
+          $m_Lchess_package$();
+          const this$26 = $m_Lchess_format_pgn_Parser$MovesParser$().apply__T__Lcats_data_Validated(moveStr$1);
+          let a$6;
+          if ((this$26 instanceof $c_Lcats_data_Validated$Invalid)) {
+            const x2$3 = $as_Lcats_data_Validated$Invalid(this$26);
+            a$6 = x2$3
+          } else {
+            if ((!(this$26 instanceof $c_Lcats_data_Validated$Valid))) {
+              throw new $c_s_MatchError(this$26)
+            };
+            const x4$1 = $as_Lcats_data_Validated$Valid(this$26);
+            const a$5 = x4$1.Lcats_data_Validated$Valid__f_a;
+            const parsedMoves = $as_T3(a$5);
+            const init = $as_Lchess_format_pgn_InitialPosition(parsedMoves.T3__f__1);
+            const strMoves = $as_sci_List(parsedMoves.T3__f__2);
+            const resultOption = $as_s_Option(parsedMoves.T3__f__3);
+            const this$28 = $m_Lcats_implicits$();
+            let $$x1;
+            if (resultOption.isEmpty__Z()) {
+              $$x1 = true
+            } else {
+              const arg1 = resultOption.get__O();
+              $as_Lchess_format_pgn_Tag(arg1);
+              $m_Lchess_format_pgn_Tags$();
+              let $$x2;
+              _return: {
+                let these = preTags;
+                while ((!these.isEmpty__Z())) {
+                  const arg1$1 = these.head__O();
+                  const x$10 = $as_Lchess_format_pgn_Tag(arg1$1);
+                  const x = x$10.Lchess_format_pgn_Tag__f_name;
+                  $m_Lchess_format_pgn_Tag$();
+                  const x$2$1 = $m_Lchess_format_pgn_Tag$Result$();
+                  if (((x !== null) && x.equals__O__Z(x$2$1))) {
+                    $$x2 = true;
+                    break _return
+                  };
+                  these = $as_sci_List(these.tail__O())
+                };
+                $$x2 = false
+              };
+              $$x1 = (!$$x2)
+            };
+            let target;
+            if ($$x1) {
+              target = resultOption
+            } else {
+              target = $m_s_None$()
+            };
+            const tc = $m_Lcats_implicits$().Lcats_implicits$__f_catsStdInstancesForOption;
+            const this$29 = new $c_Lcats_Foldable$ToFoldableOps$$anon$5(this$28, target, tc);
+            const b = new $c_Lchess_format_pgn_Tags(preTags);
+            const f$1 = new $c_sjsr_AnonFunction2(((this$2$2) => ((x$5$2, x$6$2) => {
+              const x$5 = $as_Lchess_format_pgn_Tags(x$5$2).Lchess_format_pgn_Tags__f_value;
+              const x$6 = $as_Lchess_format_pgn_Tag(x$6$2);
+              return new $c_Lchess_format_pgn_Tags($m_Lchess_format_pgn_Tags$().$plus$extension__sci_List__Lchess_format_pgn_Tag__sci_List(x$5, x$6))
+            }))(this));
+            const tags = $as_Lchess_format_pgn_Tags(this$29.Lcats_Foldable$ToFoldableOps$$anon$5__f_typeClassInstance.foldLeft__O__O__F2__O(this$29.Lcats_Foldable$ToFoldableOps$$anon$5__f_self, b, f$1)).Lchess_format_pgn_Tags__f_value;
+            a$6 = new $c_Lcats_data_Validated$Valid(new $c_T5(parsedMoves, init, strMoves, resultOption, new $c_Lchess_format_pgn_Tags(tags)))
+          };
+          const this$31 = new $c_Lornicar_scalalib_OrnicarValidated(a$6);
+          const this$32 = this$31.Lornicar_scalalib_OrnicarValidated__f_validated;
+          if ((this$32 instanceof $c_Lcats_data_Validated$Valid)) {
+            const x2$4 = $as_Lcats_data_Validated$Valid(this$32);
+            const a$7 = x2$4.Lcats_data_Validated$Valid__f_a;
+            const x$7 = $as_T5(a$7);
+            if ((x$7 === null)) {
+              throw new $c_s_MatchError(x$7)
+            };
+            const init$1 = $as_Lchess_format_pgn_InitialPosition(x$7.T5__f__2);
+            const strMoves$1 = $as_sci_List(x$7.T5__f__3);
+            const tags$1 = $as_Lchess_format_pgn_Tags(x$7.T5__f__5).Lchess_format_pgn_Tags__f_value;
+            const $$x3 = $m_Lchess_format_pgn_Parser$();
+            $m_Lchess_package$();
+            const o = $m_Lchess_format_pgn_Tags$().variant$extension__sci_List__s_Option(tags$1);
+            const this$35 = $$x3.objMoves__sci_List__Lchess_variant_Variant__Lcats_data_Validated(strMoves$1, $as_Lchess_variant_Variant((o.isEmpty__Z() ? $m_Lchess_variant_Variant$().default__Lchess_variant_Standard$() : o.get__O())));
+            if ((this$35 instanceof $c_Lcats_data_Validated$Invalid)) {
+              const x2$5 = $as_Lcats_data_Validated$Invalid(this$35);
+              return x2$5
+            } else {
+              if ((!(this$35 instanceof $c_Lcats_data_Validated$Valid))) {
+                throw new $c_s_MatchError(this$35)
+              };
+              const x4$2 = $as_Lcats_data_Validated$Valid(this$35);
+              const a$8 = x4$2.Lcats_data_Validated$Valid__f_a;
+              const sans = $as_Lchess_format_pgn_Sans(a$8).Lchess_format_pgn_Sans__f_value;
+              return new $c_Lcats_data_Validated$Valid(new $c_Lchess_format_pgn_ParsedPgn(init$1, tags$1, sans))
+            }
+          } else {
+            if ((!(this$32 instanceof $c_Lcats_data_Validated$Invalid))) {
+              throw new $c_s_MatchError(this$32)
+            };
+            const x3 = $as_Lcats_data_Validated$Invalid(this$32);
+            return x3
+          }
+        } else {
+          if ((!(this$25 instanceof $c_Lcats_data_Validated$Invalid))) {
+            throw new $c_s_MatchError(this$25)
+          };
+          const x3$1 = $as_Lcats_data_Validated$Invalid(this$25);
+          return x3$1
+        }
+      } else if ((this$22 instanceof $c_Lcats_data_Validated$Invalid)) {
+        const x3$2 = $as_Lcats_data_Validated$Invalid(this$22);
+        return x3$2
+      } else {
+        throw new $c_s_MatchError(this$22)
+      }
+    } catch (e) {
+      if (false) {
+        const this$37 = $m_s_Console$();
+        const this$38 = this$37.out__Ljava_io_PrintStream();
+        this$38.java$lang$JSConsoleBasedPrintStream$$printString__T__V((pgn + "\n"));
+        $m_s_sys_package$().error__T__E("### StackOverflowError ### in PGN parser")
+      } else {
+        throw e
+      }
+    }
   };
   moves__sc_Iterable__Lchess_variant_Variant__Lcats_data_Validated(strMoves, variant) {
     const $$x1 = $as_sc_IterableOnceOps(strMoves.map__F1__O(new $c_sjsr_AnonFunction1(((this$1) => ((x$9$2) => {
@@ -4617,6 +4848,129 @@ class $c_Lchess_format_pgn_Parser$ extends $c_O {
       throw new $c_s_MatchError(this$13)
     }
   };
+  chess$format$pgn$Parser$$splitTagAndMoves__T__Lcats_data_Validated(pgn) {
+    const x = $p_Lchess_format_pgn_Parser$__ensureTagsNewline__T__T(this, pgn);
+    const this$5 = new $c_sc_StringOps$$anon$1(x, true);
+    const factory = $m_sci_List$();
+    const factory$1 = new $c_sc_IterableFactory$ToFactory(factory);
+    const this$7 = $as_sci_List(factory$1.fromSpecific__sc_IterableOnce__O(this$5));
+    const f = ((this$6) => ((x$18$2) => {
+      const x$18 = $as_T(x$18$2);
+      return $f_T__trim__T(x$18)
+    }))(this);
+    let this$10;
+    if ((this$7 === $m_sci_Nil$())) {
+      this$10 = $m_sci_Nil$()
+    } else {
+      const arg1 = this$7.head__O();
+      const h = new $c_sci_$colon$colon(f(arg1), $m_sci_Nil$());
+      let t = h;
+      let rest = $as_sci_List(this$7.tail__O());
+      while ((rest !== $m_sci_Nil$())) {
+        const arg1$1 = rest.head__O();
+        const nx = new $c_sci_$colon$colon(f(arg1$1), $m_sci_Nil$());
+        t.sci_$colon$colon__f_next = nx;
+        t = nx;
+        rest = $as_sci_List(rest.tail__O())
+      };
+      this$10 = h
+    };
+    const f$1 = ((this$2$1) => ((x$19$2) => {
+      const x$19 = $as_T(x$19$2);
+      return (x$19 !== "")
+    }))(this);
+    let l = this$10;
+    let result;
+    block: {
+      while (true) {
+        if (l.isEmpty__Z()) {
+          result = $m_sci_Nil$();
+          break
+        } else {
+          const h$1 = l.head__O();
+          const t$1 = $as_sci_List(l.tail__O());
+          if (($uZ(f$1(h$1)) === false)) {
+            l = t$1;
+            continue
+          };
+          const start = l;
+          let remaining = t$1;
+          while (true) {
+            if (remaining.isEmpty__Z()) {
+              result = start;
+              break block
+            } else {
+              const x$1 = remaining.head__O();
+              if (($uZ(f$1(x$1)) !== false)) {
+                remaining = $as_sci_List(remaining.tail__O());
+                continue
+              };
+              const firstMiss = remaining;
+              const newHead = new $c_sci_$colon$colon(start.head__O(), $m_sci_Nil$());
+              let toProcess = $as_sci_List(start.tail__O());
+              let currentLast = newHead;
+              while ((toProcess !== firstMiss)) {
+                const newElem = new $c_sci_$colon$colon(toProcess.head__O(), $m_sci_Nil$());
+                currentLast.sci_$colon$colon__f_next = newElem;
+                currentLast = newElem;
+                toProcess = $as_sci_List(toProcess.tail__O())
+              };
+              let next = $as_sci_List(firstMiss.tail__O());
+              let nextToCopy = next;
+              while ((!next.isEmpty__Z())) {
+                const head = next.head__O();
+                if (($uZ(f$1(head)) !== false)) {
+                  next = $as_sci_List(next.tail__O())
+                } else {
+                  while ((nextToCopy !== next)) {
+                    const newElem$2 = new $c_sci_$colon$colon(nextToCopy.head__O(), $m_sci_Nil$());
+                    currentLast.sci_$colon$colon__f_next = newElem$2;
+                    currentLast = newElem$2;
+                    nextToCopy = $as_sci_List(nextToCopy.tail__O())
+                  };
+                  nextToCopy = $as_sci_List(next.tail__O());
+                  next = $as_sci_List(next.tail__O())
+                }
+              };
+              if ((!nextToCopy.isEmpty__Z())) {
+                currentLast.sci_$colon$colon__f_next = nextToCopy
+              };
+              result = newHead;
+              break block
+            }
+          }
+        }
+      }
+    };
+    const b = new $c_scm_ListBuffer();
+    let these = result;
+    while (true) {
+      let $$x1;
+      if ((!these.isEmpty__Z())) {
+        const arg1$2 = these.head__O();
+        const line = $as_T(arg1$2);
+        const this$11 = $m_s_Predef$().wrapString__T__sci_WrappedString(line);
+        const this$12 = new $c_s_PartialFunction$Lifted(this$11);
+        $$x1 = this$12.apply__O__s_Option(0).contains__O__Z($bC(91))
+      } else {
+        $$x1 = false
+      };
+      if ($$x1) {
+        const elem = these.head__O();
+        b.addOne__O__scm_ListBuffer(elem);
+        these = $as_sci_List(these.tail__O())
+      } else {
+        break
+      }
+    };
+    const _1 = b.toList__sci_List();
+    const _2 = these;
+    $m_Lcats_data_Validated$();
+    const self = $f_sc_IterableOnceOps__mkString__T__T__T__T(_1, "", "\n", "");
+    const y = $f_sc_IterableOnceOps__mkString__T__T__T__T(_2, "", "\n", "");
+    const a = new $c_T2(self, y);
+    return new $c_Lcats_data_Validated$Valid(a)
+  };
 }
 const $d_Lchess_format_pgn_Parser$ = new $TypeData().initClass({
   Lchess_format_pgn_Parser$: 0
@@ -4663,6 +5017,18 @@ function $isArrayOf_Lchess_format_pgn_San(obj, depth) {
 }
 function $asArrayOf_Lchess_format_pgn_San(obj, depth) {
   return (($isArrayOf_Lchess_format_pgn_San(obj, depth) || (obj === null)) ? obj : $throwArrayCastException(obj, "Lchess.format.pgn.San;", depth))
+}
+function $is_Lchess_format_pgn_TagType(obj) {
+  return (!(!((obj && obj.$classData) && obj.$classData.ancestors.Lchess_format_pgn_TagType)))
+}
+function $as_Lchess_format_pgn_TagType(obj) {
+  return (($is_Lchess_format_pgn_TagType(obj) || (obj === null)) ? obj : $throwClassCastException(obj, "chess.format.pgn.TagType"))
+}
+function $isArrayOf_Lchess_format_pgn_TagType(obj, depth) {
+  return (!(!(((obj && obj.$classData) && (obj.$classData.arrayDepth === depth)) && obj.$classData.arrayBase.ancestors.Lchess_format_pgn_TagType)))
+}
+function $asArrayOf_Lchess_format_pgn_TagType(obj, depth) {
+  return (($isArrayOf_Lchess_format_pgn_TagType(obj, depth) || (obj === null)) ? obj : $throwArrayCastException(obj, "Lchess.format.pgn.TagType;", depth))
 }
 const $p_Lchess_variant_Variant__rolesByPgn$lzycompute__sci_Map = (function($thiz) {
   if (((((1 & $thiz.Lchess_variant_Variant__f_bitmap$0) << 24) >> 24) === 0)) {
@@ -5217,6 +5583,26 @@ class $c_Lchess_variant_Variant$ extends $c_O {
       throw new $c_s_UninitializedFieldError("Uninitialized field: /workspace/scalarepo/scalachess/src/main/scala/variant/Variant.scala: 224")
     };
     return this.Lchess_variant_Variant$__f_byKey
+  };
+  default__Lchess_variant_Standard$() {
+    if (((((8 & this.Lchess_variant_Variant$__f_bitmap$init$0) << 24) >> 24) === 0)) {
+      throw new $c_s_UninitializedFieldError("Uninitialized field: /workspace/scalarepo/scalachess/src/main/scala/variant/Variant.scala: 228")
+    };
+    return this.Lchess_variant_Variant$__f_default
+  };
+  byName__T__s_Option(name) {
+    const this$1 = this.all__sci_List();
+    let these = this$1;
+    while ((!these.isEmpty__Z())) {
+      const arg1 = these.head__O();
+      const x$12 = $as_Lchess_variant_Variant(arg1);
+      const this$2 = x$12.Lchess_variant_Variant__f_name;
+      if (($as_T(this$2.toLowerCase()) === $as_T(name.toLowerCase()))) {
+        return new $c_s_Some(these.head__O())
+      };
+      these = $as_sci_List(these.tail__O())
+    };
+    return $m_s_None$()
   };
   symmetricRank__sci_IndexedSeq__sci_Map(rank) {
     const $$x2 = $m_sci_Seq$();
@@ -7915,6 +8301,320 @@ function $isArrayOf_ju_Map$Entry(obj, depth) {
 function $asArrayOf_ju_Map$Entry(obj, depth) {
   return (($isArrayOf_ju_Map$Entry(obj, depth) || (obj === null)) ? obj : $throwArrayCastException(obj, "Ljava.util.Map$Entry;", depth))
 }
+class $c_ju_regex_GroupStartMapper extends $c_O {
+  constructor(pattern, flags, node, groupCount, allMatchingRegex) {
+    super();
+    this.ju_regex_GroupStartMapper__f_pattern = null;
+    this.ju_regex_GroupStartMapper__f_flags = null;
+    this.ju_regex_GroupStartMapper__f_node = null;
+    this.ju_regex_GroupStartMapper__f_groupCount = 0;
+    this.ju_regex_GroupStartMapper__f_allMatchingRegex = null;
+    this.ju_regex_GroupStartMapper__f_pattern = pattern;
+    this.ju_regex_GroupStartMapper__f_flags = flags;
+    this.ju_regex_GroupStartMapper__f_node = node;
+    this.ju_regex_GroupStartMapper__f_groupCount = groupCount;
+    this.ju_regex_GroupStartMapper__f_allMatchingRegex = allMatchingRegex
+  };
+  apply__T__I__sjs_js_Array(string, start) {
+    this.ju_regex_GroupStartMapper__f_allMatchingRegex.lastIndex = start;
+    const allMatchResult = this.ju_regex_GroupStartMapper__f_allMatchingRegex.exec(string);
+    if ((allMatchResult === null)) {
+      throw new $c_jl_AssertionError((((((("[Internal error] Executed '" + this.ju_regex_GroupStartMapper__f_allMatchingRegex) + "' on ") + ((("'" + string) + "' at position ") + start)) + ", got an error.\n") + ((("Original pattern '" + this.ju_regex_GroupStartMapper__f_pattern) + "' with flags '") + this.ju_regex_GroupStartMapper__f_flags)) + "' did match however."))
+    };
+    const len = ((1 + this.ju_regex_GroupStartMapper__f_groupCount) | 0);
+    const groupStartMap = new Array(len);
+    let i = 0;
+    while ((i !== len)) {
+      groupStartMap[i] = (-1);
+      i = ((1 + i) | 0)
+    };
+    this.ju_regex_GroupStartMapper__f_node.propagateFromStart__sjs_js_RegExp$ExecResult__sjs_js_Array__I__I(allMatchResult, groupStartMap, start);
+    return groupStartMap
+  };
+}
+const $d_ju_regex_GroupStartMapper = new $TypeData().initClass({
+  ju_regex_GroupStartMapper: 0
+}, false, "java.util.regex.GroupStartMapper", {
+  ju_regex_GroupStartMapper: 1,
+  O: 1
+});
+$c_ju_regex_GroupStartMapper.prototype.$classData = $d_ju_regex_GroupStartMapper;
+class $c_ju_regex_GroupStartMapper$ extends $c_O {
+  apply__T__T__ju_regex_GroupStartMapper(pattern, flags) {
+    const parser = new $c_ju_regex_GroupStartMapper$Parser(pattern);
+    const node = $p_ju_regex_GroupStartMapper$Parser__parseInsideParensAndClosingParen__ju_regex_GroupStartMapper$Node(parser);
+    node.setNewGroup__I__I(1);
+    const allMatchingRegex = new RegExp(node.buildRegex__sjs_js_Array__T(parser.ju_regex_GroupStartMapper$Parser__f_groupNodeMap), flags);
+    return new $c_ju_regex_GroupStartMapper(pattern, flags, node, parser.parsedGroupCount__I(), allMatchingRegex)
+  };
+}
+const $d_ju_regex_GroupStartMapper$ = new $TypeData().initClass({
+  ju_regex_GroupStartMapper$: 0
+}, false, "java.util.regex.GroupStartMapper$", {
+  ju_regex_GroupStartMapper$: 1,
+  O: 1
+});
+$c_ju_regex_GroupStartMapper$.prototype.$classData = $d_ju_regex_GroupStartMapper$;
+let $n_ju_regex_GroupStartMapper$;
+function $m_ju_regex_GroupStartMapper$() {
+  if ((!$n_ju_regex_GroupStartMapper$)) {
+    $n_ju_regex_GroupStartMapper$ = new $c_ju_regex_GroupStartMapper$()
+  };
+  return $n_ju_regex_GroupStartMapper$
+}
+class $c_ju_regex_GroupStartMapper$Node extends $c_O {
+  constructor() {
+    super();
+    this.ju_regex_GroupStartMapper$Node__f_newGroup = 0
+  };
+  setNewGroup__I__I(newGroupIndex) {
+    this.ju_regex_GroupStartMapper$Node__f_newGroup = newGroupIndex;
+    return ((1 + newGroupIndex) | 0)
+  };
+  propagateFromEnd__sjs_js_RegExp$ExecResult__sjs_js_Array__I__I(matchResult, groupStartMap, end) {
+    const value = matchResult[this.ju_regex_GroupStartMapper$Node__f_newGroup];
+    let start;
+    if ((value === (void 0))) {
+      start = (-1)
+    } else {
+      const matched = $as_T(value);
+      start = ((end - $uI(matched.length)) | 0)
+    };
+    this.propagate__sjs_js_RegExp$ExecResult__sjs_js_Array__I__I__V(matchResult, groupStartMap, start, end);
+    return start
+  };
+  propagateFromStart__sjs_js_RegExp$ExecResult__sjs_js_Array__I__I(matchResult, groupStartMap, start) {
+    const value = matchResult[this.ju_regex_GroupStartMapper$Node__f_newGroup];
+    let end;
+    if ((value === (void 0))) {
+      end = (-1)
+    } else {
+      const matched = $as_T(value);
+      end = ((start + $uI(matched.length)) | 0)
+    };
+    this.propagate__sjs_js_RegExp$ExecResult__sjs_js_Array__I__I__V(matchResult, groupStartMap, start, end);
+    return end
+  };
+}
+function $as_ju_regex_GroupStartMapper$Node(obj) {
+  return (((obj instanceof $c_ju_regex_GroupStartMapper$Node) || (obj === null)) ? obj : $throwClassCastException(obj, "java.util.regex.GroupStartMapper$Node"))
+}
+function $isArrayOf_ju_regex_GroupStartMapper$Node(obj, depth) {
+  return (!(!(((obj && obj.$classData) && (obj.$classData.arrayDepth === depth)) && obj.$classData.arrayBase.ancestors.ju_regex_GroupStartMapper$Node)))
+}
+function $asArrayOf_ju_regex_GroupStartMapper$Node(obj, depth) {
+  return (($isArrayOf_ju_regex_GroupStartMapper$Node(obj, depth) || (obj === null)) ? obj : $throwArrayCastException(obj, "Ljava.util.regex.GroupStartMapper$Node;", depth))
+}
+const $p_ju_regex_GroupStartMapper$Parser__parseInsideParensAndClosingParen__ju_regex_GroupStartMapper$Node = (function($thiz) {
+  const alternatives = [];
+  let sequence = [];
+  while (true) {
+    const this$1 = $thiz.ju_regex_GroupStartMapper$Parser__f_pattern;
+    const index = $thiz.ju_regex_GroupStartMapper$Parser__f_pIndex;
+    const x1 = (65535 & $uI(this$1.charCodeAt(index)));
+    let baseNode;
+    switch (x1) {
+      case 124: {
+        alternatives.push($p_ju_regex_GroupStartMapper$Parser__completeSequence$1__sjs_js_Array__ju_regex_GroupStartMapper$Node($thiz, sequence));
+        sequence = [];
+        $thiz.ju_regex_GroupStartMapper$Parser__f_pIndex = ((1 + $thiz.ju_regex_GroupStartMapper$Parser__f_pIndex) | 0);
+        baseNode = null;
+        break
+      }
+      case 41: {
+        $thiz.ju_regex_GroupStartMapper$Parser__f_pIndex = ((1 + $thiz.ju_regex_GroupStartMapper$Parser__f_pIndex) | 0);
+        const lastAlternative = $p_ju_regex_GroupStartMapper$Parser__completeSequence$1__sjs_js_Array__ju_regex_GroupStartMapper$Node($thiz, sequence);
+        if (($uI(alternatives.length) === 0)) {
+          return lastAlternative
+        } else {
+          alternatives.push(lastAlternative);
+          return new $c_ju_regex_GroupStartMapper$AlternativesNode(alternatives)
+        };
+        break
+      }
+      case 40: {
+        const this$2 = $thiz.ju_regex_GroupStartMapper$Parser__f_pattern;
+        const beginIndex = ((1 + $thiz.ju_regex_GroupStartMapper$Parser__f_pIndex) | 0);
+        const endIndex = ((3 + $thiz.ju_regex_GroupStartMapper$Parser__f_pIndex) | 0);
+        const indicator = $as_T(this$2.substring(beginIndex, endIndex));
+        if (((indicator === "?=") || (indicator === "?!"))) {
+          $thiz.ju_regex_GroupStartMapper$Parser__f_pIndex = ((3 + $thiz.ju_regex_GroupStartMapper$Parser__f_pIndex) | 0);
+          const inner = $p_ju_regex_GroupStartMapper$Parser__parseInsideParensAndClosingParen__ju_regex_GroupStartMapper$Node($thiz);
+          baseNode = new $c_ju_regex_GroupStartMapper$ZeroLengthTestNode(indicator, inner)
+        } else if ((indicator === "?:")) {
+          $thiz.ju_regex_GroupStartMapper$Parser__f_pIndex = ((3 + $thiz.ju_regex_GroupStartMapper$Parser__f_pIndex) | 0);
+          const inner$2 = $p_ju_regex_GroupStartMapper$Parser__parseInsideParensAndClosingParen__ju_regex_GroupStartMapper$Node($thiz);
+          baseNode = inner$2
+        } else {
+          $thiz.ju_regex_GroupStartMapper$Parser__f_pIndex = ((1 + $thiz.ju_regex_GroupStartMapper$Parser__f_pIndex) | 0);
+          const groupIndex = $uI($thiz.ju_regex_GroupStartMapper$Parser__f_groupNodeMap.length);
+          $thiz.ju_regex_GroupStartMapper$Parser__f_groupNodeMap.push(null);
+          const inner$3 = $p_ju_regex_GroupStartMapper$Parser__parseInsideParensAndClosingParen__ju_regex_GroupStartMapper$Node($thiz);
+          const groupNode = new $c_ju_regex_GroupStartMapper$GroupNode(groupIndex, inner$3);
+          $thiz.ju_regex_GroupStartMapper$Parser__f_groupNodeMap[groupIndex] = groupNode;
+          baseNode = groupNode
+        };
+        break
+      }
+      case 92: {
+        const this$3 = $thiz.ju_regex_GroupStartMapper$Parser__f_pattern;
+        const index$1 = ((1 + $thiz.ju_regex_GroupStartMapper$Parser__f_pIndex) | 0);
+        const c = (65535 & $uI(this$3.charCodeAt(index$1)));
+        if (((c >= 48) && (c <= 57))) {
+          const startIndex = $thiz.ju_regex_GroupStartMapper$Parser__f_pIndex;
+          $thiz.ju_regex_GroupStartMapper$Parser__f_pIndex = ((2 + $thiz.ju_regex_GroupStartMapper$Parser__f_pIndex) | 0);
+          while (true) {
+            const this$4 = $thiz.ju_regex_GroupStartMapper$Parser__f_pattern;
+            const index$2 = $thiz.ju_regex_GroupStartMapper$Parser__f_pIndex;
+            const c$1 = (65535 & $uI(this$4.charCodeAt(index$2)));
+            if (((c$1 >= 48) && (c$1 <= 57))) {
+              $thiz.ju_regex_GroupStartMapper$Parser__f_pIndex = ((1 + $thiz.ju_regex_GroupStartMapper$Parser__f_pIndex) | 0)
+            } else {
+              break
+            }
+          };
+          const this$5 = $thiz.ju_regex_GroupStartMapper$Parser__f_pattern;
+          const beginIndex$1 = ((1 + startIndex) | 0);
+          const endIndex$1 = $thiz.ju_regex_GroupStartMapper$Parser__f_pIndex;
+          const s = $as_T(this$5.substring(beginIndex$1, endIndex$1));
+          const this$6 = $m_jl_Integer$();
+          baseNode = new $c_ju_regex_GroupStartMapper$BackReferenceNode(this$6.parseInt__T__I__I(s, 10))
+        } else {
+          const this$7 = $thiz.ju_regex_GroupStartMapper$Parser__f_pattern;
+          const beginIndex$2 = $thiz.ju_regex_GroupStartMapper$Parser__f_pIndex;
+          const endIndex$2 = ((2 + $thiz.ju_regex_GroupStartMapper$Parser__f_pIndex) | 0);
+          const e = $as_T(this$7.substring(beginIndex$2, endIndex$2));
+          $thiz.ju_regex_GroupStartMapper$Parser__f_pIndex = ((2 + $thiz.ju_regex_GroupStartMapper$Parser__f_pIndex) | 0);
+          baseNode = new $c_ju_regex_GroupStartMapper$LeafRegexNode(e)
+        };
+        break
+      }
+      case 91: {
+        const startIndex$2 = $thiz.ju_regex_GroupStartMapper$Parser__f_pIndex;
+        $thiz.ju_regex_GroupStartMapper$Parser__f_pIndex = $p_ju_regex_GroupStartMapper$Parser__loop$1__I__I($thiz, ((1 + startIndex$2) | 0));
+        const this$8 = $thiz.ju_regex_GroupStartMapper$Parser__f_pattern;
+        const endIndex$3 = $thiz.ju_regex_GroupStartMapper$Parser__f_pIndex;
+        const regex = $as_T(this$8.substring(startIndex$2, endIndex$3));
+        baseNode = new $c_ju_regex_GroupStartMapper$LeafRegexNode(regex);
+        break
+      }
+      default: {
+        const this$9 = $thiz.ju_regex_GroupStartMapper$Parser__f_pattern;
+        const beginIndex$3 = $thiz.ju_regex_GroupStartMapper$Parser__f_pIndex;
+        const endIndex$4 = ((1 + $thiz.ju_regex_GroupStartMapper$Parser__f_pIndex) | 0);
+        const e$2 = $as_T(this$9.substring(beginIndex$3, endIndex$4));
+        $thiz.ju_regex_GroupStartMapper$Parser__f_pIndex = ((1 + $thiz.ju_regex_GroupStartMapper$Parser__f_pIndex) | 0);
+        baseNode = new $c_ju_regex_GroupStartMapper$LeafRegexNode(e$2)
+      }
+    };
+    if ((baseNode !== null)) {
+      const this$10 = $thiz.ju_regex_GroupStartMapper$Parser__f_pattern;
+      const index$3 = $thiz.ju_regex_GroupStartMapper$Parser__f_pIndex;
+      const x1$2 = (65535 & $uI(this$10.charCodeAt(index$3)));
+      switch (x1$2) {
+        case 43:
+        case 42:
+        case 63: {
+          const startIndex$3 = $thiz.ju_regex_GroupStartMapper$Parser__f_pIndex;
+          const this$11 = $thiz.ju_regex_GroupStartMapper$Parser__f_pattern;
+          const index$4 = ((1 + startIndex$3) | 0);
+          if (((65535 & $uI(this$11.charCodeAt(index$4))) === 63)) {
+            $thiz.ju_regex_GroupStartMapper$Parser__f_pIndex = ((2 + $thiz.ju_regex_GroupStartMapper$Parser__f_pIndex) | 0)
+          } else {
+            $thiz.ju_regex_GroupStartMapper$Parser__f_pIndex = ((1 + $thiz.ju_regex_GroupStartMapper$Parser__f_pIndex) | 0)
+          };
+          const this$12 = $thiz.ju_regex_GroupStartMapper$Parser__f_pattern;
+          const endIndex$5 = $thiz.ju_regex_GroupStartMapper$Parser__f_pIndex;
+          const repeater = $as_T(this$12.substring(startIndex$3, endIndex$5));
+          $uI(sequence.push(new $c_ju_regex_GroupStartMapper$RepeatedNode(baseNode, repeater)));
+          break
+        }
+        case 123: {
+          const startIndex$4 = $thiz.ju_regex_GroupStartMapper$Parser__f_pIndex;
+          const this$13 = $thiz.ju_regex_GroupStartMapper$Parser__f_pattern;
+          const fromIndex = ((1 + startIndex$4) | 0);
+          $thiz.ju_regex_GroupStartMapper$Parser__f_pIndex = ((1 + $uI(this$13.indexOf("}", fromIndex))) | 0);
+          const this$15 = $thiz.ju_regex_GroupStartMapper$Parser__f_pattern;
+          const index$5 = $thiz.ju_regex_GroupStartMapper$Parser__f_pIndex;
+          if (((65535 & $uI(this$15.charCodeAt(index$5))) === 63)) {
+            $thiz.ju_regex_GroupStartMapper$Parser__f_pIndex = ((1 + $thiz.ju_regex_GroupStartMapper$Parser__f_pIndex) | 0)
+          };
+          const this$16 = $thiz.ju_regex_GroupStartMapper$Parser__f_pattern;
+          const endIndex$6 = $thiz.ju_regex_GroupStartMapper$Parser__f_pIndex;
+          const repeater$2 = $as_T(this$16.substring(startIndex$4, endIndex$6));
+          $uI(sequence.push(new $c_ju_regex_GroupStartMapper$RepeatedNode(baseNode, repeater$2)));
+          break
+        }
+        default: {
+          const sequenceLen = $uI(sequence.length);
+          if ((((sequenceLen !== 0) && (baseNode instanceof $c_ju_regex_GroupStartMapper$LeafRegexNode)) && (sequence[(((-1) + sequenceLen) | 0)] instanceof $c_ju_regex_GroupStartMapper$LeafRegexNode))) {
+            const fused = new $c_ju_regex_GroupStartMapper$LeafRegexNode((("" + $as_ju_regex_GroupStartMapper$LeafRegexNode(sequence[(((-1) + sequenceLen) | 0)]).ju_regex_GroupStartMapper$LeafRegexNode__f_regex) + $as_ju_regex_GroupStartMapper$LeafRegexNode(baseNode).ju_regex_GroupStartMapper$LeafRegexNode__f_regex));
+            sequence[(((-1) + sequenceLen) | 0)] = fused
+          } else {
+            $uI(sequence.push(baseNode))
+          }
+        }
+      }
+    }
+  }
+});
+const $p_ju_regex_GroupStartMapper$Parser__completeSequence$1__sjs_js_Array__ju_regex_GroupStartMapper$Node = (function($thiz, sequence) {
+  const x1 = $uI(sequence.length);
+  switch (x1) {
+    case 0: {
+      return new $c_ju_regex_GroupStartMapper$LeafRegexNode("");
+      break
+    }
+    case 1: {
+      return $as_ju_regex_GroupStartMapper$Node(sequence[0]);
+      break
+    }
+    default: {
+      return new $c_ju_regex_GroupStartMapper$SequenceNode(sequence)
+    }
+  }
+});
+const $p_ju_regex_GroupStartMapper$Parser__loop$1__I__I = (function($thiz, pIndex) {
+  while (true) {
+    const this$1 = $thiz.ju_regex_GroupStartMapper$Parser__f_pattern;
+    const index = pIndex;
+    const x1 = (65535 & $uI(this$1.charCodeAt(index)));
+    switch (x1) {
+      case 92: {
+        pIndex = ((2 + pIndex) | 0);
+        break
+      }
+      case 93: {
+        return ((1 + pIndex) | 0);
+        break
+      }
+      default: {
+        pIndex = ((1 + pIndex) | 0)
+      }
+    }
+  }
+});
+class $c_ju_regex_GroupStartMapper$Parser extends $c_O {
+  constructor(pattern0) {
+    super();
+    this.ju_regex_GroupStartMapper$Parser__f_pattern = null;
+    this.ju_regex_GroupStartMapper$Parser__f_pIndex = 0;
+    this.ju_regex_GroupStartMapper$Parser__f_groupNodeMap = null;
+    this.ju_regex_GroupStartMapper$Parser__f_pattern = (pattern0 + ")");
+    this.ju_regex_GroupStartMapper$Parser__f_pIndex = 0;
+    this.ju_regex_GroupStartMapper$Parser__f_groupNodeMap = [null]
+  };
+  parsedGroupCount__I() {
+    return (((-1) + $uI(this.ju_regex_GroupStartMapper$Parser__f_groupNodeMap.length)) | 0)
+  };
+}
+const $d_ju_regex_GroupStartMapper$Parser = new $TypeData().initClass({
+  ju_regex_GroupStartMapper$Parser: 0
+}, false, "java.util.regex.GroupStartMapper$Parser", {
+  ju_regex_GroupStartMapper$Parser: 1,
+  O: 1
+});
+$c_ju_regex_GroupStartMapper$Parser.prototype.$classData = $d_ju_regex_GroupStartMapper$Parser;
 class $c_ju_regex_Matcher$ extends $c_O {
   java$util$regex$Matcher$$getGroupCount__sjs_js_RegExp$ExecResult__ju_regex_Pattern__I(lastMatch, pattern) {
     return ((lastMatch !== null) ? (((-1) + $uI(lastMatch.length)) | 0) : pattern.groupCount__I())
@@ -8728,6 +9428,11 @@ class $c_sc_StringOps$ extends $c_O {
     const $$x1 = $m_sc_StringOps$();
     const y = $uI(this$.length);
     return $$x1.slice$extension__T__I__I__T(this$, 0, ((n < y) ? n : y))
+  };
+  drop$extension__T__I__T(this$, n) {
+    const $$x1 = $m_sc_StringOps$();
+    const y = $uI(this$.length);
+    return $$x1.slice$extension__T__I__I__T(this$, ((n < y) ? n : y), $uI(this$.length))
   };
 }
 const $d_sc_StringOps$ = new $TypeData().initClass({
@@ -10525,6 +11230,25 @@ function $m_sjsr_package$() {
   };
   return $n_sjsr_package$
 }
+class $c_s_sys_package$ extends $c_O {
+  error__T__E(message) {
+    throw $m_sjsr_package$().unwrapJavaScriptException__jl_Throwable__O($ct_jl_RuntimeException__T__(new $c_jl_RuntimeException(), message))
+  };
+}
+const $d_s_sys_package$ = new $TypeData().initClass({
+  s_sys_package$: 0
+}, false, "scala.sys.package$", {
+  s_sys_package$: 1,
+  O: 1
+});
+$c_s_sys_package$.prototype.$classData = $d_s_sys_package$;
+let $n_s_sys_package$;
+function $m_s_sys_package$() {
+  if ((!$n_s_sys_package$)) {
+    $n_s_sys_package$ = new $c_s_sys_package$()
+  };
+  return $n_s_sys_package$
+}
 class $c_s_util_DynamicVariable extends $c_O {
   constructor(init) {
     super();
@@ -11524,7 +12248,15 @@ class $c_s_util_hashing_MurmurHash3 extends $c_O {
   };
 }
 function $f_s_util_matching_Regex$MatchData__matched__T($thiz) {
-  return (($thiz.s_util_matching_Regex$Match__f_start >= 0) ? $dp_toString__T($dp_subSequence__I__I__jl_CharSequence($thiz.s_util_matching_Regex$Match__f_source, $thiz.s_util_matching_Regex$Match__f_start, $thiz.s_util_matching_Regex$Match__f_end)) : null)
+  return (($thiz.start__I() >= 0) ? $dp_toString__T($dp_subSequence__I__I__jl_CharSequence($thiz.source__jl_CharSequence(), $thiz.start__I(), $thiz.end__I())) : null)
+}
+function $f_s_util_matching_Regex$MatchData__group__I__T($thiz, i) {
+  return (($thiz.start__I__I(i) >= 0) ? $dp_toString__T($dp_subSequence__I__I__jl_CharSequence($thiz.source__jl_CharSequence(), $thiz.start__I__I(i), $thiz.end__I__I(i))) : null)
+}
+function $f_s_util_matching_Regex$Replacement__replaced__T($thiz) {
+  const newsb = $ct_jl_StringBuffer__jl_CharSequence__(new $c_jl_StringBuffer(), $thiz.s_util_matching_Regex$MatchIterator$$anon$4__f_scala$util$matching$Regex$Replacement$$sb);
+  $thiz.matcher__ju_regex_Matcher().appendTail__jl_StringBuffer__jl_StringBuffer(newsb);
+  return newsb.toString__T()
 }
 const $p_s_util_parsing_combinator_Parsers__p$lzycompute$7__sr_LazyRef__F0__s_util_parsing_combinator_Parsers$Parser = (function($thiz, p$lzy$7, p0$2) {
   if ((p$lzy$7 === null)) {
@@ -11704,6 +12436,23 @@ function $asArrayOf_Lcats_Eval(obj, depth) {
 }
 class $c_Lcats_EvalInstances0 extends $c_Lcats_EvalInstances1 {
 }
+class $c_Lcats_Foldable$ToFoldableOps$$anon$5 extends $c_O {
+  constructor(outer, target$1, tc$1) {
+    super();
+    this.Lcats_Foldable$ToFoldableOps$$anon$5__f_self = null;
+    this.Lcats_Foldable$ToFoldableOps$$anon$5__f_typeClassInstance = null;
+    this.Lcats_Foldable$ToFoldableOps$$anon$5__f_self = target$1;
+    this.Lcats_Foldable$ToFoldableOps$$anon$5__f_typeClassInstance = tc$1
+  };
+}
+const $d_Lcats_Foldable$ToFoldableOps$$anon$5 = new $TypeData().initClass({
+  Lcats_Foldable$ToFoldableOps$$anon$5: 0
+}, false, "cats.Foldable$ToFoldableOps$$anon$5", {
+  Lcats_Foldable$ToFoldableOps$$anon$5: 1,
+  O: 1,
+  Lcats_Foldable$Ops: 1
+});
+$c_Lcats_Foldable$ToFoldableOps$$anon$5.prototype.$classData = $d_Lcats_Foldable$ToFoldableOps$$anon$5;
 class $c_Lcats_Show$ extends $c_O {
   constructor() {
     super();
@@ -13467,6 +14216,32 @@ function $m_Lchess_format_Uci$Move$() {
   };
   return $n_Lchess_format_Uci$Move$
 }
+class $c_Lchess_format_pgn_Glyph$ extends $c_O {
+  constructor() {
+    super();
+    this.Lchess_format_pgn_Glyph$__f_bitmap$init$0 = 0
+  };
+  find__I__s_Option(id) {
+    const this$1 = $m_Lchess_format_pgn_Glyph$MoveAssessment$().byId__sci_Map().get__O__s_Option(id);
+    const this$2 = (this$1.isEmpty__Z() ? $m_Lchess_format_pgn_Glyph$PositionAssessment$().byId__sci_Map().get__O__s_Option(id) : this$1);
+    return (this$2.isEmpty__Z() ? $m_Lchess_format_pgn_Glyph$Observation$().byId__sci_Map().get__O__s_Option(id) : this$2)
+  };
+}
+const $d_Lchess_format_pgn_Glyph$ = new $TypeData().initClass({
+  Lchess_format_pgn_Glyph$: 0
+}, false, "chess.format.pgn.Glyph$", {
+  Lchess_format_pgn_Glyph$: 1,
+  O: 1,
+  Ljava_io_Serializable: 1
+});
+$c_Lchess_format_pgn_Glyph$.prototype.$classData = $d_Lchess_format_pgn_Glyph$;
+let $n_Lchess_format_pgn_Glyph$;
+function $m_Lchess_format_pgn_Glyph$() {
+  if ((!$n_Lchess_format_pgn_Glyph$)) {
+    $n_Lchess_format_pgn_Glyph$ = new $c_Lchess_format_pgn_Glyph$()
+  };
+  return $n_Lchess_format_pgn_Glyph$
+}
 class $c_Lchess_format_pgn_Glyph$MoveAssessment$ extends $c_O {
   constructor() {
     super();
@@ -13585,6 +14360,12 @@ class $c_Lchess_format_pgn_Glyph$MoveAssessment$ extends $c_O {
     };
     return this.Lchess_format_pgn_Glyph$MoveAssessment$__f_all
   };
+  byId__sci_Map() {
+    if (((512 & this.Lchess_format_pgn_Glyph$MoveAssessment$__f_bitmap$init$0) === 0)) {
+      throw new $c_s_UninitializedFieldError("Uninitialized field: /workspace/scalarepo/scalachess/src/main/scala/format/pgn/Glyph.scala: 70")
+    };
+    return this.Lchess_format_pgn_Glyph$MoveAssessment$__f_byId
+  };
 }
 const $d_Lchess_format_pgn_Glyph$MoveAssessment$ = new $TypeData().initClass({
   Lchess_format_pgn_Glyph$MoveAssessment$: 0
@@ -13600,6 +14381,286 @@ function $m_Lchess_format_pgn_Glyph$MoveAssessment$() {
     $n_Lchess_format_pgn_Glyph$MoveAssessment$ = new $c_Lchess_format_pgn_Glyph$MoveAssessment$()
   };
   return $n_Lchess_format_pgn_Glyph$MoveAssessment$
+}
+class $c_Lchess_format_pgn_Glyph$Observation$ extends $c_O {
+  constructor() {
+    super();
+    this.Lchess_format_pgn_Glyph$Observation$__f_novelty = null;
+    this.Lchess_format_pgn_Glyph$Observation$__f_development = null;
+    this.Lchess_format_pgn_Glyph$Observation$__f_initiative = null;
+    this.Lchess_format_pgn_Glyph$Observation$__f_attack = null;
+    this.Lchess_format_pgn_Glyph$Observation$__f_counterplay = null;
+    this.Lchess_format_pgn_Glyph$Observation$__f_timeTrouble = null;
+    this.Lchess_format_pgn_Glyph$Observation$__f_compensation = null;
+    this.Lchess_format_pgn_Glyph$Observation$__f_withIdea = null;
+    this.Lchess_format_pgn_Glyph$Observation$__f_all = null;
+    this.Lchess_format_pgn_Glyph$Observation$__f_byId = null;
+    this.Lchess_format_pgn_Glyph$Observation$__f_bitmap$init$0 = 0;
+    $n_Lchess_format_pgn_Glyph$Observation$ = this;
+    this.Lchess_format_pgn_Glyph$Observation$__f_novelty = new $c_Lchess_format_pgn_Glyph$Observation$$anon$17();
+    this.Lchess_format_pgn_Glyph$Observation$__f_bitmap$init$0 = (1 | this.Lchess_format_pgn_Glyph$Observation$__f_bitmap$init$0);
+    this.Lchess_format_pgn_Glyph$Observation$__f_development = new $c_Lchess_format_pgn_Glyph$Observation$$anon$18();
+    this.Lchess_format_pgn_Glyph$Observation$__f_bitmap$init$0 = (2 | this.Lchess_format_pgn_Glyph$Observation$__f_bitmap$init$0);
+    this.Lchess_format_pgn_Glyph$Observation$__f_initiative = new $c_Lchess_format_pgn_Glyph$Observation$$anon$19();
+    this.Lchess_format_pgn_Glyph$Observation$__f_bitmap$init$0 = (4 | this.Lchess_format_pgn_Glyph$Observation$__f_bitmap$init$0);
+    this.Lchess_format_pgn_Glyph$Observation$__f_attack = new $c_Lchess_format_pgn_Glyph$Observation$$anon$20();
+    this.Lchess_format_pgn_Glyph$Observation$__f_bitmap$init$0 = (8 | this.Lchess_format_pgn_Glyph$Observation$__f_bitmap$init$0);
+    this.Lchess_format_pgn_Glyph$Observation$__f_counterplay = new $c_Lchess_format_pgn_Glyph$Observation$$anon$21();
+    this.Lchess_format_pgn_Glyph$Observation$__f_bitmap$init$0 = (16 | this.Lchess_format_pgn_Glyph$Observation$__f_bitmap$init$0);
+    this.Lchess_format_pgn_Glyph$Observation$__f_timeTrouble = new $c_Lchess_format_pgn_Glyph$Observation$$anon$22();
+    this.Lchess_format_pgn_Glyph$Observation$__f_bitmap$init$0 = (32 | this.Lchess_format_pgn_Glyph$Observation$__f_bitmap$init$0);
+    this.Lchess_format_pgn_Glyph$Observation$__f_compensation = new $c_Lchess_format_pgn_Glyph$Observation$$anon$23();
+    this.Lchess_format_pgn_Glyph$Observation$__f_bitmap$init$0 = (64 | this.Lchess_format_pgn_Glyph$Observation$__f_bitmap$init$0);
+    this.Lchess_format_pgn_Glyph$Observation$__f_withIdea = new $c_Lchess_format_pgn_Glyph$Observation$$anon$24();
+    this.Lchess_format_pgn_Glyph$Observation$__f_bitmap$init$0 = (128 | this.Lchess_format_pgn_Glyph$Observation$__f_bitmap$init$0);
+    $m_sci_List$();
+    const array = [this.novelty__Lchess_format_pgn_Glyph$Observation(), this.development__Lchess_format_pgn_Glyph$Observation(), this.initiative__Lchess_format_pgn_Glyph$Observation(), this.attack__Lchess_format_pgn_Glyph$Observation(), this.counterplay__Lchess_format_pgn_Glyph$Observation(), this.timeTrouble__Lchess_format_pgn_Glyph$Observation(), this.compensation__Lchess_format_pgn_Glyph$Observation(), this.withIdea__Lchess_format_pgn_Glyph$Observation()];
+    const elems = new $c_sjsr_WrappedVarArgs(array);
+    this.Lchess_format_pgn_Glyph$Observation$__f_all = $m_sci_Nil$().prependedAll__sc_IterableOnce__sci_List(elems);
+    this.Lchess_format_pgn_Glyph$Observation$__f_bitmap$init$0 = (256 | this.Lchess_format_pgn_Glyph$Observation$__f_bitmap$init$0);
+    const this$8 = this.all__sci_List();
+    const f = ((this$5) => ((g$2) => {
+      const g = $as_Lchess_format_pgn_Glyph$Observation(g$2);
+      const self = $as_Lchess_format_pgn_Glyph(g).Lchess_format_pgn_Glyph__f_id;
+      return new $c_T2(self, g)
+    }))(this);
+    let this$10;
+    if ((this$8 === $m_sci_Nil$())) {
+      this$10 = $m_sci_Nil$()
+    } else {
+      const arg1 = this$8.head__O();
+      const h = new $c_sci_$colon$colon(f(arg1), $m_sci_Nil$());
+      let t = h;
+      let rest = $as_sci_List(this$8.tail__O());
+      while ((rest !== $m_sci_Nil$())) {
+        const arg1$1 = rest.head__O();
+        const nx = new $c_sci_$colon$colon(f(arg1$1), $m_sci_Nil$());
+        t.sci_$colon$colon__f_next = nx;
+        t = nx;
+        rest = $as_sci_List(rest.tail__O())
+      };
+      this$10 = h
+    };
+    const factory = $m_s_Predef$().s_Predef$__f_Map;
+    const factory$1 = new $c_sc_MapFactory$ToFactory(factory);
+    this.Lchess_format_pgn_Glyph$Observation$__f_byId = $as_sci_Map(factory$1.fromSpecific__sc_IterableOnce__O(this$10));
+    this.Lchess_format_pgn_Glyph$Observation$__f_bitmap$init$0 = (512 | this.Lchess_format_pgn_Glyph$Observation$__f_bitmap$init$0)
+  };
+  novelty__Lchess_format_pgn_Glyph$Observation() {
+    if (((1 & this.Lchess_format_pgn_Glyph$Observation$__f_bitmap$init$0) === 0)) {
+      throw new $c_s_UninitializedFieldError("Uninitialized field: /workspace/scalarepo/scalachess/src/main/scala/format/pgn/Glyph.scala: 113")
+    };
+    return this.Lchess_format_pgn_Glyph$Observation$__f_novelty
+  };
+  development__Lchess_format_pgn_Glyph$Observation() {
+    if (((2 & this.Lchess_format_pgn_Glyph$Observation$__f_bitmap$init$0) === 0)) {
+      throw new $c_s_UninitializedFieldError("Uninitialized field: /workspace/scalarepo/scalachess/src/main/scala/format/pgn/Glyph.scala: 114")
+    };
+    return this.Lchess_format_pgn_Glyph$Observation$__f_development
+  };
+  initiative__Lchess_format_pgn_Glyph$Observation() {
+    if (((4 & this.Lchess_format_pgn_Glyph$Observation$__f_bitmap$init$0) === 0)) {
+      throw new $c_s_UninitializedFieldError("Uninitialized field: /workspace/scalarepo/scalachess/src/main/scala/format/pgn/Glyph.scala: 115")
+    };
+    return this.Lchess_format_pgn_Glyph$Observation$__f_initiative
+  };
+  attack__Lchess_format_pgn_Glyph$Observation() {
+    if (((8 & this.Lchess_format_pgn_Glyph$Observation$__f_bitmap$init$0) === 0)) {
+      throw new $c_s_UninitializedFieldError("Uninitialized field: /workspace/scalarepo/scalachess/src/main/scala/format/pgn/Glyph.scala: 116")
+    };
+    return this.Lchess_format_pgn_Glyph$Observation$__f_attack
+  };
+  counterplay__Lchess_format_pgn_Glyph$Observation() {
+    if (((16 & this.Lchess_format_pgn_Glyph$Observation$__f_bitmap$init$0) === 0)) {
+      throw new $c_s_UninitializedFieldError("Uninitialized field: /workspace/scalarepo/scalachess/src/main/scala/format/pgn/Glyph.scala: 117")
+    };
+    return this.Lchess_format_pgn_Glyph$Observation$__f_counterplay
+  };
+  timeTrouble__Lchess_format_pgn_Glyph$Observation() {
+    if (((32 & this.Lchess_format_pgn_Glyph$Observation$__f_bitmap$init$0) === 0)) {
+      throw new $c_s_UninitializedFieldError("Uninitialized field: /workspace/scalarepo/scalachess/src/main/scala/format/pgn/Glyph.scala: 118")
+    };
+    return this.Lchess_format_pgn_Glyph$Observation$__f_timeTrouble
+  };
+  compensation__Lchess_format_pgn_Glyph$Observation() {
+    if (((64 & this.Lchess_format_pgn_Glyph$Observation$__f_bitmap$init$0) === 0)) {
+      throw new $c_s_UninitializedFieldError("Uninitialized field: /workspace/scalarepo/scalachess/src/main/scala/format/pgn/Glyph.scala: 119")
+    };
+    return this.Lchess_format_pgn_Glyph$Observation$__f_compensation
+  };
+  withIdea__Lchess_format_pgn_Glyph$Observation() {
+    if (((128 & this.Lchess_format_pgn_Glyph$Observation$__f_bitmap$init$0) === 0)) {
+      throw new $c_s_UninitializedFieldError("Uninitialized field: /workspace/scalarepo/scalachess/src/main/scala/format/pgn/Glyph.scala: 120")
+    };
+    return this.Lchess_format_pgn_Glyph$Observation$__f_withIdea
+  };
+  all__sci_List() {
+    if (((256 & this.Lchess_format_pgn_Glyph$Observation$__f_bitmap$init$0) === 0)) {
+      throw new $c_s_UninitializedFieldError("Uninitialized field: /workspace/scalarepo/scalachess/src/main/scala/format/pgn/Glyph.scala: 122")
+    };
+    return this.Lchess_format_pgn_Glyph$Observation$__f_all
+  };
+  byId__sci_Map() {
+    if (((512 & this.Lchess_format_pgn_Glyph$Observation$__f_bitmap$init$0) === 0)) {
+      throw new $c_s_UninitializedFieldError("Uninitialized field: /workspace/scalarepo/scalachess/src/main/scala/format/pgn/Glyph.scala: 123")
+    };
+    return this.Lchess_format_pgn_Glyph$Observation$__f_byId
+  };
+}
+const $d_Lchess_format_pgn_Glyph$Observation$ = new $TypeData().initClass({
+  Lchess_format_pgn_Glyph$Observation$: 0
+}, false, "chess.format.pgn.Glyph$Observation$", {
+  Lchess_format_pgn_Glyph$Observation$: 1,
+  O: 1,
+  Ljava_io_Serializable: 1
+});
+$c_Lchess_format_pgn_Glyph$Observation$.prototype.$classData = $d_Lchess_format_pgn_Glyph$Observation$;
+let $n_Lchess_format_pgn_Glyph$Observation$;
+function $m_Lchess_format_pgn_Glyph$Observation$() {
+  if ((!$n_Lchess_format_pgn_Glyph$Observation$)) {
+    $n_Lchess_format_pgn_Glyph$Observation$ = new $c_Lchess_format_pgn_Glyph$Observation$()
+  };
+  return $n_Lchess_format_pgn_Glyph$Observation$
+}
+class $c_Lchess_format_pgn_Glyph$PositionAssessment$ extends $c_O {
+  constructor() {
+    super();
+    this.Lchess_format_pgn_Glyph$PositionAssessment$__f_equal = null;
+    this.Lchess_format_pgn_Glyph$PositionAssessment$__f_unclear = null;
+    this.Lchess_format_pgn_Glyph$PositionAssessment$__f_whiteSlightlyBetter = null;
+    this.Lchess_format_pgn_Glyph$PositionAssessment$__f_blackSlightlyBetter = null;
+    this.Lchess_format_pgn_Glyph$PositionAssessment$__f_whiteQuiteBetter = null;
+    this.Lchess_format_pgn_Glyph$PositionAssessment$__f_blackQuiteBetter = null;
+    this.Lchess_format_pgn_Glyph$PositionAssessment$__f_whiteMuchBetter = null;
+    this.Lchess_format_pgn_Glyph$PositionAssessment$__f_blackMuchBetter = null;
+    this.Lchess_format_pgn_Glyph$PositionAssessment$__f_all = null;
+    this.Lchess_format_pgn_Glyph$PositionAssessment$__f_byId = null;
+    this.Lchess_format_pgn_Glyph$PositionAssessment$__f_bitmap$init$0 = 0;
+    $n_Lchess_format_pgn_Glyph$PositionAssessment$ = this;
+    this.Lchess_format_pgn_Glyph$PositionAssessment$__f_equal = new $c_Lchess_format_pgn_Glyph$PositionAssessment$$anon$9();
+    this.Lchess_format_pgn_Glyph$PositionAssessment$__f_bitmap$init$0 = (1 | this.Lchess_format_pgn_Glyph$PositionAssessment$__f_bitmap$init$0);
+    this.Lchess_format_pgn_Glyph$PositionAssessment$__f_unclear = new $c_Lchess_format_pgn_Glyph$PositionAssessment$$anon$10();
+    this.Lchess_format_pgn_Glyph$PositionAssessment$__f_bitmap$init$0 = (2 | this.Lchess_format_pgn_Glyph$PositionAssessment$__f_bitmap$init$0);
+    this.Lchess_format_pgn_Glyph$PositionAssessment$__f_whiteSlightlyBetter = new $c_Lchess_format_pgn_Glyph$PositionAssessment$$anon$11();
+    this.Lchess_format_pgn_Glyph$PositionAssessment$__f_bitmap$init$0 = (4 | this.Lchess_format_pgn_Glyph$PositionAssessment$__f_bitmap$init$0);
+    this.Lchess_format_pgn_Glyph$PositionAssessment$__f_blackSlightlyBetter = new $c_Lchess_format_pgn_Glyph$PositionAssessment$$anon$12();
+    this.Lchess_format_pgn_Glyph$PositionAssessment$__f_bitmap$init$0 = (8 | this.Lchess_format_pgn_Glyph$PositionAssessment$__f_bitmap$init$0);
+    this.Lchess_format_pgn_Glyph$PositionAssessment$__f_whiteQuiteBetter = new $c_Lchess_format_pgn_Glyph$PositionAssessment$$anon$13();
+    this.Lchess_format_pgn_Glyph$PositionAssessment$__f_bitmap$init$0 = (16 | this.Lchess_format_pgn_Glyph$PositionAssessment$__f_bitmap$init$0);
+    this.Lchess_format_pgn_Glyph$PositionAssessment$__f_blackQuiteBetter = new $c_Lchess_format_pgn_Glyph$PositionAssessment$$anon$14();
+    this.Lchess_format_pgn_Glyph$PositionAssessment$__f_bitmap$init$0 = (32 | this.Lchess_format_pgn_Glyph$PositionAssessment$__f_bitmap$init$0);
+    this.Lchess_format_pgn_Glyph$PositionAssessment$__f_whiteMuchBetter = new $c_Lchess_format_pgn_Glyph$PositionAssessment$$anon$15();
+    this.Lchess_format_pgn_Glyph$PositionAssessment$__f_bitmap$init$0 = (64 | this.Lchess_format_pgn_Glyph$PositionAssessment$__f_bitmap$init$0);
+    this.Lchess_format_pgn_Glyph$PositionAssessment$__f_blackMuchBetter = new $c_Lchess_format_pgn_Glyph$PositionAssessment$$anon$16();
+    this.Lchess_format_pgn_Glyph$PositionAssessment$__f_bitmap$init$0 = (128 | this.Lchess_format_pgn_Glyph$PositionAssessment$__f_bitmap$init$0);
+    $m_sci_List$();
+    const array = [this.equal__Lchess_format_pgn_Glyph$PositionAssessment(), this.unclear__Lchess_format_pgn_Glyph$PositionAssessment(), this.whiteSlightlyBetter__Lchess_format_pgn_Glyph$PositionAssessment(), this.blackSlightlyBetter__Lchess_format_pgn_Glyph$PositionAssessment(), this.whiteQuiteBetter__Lchess_format_pgn_Glyph$PositionAssessment(), this.blackQuiteBetter__Lchess_format_pgn_Glyph$PositionAssessment(), this.whiteMuchBetter__Lchess_format_pgn_Glyph$PositionAssessment(), this.blackMuchBetter__Lchess_format_pgn_Glyph$PositionAssessment()];
+    const elems = new $c_sjsr_WrappedVarArgs(array);
+    this.Lchess_format_pgn_Glyph$PositionAssessment$__f_all = $m_sci_Nil$().prependedAll__sc_IterableOnce__sci_List(elems);
+    this.Lchess_format_pgn_Glyph$PositionAssessment$__f_bitmap$init$0 = (256 | this.Lchess_format_pgn_Glyph$PositionAssessment$__f_bitmap$init$0);
+    const this$8 = this.all__sci_List();
+    const f = ((this$5) => ((g$2) => {
+      const g = $as_Lchess_format_pgn_Glyph$PositionAssessment(g$2);
+      const self = $as_Lchess_format_pgn_Glyph(g).Lchess_format_pgn_Glyph__f_id;
+      return new $c_T2(self, g)
+    }))(this);
+    let this$10;
+    if ((this$8 === $m_sci_Nil$())) {
+      this$10 = $m_sci_Nil$()
+    } else {
+      const arg1 = this$8.head__O();
+      const h = new $c_sci_$colon$colon(f(arg1), $m_sci_Nil$());
+      let t = h;
+      let rest = $as_sci_List(this$8.tail__O());
+      while ((rest !== $m_sci_Nil$())) {
+        const arg1$1 = rest.head__O();
+        const nx = new $c_sci_$colon$colon(f(arg1$1), $m_sci_Nil$());
+        t.sci_$colon$colon__f_next = nx;
+        t = nx;
+        rest = $as_sci_List(rest.tail__O())
+      };
+      this$10 = h
+    };
+    const factory = $m_s_Predef$().s_Predef$__f_Map;
+    const factory$1 = new $c_sc_MapFactory$ToFactory(factory);
+    this.Lchess_format_pgn_Glyph$PositionAssessment$__f_byId = $as_sci_Map(factory$1.fromSpecific__sc_IterableOnce__O(this$10));
+    this.Lchess_format_pgn_Glyph$PositionAssessment$__f_bitmap$init$0 = (512 | this.Lchess_format_pgn_Glyph$PositionAssessment$__f_bitmap$init$0)
+  };
+  equal__Lchess_format_pgn_Glyph$PositionAssessment() {
+    if (((1 & this.Lchess_format_pgn_Glyph$PositionAssessment$__f_bitmap$init$0) === 0)) {
+      throw new $c_s_UninitializedFieldError("Uninitialized field: /workspace/scalarepo/scalachess/src/main/scala/format/pgn/Glyph.scala: 82")
+    };
+    return this.Lchess_format_pgn_Glyph$PositionAssessment$__f_equal
+  };
+  unclear__Lchess_format_pgn_Glyph$PositionAssessment() {
+    if (((2 & this.Lchess_format_pgn_Glyph$PositionAssessment$__f_bitmap$init$0) === 0)) {
+      throw new $c_s_UninitializedFieldError("Uninitialized field: /workspace/scalarepo/scalachess/src/main/scala/format/pgn/Glyph.scala: 83")
+    };
+    return this.Lchess_format_pgn_Glyph$PositionAssessment$__f_unclear
+  };
+  whiteSlightlyBetter__Lchess_format_pgn_Glyph$PositionAssessment() {
+    if (((4 & this.Lchess_format_pgn_Glyph$PositionAssessment$__f_bitmap$init$0) === 0)) {
+      throw new $c_s_UninitializedFieldError("Uninitialized field: /workspace/scalarepo/scalachess/src/main/scala/format/pgn/Glyph.scala: 84")
+    };
+    return this.Lchess_format_pgn_Glyph$PositionAssessment$__f_whiteSlightlyBetter
+  };
+  blackSlightlyBetter__Lchess_format_pgn_Glyph$PositionAssessment() {
+    if (((8 & this.Lchess_format_pgn_Glyph$PositionAssessment$__f_bitmap$init$0) === 0)) {
+      throw new $c_s_UninitializedFieldError("Uninitialized field: /workspace/scalarepo/scalachess/src/main/scala/format/pgn/Glyph.scala: 85")
+    };
+    return this.Lchess_format_pgn_Glyph$PositionAssessment$__f_blackSlightlyBetter
+  };
+  whiteQuiteBetter__Lchess_format_pgn_Glyph$PositionAssessment() {
+    if (((16 & this.Lchess_format_pgn_Glyph$PositionAssessment$__f_bitmap$init$0) === 0)) {
+      throw new $c_s_UninitializedFieldError("Uninitialized field: /workspace/scalarepo/scalachess/src/main/scala/format/pgn/Glyph.scala: 86")
+    };
+    return this.Lchess_format_pgn_Glyph$PositionAssessment$__f_whiteQuiteBetter
+  };
+  blackQuiteBetter__Lchess_format_pgn_Glyph$PositionAssessment() {
+    if (((32 & this.Lchess_format_pgn_Glyph$PositionAssessment$__f_bitmap$init$0) === 0)) {
+      throw new $c_s_UninitializedFieldError("Uninitialized field: /workspace/scalarepo/scalachess/src/main/scala/format/pgn/Glyph.scala: 87")
+    };
+    return this.Lchess_format_pgn_Glyph$PositionAssessment$__f_blackQuiteBetter
+  };
+  whiteMuchBetter__Lchess_format_pgn_Glyph$PositionAssessment() {
+    if (((64 & this.Lchess_format_pgn_Glyph$PositionAssessment$__f_bitmap$init$0) === 0)) {
+      throw new $c_s_UninitializedFieldError("Uninitialized field: /workspace/scalarepo/scalachess/src/main/scala/format/pgn/Glyph.scala: 88")
+    };
+    return this.Lchess_format_pgn_Glyph$PositionAssessment$__f_whiteMuchBetter
+  };
+  blackMuchBetter__Lchess_format_pgn_Glyph$PositionAssessment() {
+    if (((128 & this.Lchess_format_pgn_Glyph$PositionAssessment$__f_bitmap$init$0) === 0)) {
+      throw new $c_s_UninitializedFieldError("Uninitialized field: /workspace/scalarepo/scalachess/src/main/scala/format/pgn/Glyph.scala: 89")
+    };
+    return this.Lchess_format_pgn_Glyph$PositionAssessment$__f_blackMuchBetter
+  };
+  all__sci_List() {
+    if (((256 & this.Lchess_format_pgn_Glyph$PositionAssessment$__f_bitmap$init$0) === 0)) {
+      throw new $c_s_UninitializedFieldError("Uninitialized field: /workspace/scalarepo/scalachess/src/main/scala/format/pgn/Glyph.scala: 91")
+    };
+    return this.Lchess_format_pgn_Glyph$PositionAssessment$__f_all
+  };
+  byId__sci_Map() {
+    if (((512 & this.Lchess_format_pgn_Glyph$PositionAssessment$__f_bitmap$init$0) === 0)) {
+      throw new $c_s_UninitializedFieldError("Uninitialized field: /workspace/scalarepo/scalachess/src/main/scala/format/pgn/Glyph.scala: 101")
+    };
+    return this.Lchess_format_pgn_Glyph$PositionAssessment$__f_byId
+  };
+}
+const $d_Lchess_format_pgn_Glyph$PositionAssessment$ = new $TypeData().initClass({
+  Lchess_format_pgn_Glyph$PositionAssessment$: 0
+}, false, "chess.format.pgn.Glyph$PositionAssessment$", {
+  Lchess_format_pgn_Glyph$PositionAssessment$: 1,
+  O: 1,
+  Ljava_io_Serializable: 1
+});
+$c_Lchess_format_pgn_Glyph$PositionAssessment$.prototype.$classData = $d_Lchess_format_pgn_Glyph$PositionAssessment$;
+let $n_Lchess_format_pgn_Glyph$PositionAssessment$;
+function $m_Lchess_format_pgn_Glyph$PositionAssessment$() {
+  if ((!$n_Lchess_format_pgn_Glyph$PositionAssessment$)) {
+    $n_Lchess_format_pgn_Glyph$PositionAssessment$ = new $c_Lchess_format_pgn_Glyph$PositionAssessment$()
+  };
+  return $n_Lchess_format_pgn_Glyph$PositionAssessment$
 }
 class $c_Lchess_format_pgn_Glyphs$ extends $c_O {
   constructor() {
@@ -13717,6 +14778,284 @@ function $m_Lchess_format_pgn_Sans$() {
     $n_Lchess_format_pgn_Sans$ = new $c_Lchess_format_pgn_Sans$()
   };
   return $n_Lchess_format_pgn_Sans$
+}
+class $c_Lchess_format_pgn_Tag$ extends $c_O {
+  constructor() {
+    super();
+    this.Lchess_format_pgn_Tag$__f_tagTypes = null;
+    this.Lchess_format_pgn_Tag$__f_tagTypesByLowercase = null;
+    this.Lchess_format_pgn_Tag$__f_bitmap$init$0 = 0;
+    $n_Lchess_format_pgn_Tag$ = this;
+    $m_sci_List$();
+    const array = [$m_Lchess_format_pgn_Tag$Event$(), $m_Lchess_format_pgn_Tag$Site$(), $m_Lchess_format_pgn_Tag$Date$(), $m_Lchess_format_pgn_Tag$UTCDate$(), $m_Lchess_format_pgn_Tag$UTCTime$(), $m_Lchess_format_pgn_Tag$Round$(), $m_Lchess_format_pgn_Tag$White$(), $m_Lchess_format_pgn_Tag$Black$(), $m_Lchess_format_pgn_Tag$TimeControl$(), $m_Lchess_format_pgn_Tag$WhiteClock$(), $m_Lchess_format_pgn_Tag$BlackClock$(), $m_Lchess_format_pgn_Tag$WhiteElo$(), $m_Lchess_format_pgn_Tag$BlackElo$(), $m_Lchess_format_pgn_Tag$WhiteRatingDiff$(), $m_Lchess_format_pgn_Tag$BlackRatingDiff$(), $m_Lchess_format_pgn_Tag$WhiteTitle$(), $m_Lchess_format_pgn_Tag$BlackTitle$(), $m_Lchess_format_pgn_Tag$WhiteTeam$(), $m_Lchess_format_pgn_Tag$BlackTeam$(), $m_Lchess_format_pgn_Tag$Result$(), $m_Lchess_format_pgn_Tag$FEN$(), $m_Lchess_format_pgn_Tag$Variant$(), $m_Lchess_format_pgn_Tag$ECO$(), $m_Lchess_format_pgn_Tag$Opening$(), $m_Lchess_format_pgn_Tag$Termination$(), $m_Lchess_format_pgn_Tag$Annotator$()];
+    const elems = new $c_sjsr_WrappedVarArgs(array);
+    this.Lchess_format_pgn_Tag$__f_tagTypes = $m_sci_Nil$().prependedAll__sc_IterableOnce__sci_List(elems);
+    this.Lchess_format_pgn_Tag$__f_bitmap$init$0 = (134217728 | this.Lchess_format_pgn_Tag$__f_bitmap$init$0);
+    const this$8 = this.tagTypes__sci_List();
+    const f = ((this$5) => ((t$2) => {
+      const t = $as_s_Product(t$2);
+      const self = $as_Lchess_format_pgn_TagType(t).lowercase__T();
+      return new $c_T2(self, t)
+    }))(this);
+    let this$10;
+    if ((this$8 === $m_sci_Nil$())) {
+      this$10 = $m_sci_Nil$()
+    } else {
+      const arg1 = this$8.head__O();
+      const h = new $c_sci_$colon$colon(f(arg1), $m_sci_Nil$());
+      let t$1 = h;
+      let rest = $as_sci_List(this$8.tail__O());
+      while ((rest !== $m_sci_Nil$())) {
+        const arg1$1 = rest.head__O();
+        const nx = new $c_sci_$colon$colon(f(arg1$1), $m_sci_Nil$());
+        t$1.sci_$colon$colon__f_next = nx;
+        t$1 = nx;
+        rest = $as_sci_List(rest.tail__O())
+      };
+      this$10 = h
+    };
+    const factory = $m_s_Predef$().s_Predef$__f_Map;
+    const factory$1 = new $c_sc_MapFactory$ToFactory(factory);
+    this.Lchess_format_pgn_Tag$__f_tagTypesByLowercase = $as_sci_Map(factory$1.fromSpecific__sc_IterableOnce__O(this$10));
+    this.Lchess_format_pgn_Tag$__f_bitmap$init$0 = (268435456 | this.Lchess_format_pgn_Tag$__f_bitmap$init$0)
+  };
+  tagTypes__sci_List() {
+    if (((134217728 & this.Lchess_format_pgn_Tag$__f_bitmap$init$0) === 0)) {
+      throw new $c_s_UninitializedFieldError("Uninitialized field: /workspace/scalarepo/scalachess/src/main/scala/format/pgn/tagModel.scala: 125")
+    };
+    return this.Lchess_format_pgn_Tag$__f_tagTypes
+  };
+  tagTypesByLowercase__sci_Map() {
+    if (((268435456 & this.Lchess_format_pgn_Tag$__f_bitmap$init$0) === 0)) {
+      throw new $c_s_UninitializedFieldError("Uninitialized field: /workspace/scalarepo/scalachess/src/main/scala/format/pgn/tagModel.scala: 153")
+    };
+    return this.Lchess_format_pgn_Tag$__f_tagTypesByLowercase
+  };
+  apply__T__O__Lchess_format_pgn_Tag(name, value) {
+    return new $c_Lchess_format_pgn_Tag(this.tagType__T__Lchess_format_pgn_TagType(name), $dp_toString__T(value))
+  };
+  tagType__T__Lchess_format_pgn_TagType(name) {
+    $m_Lchess_package$();
+    const o = this.tagTypesByLowercase__sci_Map().get__O__s_Option($as_T(name.toLowerCase()));
+    return $as_Lchess_format_pgn_TagType((o.isEmpty__Z() ? new $c_Lchess_format_pgn_Tag$Unknown(name) : o.get__O()))
+  };
+}
+const $d_Lchess_format_pgn_Tag$ = new $TypeData().initClass({
+  Lchess_format_pgn_Tag$: 0
+}, false, "chess.format.pgn.Tag$", {
+  Lchess_format_pgn_Tag$: 1,
+  O: 1,
+  Ljava_io_Serializable: 1
+});
+$c_Lchess_format_pgn_Tag$.prototype.$classData = $d_Lchess_format_pgn_Tag$;
+let $n_Lchess_format_pgn_Tag$;
+function $m_Lchess_format_pgn_Tag$() {
+  if ((!$n_Lchess_format_pgn_Tag$)) {
+    $n_Lchess_format_pgn_Tag$ = new $c_Lchess_format_pgn_Tag$()
+  };
+  return $n_Lchess_format_pgn_Tag$
+}
+class $c_Lchess_format_pgn_Tags$ extends $c_O {
+  constructor() {
+    super();
+    this.Lchess_format_pgn_Tags$__f_empty = null;
+    this.Lchess_format_pgn_Tags$__f_sevenTagRoster = null;
+    this.Lchess_format_pgn_Tags$__f_tagIndex = null;
+    this.Lchess_format_pgn_Tags$__f_DateRegex = null;
+    this.Lchess_format_pgn_Tags$__f_bitmap$init$0 = 0;
+    $n_Lchess_format_pgn_Tags$ = this;
+    this.Lchess_format_pgn_Tags$__f_empty = $m_sci_Nil$();
+    this.Lchess_format_pgn_Tags$__f_bitmap$init$0 = (((1 | this.Lchess_format_pgn_Tags$__f_bitmap$init$0) << 24) >> 24);
+    $m_sci_List$();
+    const array = [$m_Lchess_format_pgn_Tag$Event$(), $m_Lchess_format_pgn_Tag$Site$(), $m_Lchess_format_pgn_Tag$Date$(), $m_Lchess_format_pgn_Tag$Round$(), $m_Lchess_format_pgn_Tag$White$(), $m_Lchess_format_pgn_Tag$Black$(), $m_Lchess_format_pgn_Tag$Result$()];
+    const elems = new $c_sjsr_WrappedVarArgs(array);
+    this.Lchess_format_pgn_Tags$__f_sevenTagRoster = $m_sci_Nil$().prependedAll__sc_IterableOnce__sci_List(elems);
+    this.Lchess_format_pgn_Tags$__f_bitmap$init$0 = (((2 | this.Lchess_format_pgn_Tags$__f_bitmap$init$0) << 24) >> 24);
+    const this$5 = this.sevenTagRoster__sci_List();
+    const $$x1 = $as_sc_IterableOnceOps($f_sc_StrictOptimizedIterableOps__zipWithIndex__O(this$5));
+    const this$6 = $m_s_$less$colon$less$();
+    this.Lchess_format_pgn_Tags$__f_tagIndex = $$x1.toMap__s_$less$colon$less__sci_Map(this$6.s_$less$colon$less$__f_singleton);
+    this.Lchess_format_pgn_Tags$__f_bitmap$init$0 = (((4 | this.Lchess_format_pgn_Tags$__f_bitmap$init$0) << 24) >> 24);
+    const groupNames = $m_sci_Nil$();
+    this.Lchess_format_pgn_Tags$__f_DateRegex = $ct_s_util_matching_Regex__T__sci_Seq__(new $c_s_util_matching_Regex(), "(\\d{4}|\\?{4})\\.(\\d\\d|\\?\\?)\\.(\\d\\d|\\?\\?)", groupNames);
+    this.Lchess_format_pgn_Tags$__f_bitmap$init$0 = (((8 | this.Lchess_format_pgn_Tags$__f_bitmap$init$0) << 24) >> 24)
+  };
+  sevenTagRoster__sci_List() {
+    if (((((2 & this.Lchess_format_pgn_Tags$__f_bitmap$init$0) << 24) >> 24) === 0)) {
+      throw new $c_s_UninitializedFieldError("Uninitialized field: /workspace/scalarepo/scalachess/src/main/scala/format/pgn/tagModel.scala: 74")
+    };
+    return this.Lchess_format_pgn_Tags$__f_sevenTagRoster
+  };
+  tagIndex__sci_Map() {
+    if (((((4 & this.Lchess_format_pgn_Tags$__f_bitmap$init$0) << 24) >> 24) === 0)) {
+      throw new $c_s_UninitializedFieldError("Uninitialized field: /workspace/scalarepo/scalachess/src/main/scala/format/pgn/tagModel.scala: 83")
+    };
+    return this.Lchess_format_pgn_Tags$__f_tagIndex
+  };
+  variant$extension__sci_List__s_Option(this$) {
+    $m_Lchess_format_pgn_Tags$();
+    let this$2;
+    _return: {
+      let these = this$;
+      while ((!these.isEmpty__Z())) {
+        const arg1 = these.head__O();
+        const x$3 = $as_Lchess_format_pgn_Tag(arg1);
+        const x = x$3.Lchess_format_pgn_Tag__f_name;
+        $m_Lchess_format_pgn_Tag$();
+        const x$2 = $m_Lchess_format_pgn_Tag$Variant$();
+        if (((x !== null) && x.equals__O__Z(x$2))) {
+          this$2 = new $c_s_Some(these.head__O());
+          break _return
+        };
+        these = $as_sci_List(these.tail__O())
+      };
+      this$2 = $m_s_None$()
+    };
+    let this$3;
+    if (this$2.isEmpty__Z()) {
+      this$3 = $m_s_None$()
+    } else {
+      const arg1$2 = this$2.get__O();
+      const x$4 = $as_Lchess_format_pgn_Tag(arg1$2);
+      this$3 = new $c_s_Some(x$4.Lchess_format_pgn_Tag__f_value)
+    };
+    let this$4;
+    if (this$3.isEmpty__Z()) {
+      this$4 = $m_s_None$()
+    } else {
+      const arg1$3 = this$3.get__O();
+      const x$6 = $as_T(arg1$3);
+      this$4 = new $c_s_Some($as_T(x$6.toLowerCase()))
+    };
+    if (this$4.isEmpty__Z()) {
+      return $m_s_None$()
+    } else {
+      const arg1$4 = this$4.get__O();
+      const x0$1 = $as_T(arg1$4);
+      if (((x0$1 === "chess 960") || ((x0$1 === "fischerandom") || (x0$1 === "fischerrandom")))) {
+        const a = $m_Lchess_variant_Chess960$();
+        return new $c_s_Some(a)
+      } else {
+        return $m_Lchess_variant_Variant$().byName__T__s_Option(x0$1)
+      }
+    }
+  };
+  $plus$extension__sci_List__Lchess_format_pgn_Tag__sci_List(this$, tag) {
+    const f = ((this$1, tag$1) => ((x$14$2) => {
+      const x$14 = $as_Lchess_format_pgn_Tag(x$14$2);
+      const x = x$14.Lchess_format_pgn_Tag__f_name;
+      const x$2 = tag$1.Lchess_format_pgn_Tag__f_name;
+      return ((x === null) ? (x$2 === null) : x.equals__O__Z(x$2))
+    }))(this, tag);
+    let l = this$;
+    let result;
+    block: {
+      while (true) {
+        if (l.isEmpty__Z()) {
+          result = $m_sci_Nil$();
+          break
+        } else {
+          const h = l.head__O();
+          const t = $as_sci_List(l.tail__O());
+          if (($uZ(f(h)) === true)) {
+            l = t;
+            continue
+          };
+          const start = l;
+          let remaining = t;
+          while (true) {
+            if (remaining.isEmpty__Z()) {
+              result = start;
+              break block
+            } else {
+              const x$1 = remaining.head__O();
+              if (($uZ(f(x$1)) !== true)) {
+                remaining = $as_sci_List(remaining.tail__O());
+                continue
+              };
+              const firstMiss = remaining;
+              const newHead = new $c_sci_$colon$colon(start.head__O(), $m_sci_Nil$());
+              let toProcess = $as_sci_List(start.tail__O());
+              let currentLast = newHead;
+              while ((toProcess !== firstMiss)) {
+                const newElem = new $c_sci_$colon$colon(toProcess.head__O(), $m_sci_Nil$());
+                currentLast.sci_$colon$colon__f_next = newElem;
+                currentLast = newElem;
+                toProcess = $as_sci_List(toProcess.tail__O())
+              };
+              let next = $as_sci_List(firstMiss.tail__O());
+              let nextToCopy = next;
+              while ((!next.isEmpty__Z())) {
+                const head = next.head__O();
+                if (($uZ(f(head)) !== true)) {
+                  next = $as_sci_List(next.tail__O())
+                } else {
+                  while ((nextToCopy !== next)) {
+                    const newElem$2 = new $c_sci_$colon$colon(nextToCopy.head__O(), $m_sci_Nil$());
+                    currentLast.sci_$colon$colon__f_next = newElem$2;
+                    currentLast = newElem$2;
+                    nextToCopy = $as_sci_List(nextToCopy.tail__O())
+                  };
+                  nextToCopy = $as_sci_List(next.tail__O());
+                  next = $as_sci_List(next.tail__O())
+                }
+              };
+              if ((!nextToCopy.isEmpty__Z())) {
+                currentLast.sci_$colon$colon__f_next = nextToCopy
+              };
+              result = newHead;
+              break block
+            }
+          }
+        }
+      }
+    };
+    return $as_sci_List($f_sc_StrictOptimizedSeqOps__appended__O__O(result, tag))
+  };
+  sorted$extension__sci_List__sci_List(this$) {
+    $m_Lchess_format_pgn_Tags$();
+    const f = new $c_sjsr_AnonFunction1(((this$1) => ((tag$2) => {
+      const tag = $as_Lchess_format_pgn_Tag(tag$2);
+      return $uI($m_Lchess_format_pgn_Tags$().tagIndex__sci_Map().getOrElse__O__F0__O(tag.Lchess_format_pgn_Tag__f_name, new $c_sjsr_AnonFunction0(((this$2) => (() => 999))(this$1))))
+    }))(this));
+    const ord = $m_s_math_Ordering$Int$();
+    const value = $as_sci_List($f_sc_SeqOps__sortBy__F1__s_math_Ordering__O(this$, f, ord));
+    return value
+  };
+  toString$extension__sci_List__T(this$) {
+    const this$1 = $m_Lchess_format_pgn_Tags$().sorted$extension__sci_List__sci_List(this$);
+    return $f_sc_IterableOnceOps__mkString__T__T__T__T(this$1, "", "\n", "")
+  };
+  productElement$extension__sci_List__I__O(this$, x$1) {
+    return ((x$1 === 0) ? this$ : $m_sr_Statics$().ioobe__I__O(x$1))
+  };
+  productIterator$extension__sci_List__sc_Iterator(this$) {
+    const x = new $c_Lchess_format_pgn_Tags(this$);
+    return new $c_sr_ScalaRunTime$$anon$1(x)
+  };
+  equals$extension__sci_List__O__Z(this$, x$1) {
+    if ((x$1 instanceof $c_Lchess_format_pgn_Tags)) {
+      const Tags$1 = ((x$1 === null) ? null : $as_Lchess_format_pgn_Tags(x$1).Lchess_format_pgn_Tags__f_value);
+      return ((this$ === null) ? (Tags$1 === null) : this$.equals__O__Z(Tags$1))
+    } else {
+      return false
+    }
+  };
+}
+const $d_Lchess_format_pgn_Tags$ = new $TypeData().initClass({
+  Lchess_format_pgn_Tags$: 0
+}, false, "chess.format.pgn.Tags$", {
+  Lchess_format_pgn_Tags$: 1,
+  O: 1,
+  Ljava_io_Serializable: 1
+});
+$c_Lchess_format_pgn_Tags$.prototype.$classData = $d_Lchess_format_pgn_Tags$;
+let $n_Lchess_format_pgn_Tags$;
+function $m_Lchess_format_pgn_Tags$() {
+  if ((!$n_Lchess_format_pgn_Tags$)) {
+    $n_Lchess_format_pgn_Tags$ = new $c_Lchess_format_pgn_Tags$()
+  };
+  return $n_Lchess_format_pgn_Tags$
 }
 class $c_Lchess_variant_Crazyhouse$Data$ extends $c_O {
   constructor() {
@@ -15122,11 +16461,241 @@ function $m_ju_Random$() {
   };
   return $n_ju_Random$
 }
+class $c_ju_regex_GroupStartMapper$AlternativesNode extends $c_ju_regex_GroupStartMapper$Node {
+  constructor(alternatives) {
+    super();
+    this.ju_regex_GroupStartMapper$AlternativesNode__f_alternatives = null;
+    this.ju_regex_GroupStartMapper$AlternativesNode__f_alternatives = alternatives
+  };
+  setNewGroup__I__I(newGroupIndex) {
+    let nextIndex = $c_ju_regex_GroupStartMapper$Node.prototype.setNewGroup__I__I.call(this, newGroupIndex);
+    const len = $uI(this.ju_regex_GroupStartMapper$AlternativesNode__f_alternatives.length);
+    let i = 0;
+    while ((i !== len)) {
+      nextIndex = $as_ju_regex_GroupStartMapper$Node(this.ju_regex_GroupStartMapper$AlternativesNode__f_alternatives[i]).setNewGroup__I__I(nextIndex);
+      i = ((1 + i) | 0)
+    };
+    return nextIndex
+  };
+  buildRegex__sjs_js_Array__T(groupNodeMap) {
+    let result = "(";
+    const len = $uI(this.ju_regex_GroupStartMapper$AlternativesNode__f_alternatives.length);
+    let i = 0;
+    while ((i !== len)) {
+      if ((i !== 0)) {
+        result = (result + "|")
+      };
+      result = (("" + result) + $as_ju_regex_GroupStartMapper$Node(this.ju_regex_GroupStartMapper$AlternativesNode__f_alternatives[i]).buildRegex__sjs_js_Array__T(groupNodeMap));
+      i = ((1 + i) | 0)
+    };
+    return (result + ")")
+  };
+  propagate__sjs_js_RegExp$ExecResult__sjs_js_Array__I__I__V(matchResult, groupStartMap, start, end) {
+    const len = $uI(this.ju_regex_GroupStartMapper$AlternativesNode__f_alternatives.length);
+    let i = 0;
+    while ((i !== len)) {
+      $as_ju_regex_GroupStartMapper$Node(this.ju_regex_GroupStartMapper$AlternativesNode__f_alternatives[i]).propagateFromStart__sjs_js_RegExp$ExecResult__sjs_js_Array__I__I(matchResult, groupStartMap, start);
+      i = ((1 + i) | 0)
+    }
+  };
+}
+const $d_ju_regex_GroupStartMapper$AlternativesNode = new $TypeData().initClass({
+  ju_regex_GroupStartMapper$AlternativesNode: 0
+}, false, "java.util.regex.GroupStartMapper$AlternativesNode", {
+  ju_regex_GroupStartMapper$AlternativesNode: 1,
+  ju_regex_GroupStartMapper$Node: 1,
+  O: 1
+});
+$c_ju_regex_GroupStartMapper$AlternativesNode.prototype.$classData = $d_ju_regex_GroupStartMapper$AlternativesNode;
+class $c_ju_regex_GroupStartMapper$BackReferenceNode extends $c_ju_regex_GroupStartMapper$Node {
+  constructor(groupNumber) {
+    super();
+    this.ju_regex_GroupStartMapper$BackReferenceNode__f_groupNumber = 0;
+    this.ju_regex_GroupStartMapper$BackReferenceNode__f_groupNumber = groupNumber
+  };
+  buildRegex__sjs_js_Array__T(groupNodeMap) {
+    const newGroupNumber = ((this.ju_regex_GroupStartMapper$BackReferenceNode__f_groupNumber >= $uI(groupNodeMap.length)) ? 0 : $as_ju_regex_GroupStartMapper$Node(groupNodeMap[this.ju_regex_GroupStartMapper$BackReferenceNode__f_groupNumber]).ju_regex_GroupStartMapper$Node__f_newGroup);
+    return (("(\\" + newGroupNumber) + ")")
+  };
+  propagate__sjs_js_RegExp$ExecResult__sjs_js_Array__I__I__V(matchResult, groupStartMap, start, end) {
+    /*<skip>*/
+  };
+}
+const $d_ju_regex_GroupStartMapper$BackReferenceNode = new $TypeData().initClass({
+  ju_regex_GroupStartMapper$BackReferenceNode: 0
+}, false, "java.util.regex.GroupStartMapper$BackReferenceNode", {
+  ju_regex_GroupStartMapper$BackReferenceNode: 1,
+  ju_regex_GroupStartMapper$Node: 1,
+  O: 1
+});
+$c_ju_regex_GroupStartMapper$BackReferenceNode.prototype.$classData = $d_ju_regex_GroupStartMapper$BackReferenceNode;
+class $c_ju_regex_GroupStartMapper$GroupNode extends $c_ju_regex_GroupStartMapper$Node {
+  constructor(number, inner) {
+    super();
+    this.ju_regex_GroupStartMapper$GroupNode__f_number = 0;
+    this.ju_regex_GroupStartMapper$GroupNode__f_inner = null;
+    this.ju_regex_GroupStartMapper$GroupNode__f_number = number;
+    this.ju_regex_GroupStartMapper$GroupNode__f_inner = inner
+  };
+  setNewGroup__I__I(newGroupIndex) {
+    return this.ju_regex_GroupStartMapper$GroupNode__f_inner.setNewGroup__I__I($c_ju_regex_GroupStartMapper$Node.prototype.setNewGroup__I__I.call(this, newGroupIndex))
+  };
+  buildRegex__sjs_js_Array__T(groupNodeMap) {
+    return (("(" + this.ju_regex_GroupStartMapper$GroupNode__f_inner.buildRegex__sjs_js_Array__T(groupNodeMap)) + ")")
+  };
+  propagate__sjs_js_RegExp$ExecResult__sjs_js_Array__I__I__V(matchResult, groupStartMap, start, end) {
+    const value = matchResult[this.ju_regex_GroupStartMapper$Node__f_newGroup];
+    if ((value !== (void 0))) {
+      groupStartMap[this.ju_regex_GroupStartMapper$GroupNode__f_number] = start
+    };
+    this.ju_regex_GroupStartMapper$GroupNode__f_inner.propagateFromStart__sjs_js_RegExp$ExecResult__sjs_js_Array__I__I(matchResult, groupStartMap, start)
+  };
+}
+const $d_ju_regex_GroupStartMapper$GroupNode = new $TypeData().initClass({
+  ju_regex_GroupStartMapper$GroupNode: 0
+}, false, "java.util.regex.GroupStartMapper$GroupNode", {
+  ju_regex_GroupStartMapper$GroupNode: 1,
+  ju_regex_GroupStartMapper$Node: 1,
+  O: 1
+});
+$c_ju_regex_GroupStartMapper$GroupNode.prototype.$classData = $d_ju_regex_GroupStartMapper$GroupNode;
+class $c_ju_regex_GroupStartMapper$LeafRegexNode extends $c_ju_regex_GroupStartMapper$Node {
+  constructor(regex) {
+    super();
+    this.ju_regex_GroupStartMapper$LeafRegexNode__f_regex = null;
+    this.ju_regex_GroupStartMapper$LeafRegexNode__f_regex = regex
+  };
+  buildRegex__sjs_js_Array__T(groupNodeMap) {
+    return (("(" + this.ju_regex_GroupStartMapper$LeafRegexNode__f_regex) + ")")
+  };
+  propagate__sjs_js_RegExp$ExecResult__sjs_js_Array__I__I__V(matchResult, groupStartMap, start, end) {
+    /*<skip>*/
+  };
+}
+function $as_ju_regex_GroupStartMapper$LeafRegexNode(obj) {
+  return (((obj instanceof $c_ju_regex_GroupStartMapper$LeafRegexNode) || (obj === null)) ? obj : $throwClassCastException(obj, "java.util.regex.GroupStartMapper$LeafRegexNode"))
+}
+function $isArrayOf_ju_regex_GroupStartMapper$LeafRegexNode(obj, depth) {
+  return (!(!(((obj && obj.$classData) && (obj.$classData.arrayDepth === depth)) && obj.$classData.arrayBase.ancestors.ju_regex_GroupStartMapper$LeafRegexNode)))
+}
+function $asArrayOf_ju_regex_GroupStartMapper$LeafRegexNode(obj, depth) {
+  return (($isArrayOf_ju_regex_GroupStartMapper$LeafRegexNode(obj, depth) || (obj === null)) ? obj : $throwArrayCastException(obj, "Ljava.util.regex.GroupStartMapper$LeafRegexNode;", depth))
+}
+const $d_ju_regex_GroupStartMapper$LeafRegexNode = new $TypeData().initClass({
+  ju_regex_GroupStartMapper$LeafRegexNode: 0
+}, false, "java.util.regex.GroupStartMapper$LeafRegexNode", {
+  ju_regex_GroupStartMapper$LeafRegexNode: 1,
+  ju_regex_GroupStartMapper$Node: 1,
+  O: 1
+});
+$c_ju_regex_GroupStartMapper$LeafRegexNode.prototype.$classData = $d_ju_regex_GroupStartMapper$LeafRegexNode;
+class $c_ju_regex_GroupStartMapper$RepeatedNode extends $c_ju_regex_GroupStartMapper$Node {
+  constructor(inner, repeater) {
+    super();
+    this.ju_regex_GroupStartMapper$RepeatedNode__f_inner = null;
+    this.ju_regex_GroupStartMapper$RepeatedNode__f_repeater = null;
+    this.ju_regex_GroupStartMapper$RepeatedNode__f_inner = inner;
+    this.ju_regex_GroupStartMapper$RepeatedNode__f_repeater = repeater
+  };
+  setNewGroup__I__I(newGroupIndex) {
+    return this.ju_regex_GroupStartMapper$RepeatedNode__f_inner.setNewGroup__I__I($c_ju_regex_GroupStartMapper$Node.prototype.setNewGroup__I__I.call(this, newGroupIndex))
+  };
+  buildRegex__sjs_js_Array__T(groupNodeMap) {
+    return ((("(" + this.ju_regex_GroupStartMapper$RepeatedNode__f_inner.buildRegex__sjs_js_Array__T(groupNodeMap)) + this.ju_regex_GroupStartMapper$RepeatedNode__f_repeater) + ")")
+  };
+  propagate__sjs_js_RegExp$ExecResult__sjs_js_Array__I__I__V(matchResult, groupStartMap, start, end) {
+    this.ju_regex_GroupStartMapper$RepeatedNode__f_inner.propagateFromEnd__sjs_js_RegExp$ExecResult__sjs_js_Array__I__I(matchResult, groupStartMap, end)
+  };
+}
+const $d_ju_regex_GroupStartMapper$RepeatedNode = new $TypeData().initClass({
+  ju_regex_GroupStartMapper$RepeatedNode: 0
+}, false, "java.util.regex.GroupStartMapper$RepeatedNode", {
+  ju_regex_GroupStartMapper$RepeatedNode: 1,
+  ju_regex_GroupStartMapper$Node: 1,
+  O: 1
+});
+$c_ju_regex_GroupStartMapper$RepeatedNode.prototype.$classData = $d_ju_regex_GroupStartMapper$RepeatedNode;
+class $c_ju_regex_GroupStartMapper$SequenceNode extends $c_ju_regex_GroupStartMapper$Node {
+  constructor(sequence) {
+    super();
+    this.ju_regex_GroupStartMapper$SequenceNode__f_sequence = null;
+    this.ju_regex_GroupStartMapper$SequenceNode__f_sequence = sequence
+  };
+  setNewGroup__I__I(newGroupIndex) {
+    let nextIndex = $c_ju_regex_GroupStartMapper$Node.prototype.setNewGroup__I__I.call(this, newGroupIndex);
+    const len = $uI(this.ju_regex_GroupStartMapper$SequenceNode__f_sequence.length);
+    let i = 0;
+    while ((i !== len)) {
+      nextIndex = $as_ju_regex_GroupStartMapper$Node(this.ju_regex_GroupStartMapper$SequenceNode__f_sequence[i]).setNewGroup__I__I(nextIndex);
+      i = ((1 + i) | 0)
+    };
+    return nextIndex
+  };
+  buildRegex__sjs_js_Array__T(groupNodeMap) {
+    let result = "(";
+    const len = $uI(this.ju_regex_GroupStartMapper$SequenceNode__f_sequence.length);
+    let i = 0;
+    while ((i !== len)) {
+      result = (("" + result) + $as_ju_regex_GroupStartMapper$Node(this.ju_regex_GroupStartMapper$SequenceNode__f_sequence[i]).buildRegex__sjs_js_Array__T(groupNodeMap));
+      i = ((1 + i) | 0)
+    };
+    return (result + ")")
+  };
+  propagate__sjs_js_RegExp$ExecResult__sjs_js_Array__I__I__V(matchResult, groupStartMap, start, end) {
+    const len = $uI(this.ju_regex_GroupStartMapper$SequenceNode__f_sequence.length);
+    let i = 0;
+    let nextStart = start;
+    while ((i !== len)) {
+      nextStart = $as_ju_regex_GroupStartMapper$Node(this.ju_regex_GroupStartMapper$SequenceNode__f_sequence[i]).propagateFromStart__sjs_js_RegExp$ExecResult__sjs_js_Array__I__I(matchResult, groupStartMap, nextStart);
+      i = ((1 + i) | 0)
+    }
+  };
+}
+const $d_ju_regex_GroupStartMapper$SequenceNode = new $TypeData().initClass({
+  ju_regex_GroupStartMapper$SequenceNode: 0
+}, false, "java.util.regex.GroupStartMapper$SequenceNode", {
+  ju_regex_GroupStartMapper$SequenceNode: 1,
+  ju_regex_GroupStartMapper$Node: 1,
+  O: 1
+});
+$c_ju_regex_GroupStartMapper$SequenceNode.prototype.$classData = $d_ju_regex_GroupStartMapper$SequenceNode;
+class $c_ju_regex_GroupStartMapper$ZeroLengthTestNode extends $c_ju_regex_GroupStartMapper$Node {
+  constructor(indicator, inner) {
+    super();
+    this.ju_regex_GroupStartMapper$ZeroLengthTestNode__f_indicator = null;
+    this.ju_regex_GroupStartMapper$ZeroLengthTestNode__f_inner = null;
+    this.ju_regex_GroupStartMapper$ZeroLengthTestNode__f_indicator = indicator;
+    this.ju_regex_GroupStartMapper$ZeroLengthTestNode__f_inner = inner
+  };
+  setNewGroup__I__I(newGroupIndex) {
+    return this.ju_regex_GroupStartMapper$ZeroLengthTestNode__f_inner.setNewGroup__I__I($c_ju_regex_GroupStartMapper$Node.prototype.setNewGroup__I__I.call(this, newGroupIndex))
+  };
+  buildRegex__sjs_js_Array__T(groupNodeMap) {
+    return ((("((" + this.ju_regex_GroupStartMapper$ZeroLengthTestNode__f_indicator) + this.ju_regex_GroupStartMapper$ZeroLengthTestNode__f_inner.buildRegex__sjs_js_Array__T(groupNodeMap)) + "))")
+  };
+  propagate__sjs_js_RegExp$ExecResult__sjs_js_Array__I__I__V(matchResult, groupStartMap, start, end) {
+    this.ju_regex_GroupStartMapper$ZeroLengthTestNode__f_inner.propagateFromStart__sjs_js_RegExp$ExecResult__sjs_js_Array__I__I(matchResult, groupStartMap, start)
+  };
+}
+const $d_ju_regex_GroupStartMapper$ZeroLengthTestNode = new $TypeData().initClass({
+  ju_regex_GroupStartMapper$ZeroLengthTestNode: 0
+}, false, "java.util.regex.GroupStartMapper$ZeroLengthTestNode", {
+  ju_regex_GroupStartMapper$ZeroLengthTestNode: 1,
+  ju_regex_GroupStartMapper$Node: 1,
+  O: 1
+});
+$c_ju_regex_GroupStartMapper$ZeroLengthTestNode.prototype.$classData = $d_ju_regex_GroupStartMapper$ZeroLengthTestNode;
 const $p_ju_regex_Matcher__ensureLastMatch__sjs_js_RegExp$ExecResult = (function($thiz) {
   if (($thiz.ju_regex_Matcher__f_lastMatch === null)) {
     throw $ct_jl_IllegalStateException__T__(new $c_jl_IllegalStateException(), "No match available")
   };
   return $thiz.ju_regex_Matcher__f_lastMatch
+});
+const $p_ju_regex_Matcher__startOfGroup__sjs_js_Array = (function($thiz) {
+  if (($thiz.ju_regex_Matcher__f_startOfGroupCache === null)) {
+    $thiz.ju_regex_Matcher__f_startOfGroupCache = $thiz.ju_regex_Matcher__f_pattern0.groupStartMapper__ju_regex_GroupStartMapper().apply__T__I__sjs_js_Array($thiz.ju_regex_Matcher__f_inputstr, $thiz.start__I())
+  };
+  return $thiz.ju_regex_Matcher__f_startOfGroupCache
 });
 class $c_ju_regex_Matcher extends $c_O {
   constructor(pattern0, input0, regionStart0, regionEnd0) {
@@ -15301,6 +16870,18 @@ class $c_ju_regex_Matcher extends $c_O {
     };
     return $as_T(value)
   };
+  start__I__I(group) {
+    return ((group === 0) ? this.start__I() : $uI($p_ju_regex_Matcher__startOfGroup__sjs_js_Array(this)[group]))
+  };
+  end__I__I(group) {
+    const s = this.start__I__I(group);
+    if ((s === (-1))) {
+      return (-1)
+    } else {
+      const this$1 = this.group__I__T(group);
+      return ((s + $uI(this$1.length)) | 0)
+    }
+  };
   group__I__T(group) {
     const value = $p_ju_regex_Matcher__ensureLastMatch__sjs_js_RegExp$ExecResult(this)[group];
     $m_s_$less$colon$less$();
@@ -15328,6 +16909,13 @@ const $p_ju_regex_Pattern__groupCount$lzycompute__I = (function($thiz) {
   };
   return $thiz.ju_regex_Pattern__f_groupCount
 });
+const $p_ju_regex_Pattern__groupStartMapper$lzycompute__ju_regex_GroupStartMapper = (function($thiz) {
+  if (((((2 & $thiz.ju_regex_Pattern__f_bitmap$0) << 24) >> 24) === 0)) {
+    $thiz.ju_regex_Pattern__f_groupStartMapper = $m_ju_regex_GroupStartMapper$().apply__T__T__ju_regex_GroupStartMapper($p_ju_regex_Pattern__jsPattern__T($thiz), $p_ju_regex_Pattern__jsFlags__T($thiz));
+    $thiz.ju_regex_Pattern__f_bitmap$0 = (((2 | $thiz.ju_regex_Pattern__f_bitmap$0) << 24) >> 24)
+  };
+  return $thiz.ju_regex_Pattern__f_groupStartMapper
+});
 class $c_ju_regex_Pattern extends $c_O {
   constructor(jsRegExp, _pattern, _flags) {
     super();
@@ -15343,6 +16931,9 @@ class $c_ju_regex_Pattern extends $c_O {
   };
   groupCount__I() {
     return (((((1 & this.ju_regex_Pattern__f_bitmap$0) << 24) >> 24) === 0) ? $p_ju_regex_Pattern__groupCount$lzycompute__I(this) : this.ju_regex_Pattern__f_groupCount)
+  };
+  groupStartMapper__ju_regex_GroupStartMapper() {
+    return (((((2 & this.ju_regex_Pattern__f_bitmap$0) << 24) >> 24) === 0) ? $p_ju_regex_Pattern__groupStartMapper$lzycompute__ju_regex_GroupStartMapper(this) : this.ju_regex_Pattern__f_groupStartMapper)
   };
   toString__T() {
     return this.ju_regex_Pattern__f__pattern
@@ -17204,6 +18795,60 @@ const $d_s_util_matching_Regex = new $TypeData().initClass({
   Ljava_io_Serializable: 1
 });
 $c_s_util_matching_Regex.prototype.$classData = $d_s_util_matching_Regex;
+const $p_s_util_matching_Regex$Match__starts$lzycompute__AI = (function($thiz) {
+  if (((((1 & $thiz.s_util_matching_Regex$Match__f_bitmap$0) << 24) >> 24) === 0)) {
+    const this$1 = $thiz.s_util_matching_Regex$Match__f_matcher;
+    const n = ((1 + $m_ju_regex_Matcher$().java$util$regex$Matcher$$getGroupCount__sjs_js_RegExp$ExecResult__ju_regex_Pattern__I(this$1.ju_regex_Matcher__f_lastMatch, this$1.ju_regex_Matcher__f_pattern0)) | 0);
+    $m_s_reflect_ManifestFactory$IntManifest$();
+    let $$x1;
+    if ((n <= 0)) {
+      $$x1 = $newArrayObject($d_I.getArrayOf(), [0])
+    } else {
+      const array = $newArrayObject($d_I.getArrayOf(), [n]);
+      let i = 0;
+      while ((i < n)) {
+        const $$x2 = i;
+        const arg1 = i;
+        array.set($$x2, $thiz.s_util_matching_Regex$Match__f_matcher.start__I__I(arg1));
+        i = ((1 + i) | 0)
+      };
+      $$x1 = array
+    };
+    $thiz.s_util_matching_Regex$Match__f_starts = $$x1;
+    $thiz.s_util_matching_Regex$Match__f_bitmap$0 = (((1 | $thiz.s_util_matching_Regex$Match__f_bitmap$0) << 24) >> 24)
+  };
+  return $thiz.s_util_matching_Regex$Match__f_starts
+});
+const $p_s_util_matching_Regex$Match__starts__AI = (function($thiz) {
+  return (((((1 & $thiz.s_util_matching_Regex$Match__f_bitmap$0) << 24) >> 24) === 0) ? $p_s_util_matching_Regex$Match__starts$lzycompute__AI($thiz) : $thiz.s_util_matching_Regex$Match__f_starts)
+});
+const $p_s_util_matching_Regex$Match__ends$lzycompute__AI = (function($thiz) {
+  if (((((2 & $thiz.s_util_matching_Regex$Match__f_bitmap$0) << 24) >> 24) === 0)) {
+    const this$1 = $thiz.s_util_matching_Regex$Match__f_matcher;
+    const n = ((1 + $m_ju_regex_Matcher$().java$util$regex$Matcher$$getGroupCount__sjs_js_RegExp$ExecResult__ju_regex_Pattern__I(this$1.ju_regex_Matcher__f_lastMatch, this$1.ju_regex_Matcher__f_pattern0)) | 0);
+    $m_s_reflect_ManifestFactory$IntManifest$();
+    let $$x1;
+    if ((n <= 0)) {
+      $$x1 = $newArrayObject($d_I.getArrayOf(), [0])
+    } else {
+      const array = $newArrayObject($d_I.getArrayOf(), [n]);
+      let i = 0;
+      while ((i < n)) {
+        const $$x2 = i;
+        const arg1 = i;
+        array.set($$x2, $thiz.s_util_matching_Regex$Match__f_matcher.end__I__I(arg1));
+        i = ((1 + i) | 0)
+      };
+      $$x1 = array
+    };
+    $thiz.s_util_matching_Regex$Match__f_ends = $$x1;
+    $thiz.s_util_matching_Regex$Match__f_bitmap$0 = (((2 | $thiz.s_util_matching_Regex$Match__f_bitmap$0) << 24) >> 24)
+  };
+  return $thiz.s_util_matching_Regex$Match__f_ends
+});
+const $p_s_util_matching_Regex$Match__ends__AI = (function($thiz) {
+  return (((((2 & $thiz.s_util_matching_Regex$Match__f_bitmap$0) << 24) >> 24) === 0) ? $p_s_util_matching_Regex$Match__ends$lzycompute__AI($thiz) : $thiz.s_util_matching_Regex$Match__f_ends)
+});
 class $c_s_util_matching_Regex$Match extends $c_O {
   constructor(source, matcher, groupNames) {
     super();
@@ -17224,6 +18869,26 @@ class $c_s_util_matching_Regex$Match extends $c_O {
   };
   toString__T() {
     return $f_s_util_matching_Regex$MatchData__matched__T(this)
+  };
+  source__jl_CharSequence() {
+    return this.s_util_matching_Regex$Match__f_source
+  };
+  start__I() {
+    return this.s_util_matching_Regex$Match__f_start
+  };
+  end__I() {
+    return this.s_util_matching_Regex$Match__f_end
+  };
+  start__I__I(i) {
+    return $p_s_util_matching_Regex$Match__starts__AI(this).get(i)
+  };
+  end__I__I(i) {
+    return $p_s_util_matching_Regex$Match__ends__AI(this).get(i)
+  };
+  force__s_util_matching_Regex$Match() {
+    $p_s_util_matching_Regex$Match__starts__AI(this);
+    $p_s_util_matching_Regex$Match__ends__AI(this);
+    return this
   };
 }
 function $as_s_util_matching_Regex$Match(obj) {
@@ -17377,6 +19042,11 @@ class $c_s_util_parsing_combinator_Parsers$Parser extends $c_O {
   $up$up$up__F0__s_util_parsing_combinator_Parsers$Parser(v) {
     return new $c_s_util_parsing_combinator_Parsers$Parser$$anon$4(this, v).named__T__s_util_parsing_combinator_Parsers$Parser((this.toString__T() + "^^^"))
   };
+  $times__s_util_parsing_combinator_Parsers$Parser() {
+    const this$2 = this.s_util_parsing_combinator_Parsers$Parser__f_$outer;
+    const p = new $c_sjsr_AnonFunction0(((this$1) => (() => this$1))(this));
+    return $f_s_util_parsing_combinator_Parsers__rep__F0__s_util_parsing_combinator_Parsers$Parser(this$2, p)
+  };
   $qmark__s_util_parsing_combinator_Parsers$Parser() {
     const this$1 = this.s_util_parsing_combinator_Parsers$Parser__f_$outer;
     return this.$up$up__F1__s_util_parsing_combinator_Parsers$Parser(new $c_sjsr_AnonFunction1(((this$2) => ((x$2) => new $c_s_Some(x$2)))(this$1))).$bar__F0__s_util_parsing_combinator_Parsers$Parser(new $c_sjsr_AnonFunction0(((this$2$1) => (() => {
@@ -17394,8 +19064,29 @@ function $isArrayOf_s_util_parsing_combinator_Parsers$Parser(obj, depth) {
 function $asArrayOf_s_util_parsing_combinator_Parsers$Parser(obj, depth) {
   return (($isArrayOf_s_util_parsing_combinator_Parsers$Parser(obj, depth) || (obj === null)) ? obj : $throwArrayCastException(obj, "Lscala.util.parsing.combinator.Parsers$Parser;", depth))
 }
+function $f_s_util_parsing_combinator_RegexParsers__skipWhitespace__Z($thiz) {
+  const this$1 = $thiz.whiteSpace__s_util_matching_Regex();
+  const this$2 = this$1.s_util_matching_Regex__f_pattern.ju_regex_Pattern__f__pattern;
+  return ($uI(this$2.length) > 0)
+}
 function $f_s_util_parsing_combinator_RegexParsers__handleWhiteSpace__jl_CharSequence__I__I($thiz, source, offset) {
-  return offset
+  if ($thiz.skipWhitespace__Z()) {
+    const x1 = $thiz.whiteSpace__s_util_matching_Regex().findPrefixMatchOf__jl_CharSequence__s_Option($ct_s_util_parsing_combinator_SubSequence__jl_CharSequence__I__(new $c_s_util_parsing_combinator_SubSequence(), source, offset));
+    if ((x1 instanceof $c_s_Some)) {
+      const x2 = $as_s_Some(x1);
+      const matched = $as_s_util_matching_Regex$Match(x2.s_Some__f_value);
+      return ((offset + matched.s_util_matching_Regex$Match__f_end) | 0)
+    } else {
+      const x = $m_s_None$();
+      if ((x === x1)) {
+        return offset
+      } else {
+        throw new $c_s_MatchError(x1)
+      }
+    }
+  } else {
+    return offset
+  }
 }
 function $f_s_util_parsing_combinator_RegexParsers__phrase__s_util_parsing_combinator_Parsers$Parser__s_util_parsing_combinator_Parsers$Parser($thiz, p) {
   const p$1 = p.$less$tilde__F0__s_util_parsing_combinator_Parsers$Parser(new $c_sjsr_AnonFunction0(((this$1) => (() => {
@@ -18053,6 +19744,33 @@ function $f_s_Product3__productElement__I__O($thiz, n) {
     }
     default: {
       throw $ct_jl_IndexOutOfBoundsException__T__(new $c_jl_IndexOutOfBoundsException(), (n + " is out of bounds (min 0, max 2)"))
+    }
+  }
+}
+function $f_s_Product5__productElement__I__O($thiz, n) {
+  switch (n) {
+    case 0: {
+      return $thiz.T5__f__1;
+      break
+    }
+    case 1: {
+      return $thiz.T5__f__2;
+      break
+    }
+    case 2: {
+      return $thiz.T5__f__3;
+      break
+    }
+    case 3: {
+      return $thiz.T5__f__4;
+      break
+    }
+    case 4: {
+      return $thiz.T5__f__5;
+      break
+    }
+    default: {
+      throw $ct_jl_IndexOutOfBoundsException__T__(new $c_jl_IndexOutOfBoundsException(), (n + " is out of bounds (min 0, max 4)"))
     }
   }
 }
@@ -25877,6 +27595,63 @@ const $d_Lchess_format_pgn_Glyphs = new $TypeData().initClass({
   Ljava_io_Serializable: 1
 });
 $c_Lchess_format_pgn_Glyphs.prototype.$classData = $d_Lchess_format_pgn_Glyphs;
+class $c_Lchess_format_pgn_InitialPosition extends $c_O {
+  constructor(comments) {
+    super();
+    this.Lchess_format_pgn_InitialPosition__f_comments = null;
+    this.Lchess_format_pgn_InitialPosition__f_comments = comments
+  };
+  productPrefix__T() {
+    return "InitialPosition"
+  };
+  productArity__I() {
+    return 1
+  };
+  productElement__I__O(x$1) {
+    return ((x$1 === 0) ? this.Lchess_format_pgn_InitialPosition__f_comments : $m_sr_Statics$().ioobe__I__O(x$1))
+  };
+  productIterator__sc_Iterator() {
+    return new $c_sr_ScalaRunTime$$anon$1(this)
+  };
+  hashCode__I() {
+    const this$2 = $m_s_util_hashing_MurmurHash3$();
+    return this$2.productHash__s_Product__I__Z__I(this, (-889275714), false)
+  };
+  toString__T() {
+    return $m_sr_ScalaRunTime$()._toString__s_Product__T(this)
+  };
+  equals__O__Z(x$1) {
+    if ((this === x$1)) {
+      return true
+    } else if ((x$1 instanceof $c_Lchess_format_pgn_InitialPosition)) {
+      const InitialPosition$1 = $as_Lchess_format_pgn_InitialPosition(x$1);
+      const x = this.Lchess_format_pgn_InitialPosition__f_comments;
+      const x$2 = InitialPosition$1.Lchess_format_pgn_InitialPosition__f_comments;
+      return ((x === null) ? (x$2 === null) : x.equals__O__Z(x$2))
+    } else {
+      return false
+    }
+  };
+}
+function $as_Lchess_format_pgn_InitialPosition(obj) {
+  return (((obj instanceof $c_Lchess_format_pgn_InitialPosition) || (obj === null)) ? obj : $throwClassCastException(obj, "chess.format.pgn.InitialPosition"))
+}
+function $isArrayOf_Lchess_format_pgn_InitialPosition(obj, depth) {
+  return (!(!(((obj && obj.$classData) && (obj.$classData.arrayDepth === depth)) && obj.$classData.arrayBase.ancestors.Lchess_format_pgn_InitialPosition)))
+}
+function $asArrayOf_Lchess_format_pgn_InitialPosition(obj, depth) {
+  return (($isArrayOf_Lchess_format_pgn_InitialPosition(obj, depth) || (obj === null)) ? obj : $throwArrayCastException(obj, "Lchess.format.pgn.InitialPosition;", depth))
+}
+const $d_Lchess_format_pgn_InitialPosition = new $TypeData().initClass({
+  Lchess_format_pgn_InitialPosition: 0
+}, false, "chess.format.pgn.InitialPosition", {
+  Lchess_format_pgn_InitialPosition: 1,
+  O: 1,
+  s_Product: 1,
+  s_Equals: 1,
+  Ljava_io_Serializable: 1
+});
+$c_Lchess_format_pgn_InitialPosition.prototype.$classData = $d_Lchess_format_pgn_InitialPosition;
 class $c_Lchess_format_pgn_Metas extends $c_O {
   constructor(check, checkmate, comments, glyphs, variations) {
     super();
@@ -26037,6 +27812,97 @@ const $d_Lchess_format_pgn_Metas = new $TypeData().initClass({
   Ljava_io_Serializable: 1
 });
 $c_Lchess_format_pgn_Metas.prototype.$classData = $d_Lchess_format_pgn_Metas;
+class $c_Lchess_format_pgn_ParsedPgn extends $c_O {
+  constructor(initialPosition, tags, sans) {
+    super();
+    this.Lchess_format_pgn_ParsedPgn__f_initialPosition = null;
+    this.Lchess_format_pgn_ParsedPgn__f_tags = null;
+    this.Lchess_format_pgn_ParsedPgn__f_sans = null;
+    this.Lchess_format_pgn_ParsedPgn__f_initialPosition = initialPosition;
+    this.Lchess_format_pgn_ParsedPgn__f_tags = tags;
+    this.Lchess_format_pgn_ParsedPgn__f_sans = sans
+  };
+  productPrefix__T() {
+    return "ParsedPgn"
+  };
+  productArity__I() {
+    return 3
+  };
+  productElement__I__O(x$1) {
+    switch (x$1) {
+      case 0: {
+        return this.Lchess_format_pgn_ParsedPgn__f_initialPosition;
+        break
+      }
+      case 1: {
+        return new $c_Lchess_format_pgn_Tags(this.Lchess_format_pgn_ParsedPgn__f_tags);
+        break
+      }
+      case 2: {
+        return new $c_Lchess_format_pgn_Sans(this.Lchess_format_pgn_ParsedPgn__f_sans);
+        break
+      }
+      default: {
+        return $m_sr_Statics$().ioobe__I__O(x$1)
+      }
+    }
+  };
+  productIterator__sc_Iterator() {
+    return new $c_sr_ScalaRunTime$$anon$1(this)
+  };
+  hashCode__I() {
+    const this$2 = $m_s_util_hashing_MurmurHash3$();
+    return this$2.productHash__s_Product__I__Z__I(this, (-889275714), false)
+  };
+  toString__T() {
+    return $m_sr_ScalaRunTime$()._toString__s_Product__T(this)
+  };
+  equals__O__Z(x$1) {
+    if ((this === x$1)) {
+      return true
+    } else if ((x$1 instanceof $c_Lchess_format_pgn_ParsedPgn)) {
+      const ParsedPgn$1 = $as_Lchess_format_pgn_ParsedPgn(x$1);
+      const x = this.Lchess_format_pgn_ParsedPgn__f_initialPosition;
+      const x$2 = ParsedPgn$1.Lchess_format_pgn_ParsedPgn__f_initialPosition;
+      let $$x1;
+      if (((x === null) ? (x$2 === null) : x.equals__O__Z(x$2))) {
+        const x$3 = this.Lchess_format_pgn_ParsedPgn__f_tags;
+        const x$4 = ParsedPgn$1.Lchess_format_pgn_ParsedPgn__f_tags;
+        $$x1 = ((x$3 === null) ? (x$4 === null) : x$3.equals__O__Z(x$4))
+      } else {
+        $$x1 = false
+      };
+      if ($$x1) {
+        const x$5 = this.Lchess_format_pgn_ParsedPgn__f_sans;
+        const x$6 = ParsedPgn$1.Lchess_format_pgn_ParsedPgn__f_sans;
+        return ((x$5 === null) ? (x$6 === null) : x$5.equals__O__Z(x$6))
+      } else {
+        return false
+      }
+    } else {
+      return false
+    }
+  };
+}
+function $as_Lchess_format_pgn_ParsedPgn(obj) {
+  return (((obj instanceof $c_Lchess_format_pgn_ParsedPgn) || (obj === null)) ? obj : $throwClassCastException(obj, "chess.format.pgn.ParsedPgn"))
+}
+function $isArrayOf_Lchess_format_pgn_ParsedPgn(obj, depth) {
+  return (!(!(((obj && obj.$classData) && (obj.$classData.arrayDepth === depth)) && obj.$classData.arrayBase.ancestors.Lchess_format_pgn_ParsedPgn)))
+}
+function $asArrayOf_Lchess_format_pgn_ParsedPgn(obj, depth) {
+  return (($isArrayOf_Lchess_format_pgn_ParsedPgn(obj, depth) || (obj === null)) ? obj : $throwArrayCastException(obj, "Lchess.format.pgn.ParsedPgn;", depth))
+}
+const $d_Lchess_format_pgn_ParsedPgn = new $TypeData().initClass({
+  Lchess_format_pgn_ParsedPgn: 0
+}, false, "chess.format.pgn.ParsedPgn", {
+  Lchess_format_pgn_ParsedPgn: 1,
+  O: 1,
+  s_Product: 1,
+  s_Equals: 1,
+  Ljava_io_Serializable: 1
+});
+$c_Lchess_format_pgn_ParsedPgn.prototype.$classData = $d_Lchess_format_pgn_ParsedPgn;
 const $p_Lchess_format_pgn_Parser$MoveParser$__rangeToMap__sc_Iterable__sc_MapView = (function($thiz, r) {
   const $$x1 = $as_sc_IterableOnceOps(r.zipWithIndex__O());
   const factory = $m_s_Predef$().s_Predef$__f_Map;
@@ -26187,9 +28053,18 @@ class $c_Lchess_format_pgn_Parser$MoveParser$ extends $c_O {
     this.Lchess_format_pgn_Parser$MoveParser$__f_loggingEnabled = x$1;
     this.Lchess_format_pgn_Parser$MoveParser$__f_bitmap$init$0 = (32768 | this.Lchess_format_pgn_Parser$MoveParser$__f_bitmap$init$0)
   };
+  whiteSpace__s_util_matching_Regex() {
+    if (((65536 & this.Lchess_format_pgn_Parser$MoveParser$__f_bitmap$init$0) === 0)) {
+      throw new $c_s_UninitializedFieldError("Uninitialized field: /workspace/scalarepo/scalachess/src/main/scala/format/pgn/Parser.scala: 164")
+    };
+    return this.Lchess_format_pgn_Parser$MoveParser$__f_whiteSpace
+  };
   scala$util$parsing$combinator$RegexParsers$_setter_$whiteSpace_$eq__s_util_matching_Regex__V(x$1) {
     this.Lchess_format_pgn_Parser$MoveParser$__f_whiteSpace = x$1;
     this.Lchess_format_pgn_Parser$MoveParser$__f_bitmap$init$0 = (65536 | this.Lchess_format_pgn_Parser$MoveParser$__f_bitmap$init$0)
+  };
+  skipWhitespace__Z() {
+    return false
   };
   apply__T__Lchess_variant_Variant__Lcats_data_Validated(str, variant) {
     if (($uI(str.length) === 2)) {
@@ -26624,6 +28499,377 @@ function $m_Lchess_format_pgn_Parser$MoveParser$() {
   };
   return $n_Lchess_format_pgn_Parser$MoveParser$
 }
+const $p_Lchess_format_pgn_Parser$MovesParser$__cleanComments__sci_List__sci_List = (function($thiz, comments) {
+  const f = ((this$1) => ((x$11$2) => {
+    const x$11 = $as_T(x$11$2);
+    return $f_T__trim__T(x$11)
+  }))($thiz);
+  let this$5;
+  if ((comments === $m_sci_Nil$())) {
+    this$5 = $m_sci_Nil$()
+  } else {
+    const arg1 = comments.head__O();
+    const h = new $c_sci_$colon$colon(f(arg1), $m_sci_Nil$());
+    let t = h;
+    let rest = $as_sci_List(comments.tail__O());
+    while ((rest !== $m_sci_Nil$())) {
+      const arg1$1 = rest.head__O();
+      const nx = new $c_sci_$colon$colon(f(arg1$1), $m_sci_Nil$());
+      t.sci_$colon$colon__f_next = nx;
+      t = nx;
+      rest = $as_sci_List(rest.tail__O())
+    };
+    this$5 = h
+  };
+  const f$1 = ((this$2) => ((x$12$2) => {
+    const x$12 = $as_T(x$12$2);
+    return (x$12 !== "")
+  }))($thiz);
+  let l = this$5;
+  let result;
+  block: {
+    while (true) {
+      if (l.isEmpty__Z()) {
+        result = $m_sci_Nil$();
+        break
+      } else {
+        const h$1 = l.head__O();
+        const t$1 = $as_sci_List(l.tail__O());
+        if (($uZ(f$1(h$1)) === false)) {
+          l = t$1;
+          continue
+        };
+        const start = l;
+        let remaining = t$1;
+        while (true) {
+          if (remaining.isEmpty__Z()) {
+            result = start;
+            break block
+          } else {
+            const x = remaining.head__O();
+            if (($uZ(f$1(x)) !== false)) {
+              remaining = $as_sci_List(remaining.tail__O());
+              continue
+            };
+            const firstMiss = remaining;
+            const newHead = new $c_sci_$colon$colon(start.head__O(), $m_sci_Nil$());
+            let toProcess = $as_sci_List(start.tail__O());
+            let currentLast = newHead;
+            while ((toProcess !== firstMiss)) {
+              const newElem = new $c_sci_$colon$colon(toProcess.head__O(), $m_sci_Nil$());
+              currentLast.sci_$colon$colon__f_next = newElem;
+              currentLast = newElem;
+              toProcess = $as_sci_List(toProcess.tail__O())
+            };
+            let next = $as_sci_List(firstMiss.tail__O());
+            let nextToCopy = next;
+            while ((!next.isEmpty__Z())) {
+              const head = next.head__O();
+              if (($uZ(f$1(head)) !== false)) {
+                next = $as_sci_List(next.tail__O())
+              } else {
+                while ((nextToCopy !== next)) {
+                  const newElem$2 = new $c_sci_$colon$colon(nextToCopy.head__O(), $m_sci_Nil$());
+                  currentLast.sci_$colon$colon__f_next = newElem$2;
+                  currentLast = newElem$2;
+                  nextToCopy = $as_sci_List(nextToCopy.tail__O())
+                };
+                nextToCopy = $as_sci_List(next.tail__O());
+                next = $as_sci_List(next.tail__O())
+              }
+            };
+            if ((!nextToCopy.isEmpty__Z())) {
+              currentLast.sci_$colon$colon__f_next = nextToCopy
+            };
+            result = newHead;
+            break block
+          }
+        }
+      }
+    }
+  };
+  return result
+});
+class $c_Lchess_format_pgn_Parser$MovesParser$ extends $c_O {
+  constructor() {
+    super();
+    this.Lchess_format_pgn_Parser$MovesParser$__f_whiteSpace = null;
+    this.Lchess_format_pgn_Parser$MovesParser$__f_moveRegex = null;
+    this.Lchess_format_pgn_Parser$MovesParser$__f_result = null;
+    this.Lchess_format_pgn_Parser$MovesParser$__f_loggingEnabled = false;
+    this.Lchess_format_pgn_Parser$MovesParser$__f_Success$module = null;
+    this.Lchess_format_pgn_Parser$MovesParser$__f_NoSuccess$module = null;
+    this.Lchess_format_pgn_Parser$MovesParser$__f_Failure$module = null;
+    this.Lchess_format_pgn_Parser$MovesParser$__f_Error$module = null;
+    this.Lchess_format_pgn_Parser$MovesParser$__f_$tilde$module = null;
+    this.Lchess_format_pgn_Parser$MovesParser$__f_bitmap$init$0 = 0;
+    $n_Lchess_format_pgn_Parser$MovesParser$ = this;
+    $f_s_util_parsing_combinator_RegexParsers__$init$__V(this);
+    this.chess$format$pgn$Parser$Logging$_setter_$loggingEnabled_$eq__Z__V(false);
+    const groupNames = $m_sci_Nil$();
+    this.Lchess_format_pgn_Parser$MovesParser$__f_whiteSpace = $ct_s_util_matching_Regex__T__sci_Seq__(new $c_s_util_matching_Regex(), "(\\s|\\t|\\r?\\n)+", groupNames);
+    this.Lchess_format_pgn_Parser$MovesParser$__f_bitmap$init$0 = (1 | this.Lchess_format_pgn_Parser$MovesParser$__f_bitmap$init$0);
+    const groupNames$1 = $m_sci_Nil$();
+    this.Lchess_format_pgn_Parser$MovesParser$__f_moveRegex = $ct_s_util_matching_Regex__T__sci_Seq__(new $c_s_util_matching_Regex(), "(?:(?:0\\-0(?:\\-0|)[\\+\\#]?)|[PQKRBNOoa-h@][QKRBNa-h1-8xOo\\-=\\+\\#\\@]{1,6})[\\?!\u25a1]{0,2}", groupNames$1);
+    this.Lchess_format_pgn_Parser$MovesParser$__f_bitmap$init$0 = (2 | this.Lchess_format_pgn_Parser$MovesParser$__f_bitmap$init$0);
+    this.Lchess_format_pgn_Parser$MovesParser$__f_result = new $c_s_util_parsing_combinator_RegexParsers$$anon$1(this, "*").$bar__F0__s_util_parsing_combinator_Parsers$Parser(new $c_sjsr_AnonFunction0(((this$7) => (() => {
+      const this$8 = $m_Lchess_format_pgn_Parser$MovesParser$();
+      return new $c_s_util_parsing_combinator_RegexParsers$$anon$1(this$8, "1/2-1/2")
+    }))(this))).$bar__F0__s_util_parsing_combinator_Parsers$Parser(new $c_sjsr_AnonFunction0(((this$2$1) => (() => {
+      const this$9 = $m_Lchess_format_pgn_Parser$MovesParser$();
+      return new $c_s_util_parsing_combinator_RegexParsers$$anon$1(this$9, "\u00bd-\u00bd")
+    }))(this))).$bar__F0__s_util_parsing_combinator_Parsers$Parser(new $c_sjsr_AnonFunction0(((this$3$1) => (() => {
+      const this$10 = $m_Lchess_format_pgn_Parser$MovesParser$();
+      return new $c_s_util_parsing_combinator_RegexParsers$$anon$1(this$10, "0-1")
+    }))(this))).$bar__F0__s_util_parsing_combinator_Parsers$Parser(new $c_sjsr_AnonFunction0(((this$4$1) => (() => {
+      const this$11 = $m_Lchess_format_pgn_Parser$MovesParser$();
+      return new $c_s_util_parsing_combinator_RegexParsers$$anon$1(this$11, "1-0")
+    }))(this)));
+    this.Lchess_format_pgn_Parser$MovesParser$__f_bitmap$init$0 = (4 | this.Lchess_format_pgn_Parser$MovesParser$__f_bitmap$init$0)
+  };
+  skipWhitespace__Z() {
+    return $f_s_util_parsing_combinator_RegexParsers__skipWhitespace__Z(this)
+  };
+  loggingEnabled__Z() {
+    if (((8 & this.Lchess_format_pgn_Parser$MovesParser$__f_bitmap$init$0) === 0)) {
+      throw new $c_s_UninitializedFieldError("Uninitialized field: /workspace/scalarepo/scalachess/src/main/scala/format/pgn/Parser.scala: 83")
+    };
+    return this.Lchess_format_pgn_Parser$MovesParser$__f_loggingEnabled
+  };
+  chess$format$pgn$Parser$Logging$_setter_$loggingEnabled_$eq__Z__V(x$1) {
+    this.Lchess_format_pgn_Parser$MovesParser$__f_loggingEnabled = x$1;
+    this.Lchess_format_pgn_Parser$MovesParser$__f_bitmap$init$0 = (8 | this.Lchess_format_pgn_Parser$MovesParser$__f_bitmap$init$0)
+  };
+  scala$util$parsing$combinator$RegexParsers$_setter_$whiteSpace_$eq__s_util_matching_Regex__V(x$1) {
+    this.Lchess_format_pgn_Parser$MovesParser$__f_bitmap$init$0 = (1 | this.Lchess_format_pgn_Parser$MovesParser$__f_bitmap$init$0)
+  };
+  whiteSpace__s_util_matching_Regex() {
+    if (((1 & this.Lchess_format_pgn_Parser$MovesParser$__f_bitmap$init$0) === 0)) {
+      throw new $c_s_UninitializedFieldError("Uninitialized field: /workspace/scalarepo/scalachess/src/main/scala/format/pgn/Parser.scala: 85")
+    };
+    return this.Lchess_format_pgn_Parser$MovesParser$__f_whiteSpace
+  };
+  apply__T__Lcats_data_Validated(pgn) {
+    const p = this.strMoves__s_util_parsing_combinator_Parsers$Parser();
+    const x1 = $f_s_util_parsing_combinator_RegexParsers__parseAll__s_util_parsing_combinator_Parsers$Parser__jl_CharSequence__s_util_parsing_combinator_Parsers$ParseResult(this, p, pgn);
+    if ((x1 instanceof $c_s_util_parsing_combinator_Parsers$Success)) {
+      const x2 = $as_s_util_parsing_combinator_Parsers$Success(x1);
+      const p3 = $as_T3(x2.s_util_parsing_combinator_Parsers$Success__f_result);
+      if ((p3 !== null)) {
+        const init = $as_Lchess_format_pgn_InitialPosition(p3.T3__f__1);
+        const moves = $as_sci_List(p3.T3__f__2);
+        const result = $as_s_Option(p3.T3__f__3);
+        $m_Lcats_data_Validated$();
+        let $$x1;
+        if (result.isEmpty__Z()) {
+          $$x1 = $m_s_None$()
+        } else {
+          const arg1 = result.get__O();
+          const r = $as_T(arg1);
+          $m_Lchess_format_pgn_Tag$();
+          $$x1 = new $c_s_Some(new $c_Lchess_format_pgn_Tag($m_Lchess_format_pgn_Tag$Result$(), r))
+        };
+        const a = new $c_T3(init, moves, $$x1);
+        return new $c_Lcats_data_Validated$Valid(a)
+      }
+    };
+    $m_Lcats_data_Validated$();
+    const $$x2 = $m_sc_StringOps$();
+    const array = [x1.toString__T(), pgn];
+    const e = $$x2.format$extension__T__sci_Seq__T("Cannot parse moves: %s\n%s", new $c_sjsr_WrappedVarArgs(array));
+    return new $c_Lcats_data_Validated$Invalid(e)
+  };
+  strMoves__s_util_parsing_combinator_Parsers$Parser() {
+    const p = new $c_sjsr_AnonFunction0(((this$1) => (() => $m_Lchess_format_pgn_Parser$MovesParser$().commentary__s_util_parsing_combinator_Parsers$Parser().$times__s_util_parsing_combinator_Parsers$Parser().$tilde__F0__s_util_parsing_combinator_Parsers$Parser(new $c_sjsr_AnonFunction0(((this$2) => (() => $m_Lchess_format_pgn_Parser$MovesParser$().strMove__s_util_parsing_combinator_Parsers$Parser().$times__s_util_parsing_combinator_Parsers$Parser()))(this$1))).$tilde__F0__s_util_parsing_combinator_Parsers$Parser(new $c_sjsr_AnonFunction0(((this$2$1) => (() => $m_Lchess_format_pgn_Parser$MovesParser$().result__s_util_parsing_combinator_Parsers$Parser().$qmark__s_util_parsing_combinator_Parsers$Parser()))(this$1))).$tilde__F0__s_util_parsing_combinator_Parsers$Parser(new $c_sjsr_AnonFunction0(((this$3) => (() => $m_Lchess_format_pgn_Parser$MovesParser$().commentary__s_util_parsing_combinator_Parsers$Parser().$times__s_util_parsing_combinator_Parsers$Parser()))(this$1))).$up$up__F1__s_util_parsing_combinator_Parsers$Parser(new $c_sjsr_AnonFunction1(((this$4) => ((x0$1$2) => {
+      const x0$1 = $as_s_util_parsing_combinator_Parsers$$tilde(x0$1$2);
+      if ((x0$1 !== null)) {
+        const p2 = $as_s_util_parsing_combinator_Parsers$$tilde(x0$1.s_util_parsing_combinator_Parsers$$tilde__f__1);
+        if ((p2 !== null)) {
+          const p4 = $as_s_util_parsing_combinator_Parsers$$tilde(p2.s_util_parsing_combinator_Parsers$$tilde__f__1);
+          const res = $as_s_Option(p2.s_util_parsing_combinator_Parsers$$tilde__f__2);
+          if ((p4 !== null)) {
+            const coms = $as_sci_List(p4.s_util_parsing_combinator_Parsers$$tilde__f__1);
+            const sans = $as_sci_List(p4.s_util_parsing_combinator_Parsers$$tilde__f__2);
+            return new $c_T3(new $c_Lchess_format_pgn_InitialPosition($p_Lchess_format_pgn_Parser$MovesParser$__cleanComments__sci_List__sci_List($m_Lchess_format_pgn_Parser$MovesParser$(), coms)), sans, res)
+          }
+        }
+      };
+      throw new $c_s_MatchError(x0$1)
+    }))(this$1)))))(this));
+    return $f_Lchess_format_pgn_Parser$Logging__as__T__F0__s_util_parsing_combinator_Parsers$Parser(this, "moves", p)
+  };
+  moveRegex__s_util_matching_Regex() {
+    if (((2 & this.Lchess_format_pgn_Parser$MovesParser$__f_bitmap$init$0) === 0)) {
+      throw new $c_s_UninitializedFieldError("Uninitialized field: /workspace/scalarepo/scalachess/src/main/scala/format/pgn/Parser.scala: 111")
+    };
+    return this.Lchess_format_pgn_Parser$MovesParser$__f_moveRegex
+  };
+  strMove__s_util_parsing_combinator_Parsers$Parser() {
+    const p$2 = new $c_sjsr_AnonFunction0(((this$1) => (() => $m_Lchess_format_pgn_Parser$MovesParser$().number__s_util_parsing_combinator_Parsers$Parser().$bar__F0__s_util_parsing_combinator_Parsers$Parser(new $c_sjsr_AnonFunction0(((this$2) => (() => $m_Lchess_format_pgn_Parser$MovesParser$().commentary__s_util_parsing_combinator_Parsers$Parser()))(this$1))).$times__s_util_parsing_combinator_Parsers$Parser().$tilde$greater__F0__s_util_parsing_combinator_Parsers$Parser(new $c_sjsr_AnonFunction0(((this$2$1) => (() => {
+      const this$3 = $m_Lchess_format_pgn_Parser$MovesParser$();
+      const r = $m_Lchess_format_pgn_Parser$MovesParser$().moveRegex__s_util_matching_Regex();
+      return new $c_s_util_parsing_combinator_RegexParsers$$anon$2(this$3, r).$tilde__F0__s_util_parsing_combinator_Parsers$Parser(new $c_sjsr_AnonFunction0(((this$4) => (() => $m_Lchess_format_pgn_Parser$MovesParser$().nagGlyphs__s_util_parsing_combinator_Parsers$Parser()))(this$2$1))).$tilde__F0__s_util_parsing_combinator_Parsers$Parser(new $c_sjsr_AnonFunction0(((this$2$2) => (() => {
+        const this$6 = $m_Lchess_format_pgn_Parser$MovesParser$();
+        const p = new $c_sjsr_AnonFunction0(((this$5) => (() => $m_Lchess_format_pgn_Parser$MovesParser$().commentary__s_util_parsing_combinator_Parsers$Parser()))(this$2$2));
+        return $f_s_util_parsing_combinator_Parsers__rep__F0__s_util_parsing_combinator_Parsers$Parser(this$6, p)
+      }))(this$2$1))).$tilde__F0__s_util_parsing_combinator_Parsers$Parser(new $c_sjsr_AnonFunction0(((this$3$1) => (() => $m_Lchess_format_pgn_Parser$MovesParser$().nagGlyphs__s_util_parsing_combinator_Parsers$Parser()))(this$2$1))).$tilde__F0__s_util_parsing_combinator_Parsers$Parser(new $c_sjsr_AnonFunction0(((this$4$1) => (() => {
+        const this$8 = $m_Lchess_format_pgn_Parser$MovesParser$();
+        const p$1 = new $c_sjsr_AnonFunction0(((this$7) => (() => $m_Lchess_format_pgn_Parser$MovesParser$().variation__s_util_parsing_combinator_Parsers$Parser()))(this$4$1));
+        return $f_s_util_parsing_combinator_Parsers__rep__F0__s_util_parsing_combinator_Parsers$Parser(this$8, p$1)
+      }))(this$2$1)))
+    }))(this$1))).$less$tilde__F0__s_util_parsing_combinator_Parsers$Parser(new $c_sjsr_AnonFunction0(((this$3$2) => (() => $m_Lchess_format_pgn_Parser$MovesParser$().moveExtras__s_util_parsing_combinator_Parsers$Parser().$times__s_util_parsing_combinator_Parsers$Parser()))(this$1))).$up$up__F1__s_util_parsing_combinator_Parsers$Parser(new $c_sjsr_AnonFunction1(((this$4$2) => ((x0$1$2) => {
+      const x0$1 = $as_s_util_parsing_combinator_Parsers$$tilde(x0$1$2);
+      if ((x0$1 !== null)) {
+        const p2 = $as_s_util_parsing_combinator_Parsers$$tilde(x0$1.s_util_parsing_combinator_Parsers$$tilde__f__1);
+        const variations = $as_sci_List(x0$1.s_util_parsing_combinator_Parsers$$tilde__f__2);
+        if ((p2 !== null)) {
+          const p3 = $as_s_util_parsing_combinator_Parsers$$tilde(p2.s_util_parsing_combinator_Parsers$$tilde__f__1);
+          const glyphs2 = $as_Lchess_format_pgn_Glyphs(p2.s_util_parsing_combinator_Parsers$$tilde__f__2);
+          if ((p3 !== null)) {
+            const p4 = $as_s_util_parsing_combinator_Parsers$$tilde(p3.s_util_parsing_combinator_Parsers$$tilde__f__1);
+            const comments = $as_sci_List(p3.s_util_parsing_combinator_Parsers$$tilde__f__2);
+            if ((p4 !== null)) {
+              const san = $as_T(p4.s_util_parsing_combinator_Parsers$$tilde__f__1);
+              const glyphs = $as_Lchess_format_pgn_Glyphs(p4.s_util_parsing_combinator_Parsers$$tilde__f__2);
+              return new $c_Lchess_format_pgn_Parser$StrMove(san, glyphs.merge__Lchess_format_pgn_Glyphs__Lchess_format_pgn_Glyphs(glyphs2), $p_Lchess_format_pgn_Parser$MovesParser$__cleanComments__sci_List__sci_List($m_Lchess_format_pgn_Parser$MovesParser$(), comments), variations)
+            }
+          }
+        }
+      };
+      throw new $c_s_MatchError(x0$1)
+    }))(this$1)))))(this));
+    return $f_Lchess_format_pgn_Parser$Logging__as__T__F0__s_util_parsing_combinator_Parsers$Parser(this, "move", p$2)
+  };
+  number__s_util_parsing_combinator_Parsers$Parser() {
+    const groupNames = $m_sci_Nil$();
+    const r = $ct_s_util_matching_Regex__T__sci_Seq__(new $c_s_util_matching_Regex(), "[1-9]\\d*[\\s\\.]*", groupNames);
+    return new $c_s_util_parsing_combinator_RegexParsers$$anon$2(this, r)
+  };
+  moveExtras__s_util_parsing_combinator_Parsers$Parser() {
+    const p = new $c_sjsr_AnonFunction0(((this$1) => (() => $m_Lchess_format_pgn_Parser$MovesParser$().commentary__s_util_parsing_combinator_Parsers$Parser().$up$up$up__F0__s_util_parsing_combinator_Parsers$Parser(new $c_sjsr_AnonFunction0(((this$2) => (() => (void 0)))(this$1)))))(this));
+    return $f_Lchess_format_pgn_Parser$Logging__as__T__F0__s_util_parsing_combinator_Parsers$Parser(this, "moveExtras", p)
+  };
+  nagGlyphs__s_util_parsing_combinator_Parsers$Parser() {
+    const p$1 = new $c_sjsr_AnonFunction0(((this$1) => (() => {
+      const this$3 = $m_Lchess_format_pgn_Parser$MovesParser$();
+      const p = new $c_sjsr_AnonFunction0(((this$2) => (() => $m_Lchess_format_pgn_Parser$MovesParser$().nag__s_util_parsing_combinator_Parsers$Parser()))(this$1));
+      return $f_s_util_parsing_combinator_Parsers__rep__F0__s_util_parsing_combinator_Parsers$Parser(this$3, p).$up$up__F1__s_util_parsing_combinator_Parsers$Parser(new $c_sjsr_AnonFunction1(((this$2$1) => ((nags$2) => {
+        const nags = $as_sci_List(nags$2);
+        const $$x2 = $m_Lchess_format_pgn_Glyphs$();
+        let rest = nags;
+        let h = null;
+        let t = null;
+        while ((rest !== $m_sci_Nil$())) {
+          const arg1 = rest.head__O();
+          const n = $as_T(arg1);
+          const x = $m_sc_StringOps$().drop$extension__T__I__T(n, 1);
+          const this$7 = $m_sc_StringParsers$().parseInt__T__s_Option(x);
+          let $$x1;
+          if (this$7.isEmpty__Z()) {
+            $$x1 = $m_s_None$()
+          } else {
+            const arg1$1 = this$7.get__O();
+            const id = $uI(arg1$1);
+            $$x1 = $m_Lchess_format_pgn_Glyph$().find__I__s_Option(id)
+          };
+          const it = $$x1.iterator__sc_Iterator();
+          while (it.hasNext__Z()) {
+            const nx = new $c_sci_$colon$colon(it.next__O(), $m_sci_Nil$());
+            if ((t === null)) {
+              h = nx
+            } else {
+              t.sci_$colon$colon__f_next = nx
+            };
+            t = nx
+          };
+          rest = $as_sci_List(rest.tail__O())
+        };
+        return $$x2.fromList__sci_List__Lchess_format_pgn_Glyphs(((h === null) ? $m_sci_Nil$() : h))
+      }))(this$1)))
+    }))(this));
+    return $f_Lchess_format_pgn_Parser$Logging__as__T__F0__s_util_parsing_combinator_Parsers$Parser(this, "nagGlyphs", p$1)
+  };
+  nag__s_util_parsing_combinator_Parsers$Parser() {
+    const p = new $c_sjsr_AnonFunction0(((this$1) => (() => {
+      const this$5 = $m_Lchess_format_pgn_Parser$MovesParser$();
+      const groupNames = $m_sci_Nil$();
+      const r = $ct_s_util_matching_Regex__T__sci_Seq__(new $c_s_util_matching_Regex(), "\\$\\d+", groupNames);
+      return new $c_s_util_parsing_combinator_RegexParsers$$anon$2(this$5, r)
+    }))(this));
+    return $f_Lchess_format_pgn_Parser$Logging__as__T__F0__s_util_parsing_combinator_Parsers$Parser(this, "nag", p)
+  };
+  variation__s_util_parsing_combinator_Parsers$Parser() {
+    const p = new $c_sjsr_AnonFunction0(((this$1) => (() => {
+      const this$2 = $m_Lchess_format_pgn_Parser$MovesParser$();
+      return new $c_s_util_parsing_combinator_RegexParsers$$anon$1(this$2, "(").$tilde$greater__F0__s_util_parsing_combinator_Parsers$Parser(new $c_sjsr_AnonFunction0(((this$3) => (() => $m_Lchess_format_pgn_Parser$MovesParser$().strMoves__s_util_parsing_combinator_Parsers$Parser()))(this$1))).$less$tilde__F0__s_util_parsing_combinator_Parsers$Parser(new $c_sjsr_AnonFunction0(((this$2$1) => (() => {
+        const this$4 = $m_Lchess_format_pgn_Parser$MovesParser$();
+        return new $c_s_util_parsing_combinator_RegexParsers$$anon$1(this$4, ")")
+      }))(this$1))).$up$up__F1__s_util_parsing_combinator_Parsers$Parser(new $c_sjsr_AnonFunction1(((this$3$1) => ((x0$1$2) => {
+        const x0$1 = $as_T3(x0$1$2);
+        if ((x0$1 !== null)) {
+          const sms = $as_sci_List(x0$1.T3__f__2);
+          return sms
+        } else {
+          throw new $c_s_MatchError(x0$1)
+        }
+      }))(this$1)))
+    }))(this));
+    return $f_Lchess_format_pgn_Parser$Logging__as__T__F0__s_util_parsing_combinator_Parsers$Parser(this, "variation", p)
+  };
+  commentary__s_util_parsing_combinator_Parsers$Parser() {
+    return this.blockCommentary__s_util_parsing_combinator_Parsers$Parser().$bar__F0__s_util_parsing_combinator_Parsers$Parser(new $c_sjsr_AnonFunction0(((this$1) => (() => $m_Lchess_format_pgn_Parser$MovesParser$().inlineCommentary__s_util_parsing_combinator_Parsers$Parser()))(this)))
+  };
+  blockCommentary__s_util_parsing_combinator_Parsers$Parser() {
+    const p = new $c_sjsr_AnonFunction0(((this$1) => (() => {
+      const this$2 = $m_Lchess_format_pgn_Parser$MovesParser$();
+      return new $c_s_util_parsing_combinator_RegexParsers$$anon$1(this$2, "{").$tilde$greater__F0__s_util_parsing_combinator_Parsers$Parser(new $c_sjsr_AnonFunction0(((this$3) => (() => {
+        const this$7 = $m_Lchess_format_pgn_Parser$MovesParser$();
+        const groupNames = $m_sci_Nil$();
+        const r = $ct_s_util_matching_Regex__T__sci_Seq__(new $c_s_util_matching_Regex(), "[^\\}]*", groupNames);
+        return new $c_s_util_parsing_combinator_RegexParsers$$anon$2(this$7, r)
+      }))(this$1))).$less$tilde__F0__s_util_parsing_combinator_Parsers$Parser(new $c_sjsr_AnonFunction0(((this$2$1) => (() => {
+        const this$8 = $m_Lchess_format_pgn_Parser$MovesParser$();
+        return new $c_s_util_parsing_combinator_RegexParsers$$anon$1(this$8, "}")
+      }))(this$1)))
+    }))(this));
+    return $f_Lchess_format_pgn_Parser$Logging__as__T__F0__s_util_parsing_combinator_Parsers$Parser(this, "block comment", p)
+  };
+  inlineCommentary__s_util_parsing_combinator_Parsers$Parser() {
+    const p = new $c_sjsr_AnonFunction0(((this$1) => (() => {
+      const this$2 = $m_Lchess_format_pgn_Parser$MovesParser$();
+      return new $c_s_util_parsing_combinator_RegexParsers$$anon$1(this$2, ";").$tilde$greater__F0__s_util_parsing_combinator_Parsers$Parser(new $c_sjsr_AnonFunction0(((this$3) => (() => {
+        const this$7 = $m_Lchess_format_pgn_Parser$MovesParser$();
+        const groupNames = $m_sci_Nil$();
+        const r = $ct_s_util_matching_Regex__T__sci_Seq__(new $c_s_util_matching_Regex(), ".+", groupNames);
+        return new $c_s_util_parsing_combinator_RegexParsers$$anon$2(this$7, r)
+      }))(this$1)))
+    }))(this));
+    return $f_Lchess_format_pgn_Parser$Logging__as__T__F0__s_util_parsing_combinator_Parsers$Parser(this, "inline comment", p)
+  };
+  result__s_util_parsing_combinator_Parsers$Parser() {
+    if (((4 & this.Lchess_format_pgn_Parser$MovesParser$__f_bitmap$init$0) === 0)) {
+      throw new $c_s_UninitializedFieldError("Uninitialized field: /workspace/scalarepo/scalachess/src/main/scala/format/pgn/Parser.scala: 161")
+    };
+    return this.Lchess_format_pgn_Parser$MovesParser$__f_result
+  };
+}
+const $d_Lchess_format_pgn_Parser$MovesParser$ = new $TypeData().initClass({
+  Lchess_format_pgn_Parser$MovesParser$: 0
+}, false, "chess.format.pgn.Parser$MovesParser$", {
+  Lchess_format_pgn_Parser$MovesParser$: 1,
+  O: 1,
+  s_util_parsing_combinator_RegexParsers: 1,
+  s_util_parsing_combinator_Parsers: 1,
+  Lchess_format_pgn_Parser$Logging: 1
+});
+$c_Lchess_format_pgn_Parser$MovesParser$.prototype.$classData = $d_Lchess_format_pgn_Parser$MovesParser$;
+let $n_Lchess_format_pgn_Parser$MovesParser$;
+function $m_Lchess_format_pgn_Parser$MovesParser$() {
+  if ((!$n_Lchess_format_pgn_Parser$MovesParser$)) {
+    $n_Lchess_format_pgn_Parser$MovesParser$ = new $c_Lchess_format_pgn_Parser$MovesParser$()
+  };
+  return $n_Lchess_format_pgn_Parser$MovesParser$
+}
 class $c_Lchess_format_pgn_Parser$StrMove extends $c_O {
   constructor(san, glyphs, comments, variations) {
     super();
@@ -26727,6 +28973,146 @@ const $d_Lchess_format_pgn_Parser$StrMove = new $TypeData().initClass({
   Ljava_io_Serializable: 1
 });
 $c_Lchess_format_pgn_Parser$StrMove.prototype.$classData = $d_Lchess_format_pgn_Parser$StrMove;
+class $c_Lchess_format_pgn_Parser$TagParser$ extends $c_O {
+  constructor() {
+    super();
+    this.Lchess_format_pgn_Parser$TagParser$__f_tagName = null;
+    this.Lchess_format_pgn_Parser$TagParser$__f_tagValue = null;
+    this.Lchess_format_pgn_Parser$TagParser$__f_loggingEnabled = false;
+    this.Lchess_format_pgn_Parser$TagParser$__f_whiteSpace = null;
+    this.Lchess_format_pgn_Parser$TagParser$__f_Success$module = null;
+    this.Lchess_format_pgn_Parser$TagParser$__f_NoSuccess$module = null;
+    this.Lchess_format_pgn_Parser$TagParser$__f_Failure$module = null;
+    this.Lchess_format_pgn_Parser$TagParser$__f_Error$module = null;
+    this.Lchess_format_pgn_Parser$TagParser$__f_$tilde$module = null;
+    this.Lchess_format_pgn_Parser$TagParser$__f_bitmap$init$0 = 0;
+    $n_Lchess_format_pgn_Parser$TagParser$ = this;
+    $f_s_util_parsing_combinator_RegexParsers__$init$__V(this);
+    this.chess$format$pgn$Parser$Logging$_setter_$loggingEnabled_$eq__Z__V(false);
+    this.Lchess_format_pgn_Parser$TagParser$__f_tagName = new $c_s_util_parsing_combinator_RegexParsers$$anon$1(this, "[").$tilde$greater__F0__s_util_parsing_combinator_Parsers$Parser(new $c_sjsr_AnonFunction0(((this$1) => (() => {
+      const this$5 = $m_Lchess_format_pgn_Parser$TagParser$();
+      const groupNames = $m_sci_Nil$();
+      const r = $ct_s_util_matching_Regex__T__sci_Seq__(new $c_s_util_matching_Regex(), "[a-zA-Z]+", groupNames);
+      return new $c_s_util_parsing_combinator_RegexParsers$$anon$2(this$5, r)
+    }))(this)));
+    this.Lchess_format_pgn_Parser$TagParser$__f_bitmap$init$0 = (1 | this.Lchess_format_pgn_Parser$TagParser$__f_bitmap$init$0);
+    const groupNames$1 = $m_sci_Nil$();
+    const r$1 = $ct_s_util_matching_Regex__T__sci_Seq__(new $c_s_util_matching_Regex(), "\"(?:[^\"\\\\]|\\\\.)*\"", groupNames$1);
+    this.Lchess_format_pgn_Parser$TagParser$__f_tagValue = new $c_s_util_parsing_combinator_RegexParsers$$anon$2(this, r$1).$less$tilde__F0__s_util_parsing_combinator_Parsers$Parser(new $c_sjsr_AnonFunction0(((this$2$1) => (() => {
+      const this$9 = $m_Lchess_format_pgn_Parser$TagParser$();
+      return new $c_s_util_parsing_combinator_RegexParsers$$anon$1(this$9, "]")
+    }))(this))).$up$up__F1__s_util_parsing_combinator_Parsers$Parser(new $c_sjsr_AnonFunction1(((this$3$1) => ((x$17$2) => {
+      const x$17 = $as_T(x$17$2);
+      const $$x1 = $m_sc_StringOps$();
+      const x = $m_sc_StringOps$().stripPrefix$extension__T__T__T(x$17, "\"");
+      const this$12 = $$x1.stripSuffix$extension__T__T__T(x, "\"");
+      return $as_T(this$12.split("\\\"").join("\""))
+    }))(this)));
+    this.Lchess_format_pgn_Parser$TagParser$__f_bitmap$init$0 = (2 | this.Lchess_format_pgn_Parser$TagParser$__f_bitmap$init$0)
+  };
+  skipWhitespace__Z() {
+    return $f_s_util_parsing_combinator_RegexParsers__skipWhitespace__Z(this)
+  };
+  loggingEnabled__Z() {
+    if (((4 & this.Lchess_format_pgn_Parser$TagParser$__f_bitmap$init$0) === 0)) {
+      throw new $c_s_UninitializedFieldError("Uninitialized field: /workspace/scalarepo/scalachess/src/main/scala/format/pgn/Parser.scala: 347")
+    };
+    return this.Lchess_format_pgn_Parser$TagParser$__f_loggingEnabled
+  };
+  chess$format$pgn$Parser$Logging$_setter_$loggingEnabled_$eq__Z__V(x$1) {
+    this.Lchess_format_pgn_Parser$TagParser$__f_loggingEnabled = x$1;
+    this.Lchess_format_pgn_Parser$TagParser$__f_bitmap$init$0 = (4 | this.Lchess_format_pgn_Parser$TagParser$__f_bitmap$init$0)
+  };
+  whiteSpace__s_util_matching_Regex() {
+    if (((8 & this.Lchess_format_pgn_Parser$TagParser$__f_bitmap$init$0) === 0)) {
+      throw new $c_s_UninitializedFieldError("Uninitialized field: /workspace/scalarepo/scalachess/src/main/scala/format/pgn/Parser.scala: 347")
+    };
+    return this.Lchess_format_pgn_Parser$TagParser$__f_whiteSpace
+  };
+  scala$util$parsing$combinator$RegexParsers$_setter_$whiteSpace_$eq__s_util_matching_Regex__V(x$1) {
+    this.Lchess_format_pgn_Parser$TagParser$__f_whiteSpace = x$1;
+    this.Lchess_format_pgn_Parser$TagParser$__f_bitmap$init$0 = (8 | this.Lchess_format_pgn_Parser$TagParser$__f_bitmap$init$0)
+  };
+  apply__T__Lcats_data_Validated(pgn) {
+    const p = this.all__s_util_parsing_combinator_Parsers$Parser();
+    const x1 = $f_s_util_parsing_combinator_RegexParsers__parseAll__s_util_parsing_combinator_Parsers$Parser__jl_CharSequence__s_util_parsing_combinator_Parsers$ParseResult(this, p, pgn);
+    if ((x1 instanceof $c_s_util_parsing_combinator_Parsers$Failure)) {
+      const x4 = $as_s_util_parsing_combinator_Parsers$Failure(x1);
+      $m_Lcats_data_Validated$();
+      const $$x1 = $m_sc_StringOps$();
+      const array = [x4.toString__T(), pgn];
+      const e = $$x1.format$extension__T__sci_Seq__T("Cannot parse tags: %s\n%s", new $c_sjsr_WrappedVarArgs(array));
+      return new $c_Lcats_data_Validated$Invalid(e)
+    } else if ((x1 instanceof $c_s_util_parsing_combinator_Parsers$Success)) {
+      const x2 = $as_s_util_parsing_combinator_Parsers$Success(x1);
+      const tags = $as_sci_List(x2.s_util_parsing_combinator_Parsers$Success__f_result);
+      $m_Lcats_data_Validated$();
+      const a = new $c_Lchess_format_pgn_Tags(tags);
+      return new $c_Lcats_data_Validated$Valid(a)
+    } else {
+      $m_Lcats_data_Validated$();
+      const $$x2 = $m_sc_StringOps$();
+      const array$1 = [x1.toString__T(), pgn];
+      const e$1 = $$x2.format$extension__T__sci_Seq__T("Cannot parse tags: %s\n%s", new $c_sjsr_WrappedVarArgs(array$1));
+      return new $c_Lcats_data_Validated$Invalid(e$1)
+    }
+  };
+  all__s_util_parsing_combinator_Parsers$Parser() {
+    const p = new $c_sjsr_AnonFunction0(((this$1) => (() => $m_Lchess_format_pgn_Parser$TagParser$().tags__s_util_parsing_combinator_Parsers$Parser().$less$tilde__F0__s_util_parsing_combinator_Parsers$Parser(new $c_sjsr_AnonFunction0(((this$2) => (() => {
+      const this$6 = $m_Lchess_format_pgn_Parser$TagParser$();
+      const groupNames = $m_sci_Nil$();
+      const r = $ct_s_util_matching_Regex__T__sci_Seq__(new $c_s_util_matching_Regex(), "(.|\\n)*", groupNames);
+      return new $c_s_util_parsing_combinator_RegexParsers$$anon$2(this$6, r)
+    }))(this$1)))))(this));
+    return $f_Lchess_format_pgn_Parser$Logging__as__T__F0__s_util_parsing_combinator_Parsers$Parser(this, "all", p)
+  };
+  tags__s_util_parsing_combinator_Parsers$Parser() {
+    const p = new $c_sjsr_AnonFunction0(((this$1) => (() => $m_Lchess_format_pgn_Parser$TagParser$().tag__s_util_parsing_combinator_Parsers$Parser()))(this));
+    return $f_s_util_parsing_combinator_Parsers__rep__F0__s_util_parsing_combinator_Parsers$Parser(this, p)
+  };
+  tag__s_util_parsing_combinator_Parsers$Parser() {
+    const p = new $c_sjsr_AnonFunction0(((this$1) => (() => $m_Lchess_format_pgn_Parser$TagParser$().tagName__s_util_parsing_combinator_Parsers$Parser().$tilde__F0__s_util_parsing_combinator_Parsers$Parser(new $c_sjsr_AnonFunction0(((this$2) => (() => $m_Lchess_format_pgn_Parser$TagParser$().tagValue__s_util_parsing_combinator_Parsers$Parser()))(this$1))).$up$up__F1__s_util_parsing_combinator_Parsers$Parser(new $c_sjsr_AnonFunction1(((this$2$1) => ((x0$1$2) => {
+      const x0$1 = $as_s_util_parsing_combinator_Parsers$$tilde(x0$1$2);
+      if ((x0$1 !== null)) {
+        const name = $as_T(x0$1.s_util_parsing_combinator_Parsers$$tilde__f__1);
+        const value = $as_T(x0$1.s_util_parsing_combinator_Parsers$$tilde__f__2);
+        return $m_Lchess_format_pgn_Tag$().apply__T__O__Lchess_format_pgn_Tag(name, value)
+      } else {
+        throw new $c_s_MatchError(x0$1)
+      }
+    }))(this$1)))))(this));
+    return $f_Lchess_format_pgn_Parser$Logging__as__T__F0__s_util_parsing_combinator_Parsers$Parser(this, "tag", p)
+  };
+  tagName__s_util_parsing_combinator_Parsers$Parser() {
+    if (((1 & this.Lchess_format_pgn_Parser$TagParser$__f_bitmap$init$0) === 0)) {
+      throw new $c_s_UninitializedFieldError("Uninitialized field: /workspace/scalarepo/scalachess/src/main/scala/format/pgn/Parser.scala: 375")
+    };
+    return this.Lchess_format_pgn_Parser$TagParser$__f_tagName
+  };
+  tagValue__s_util_parsing_combinator_Parsers$Parser() {
+    if (((2 & this.Lchess_format_pgn_Parser$TagParser$__f_bitmap$init$0) === 0)) {
+      throw new $c_s_UninitializedFieldError("Uninitialized field: /workspace/scalarepo/scalachess/src/main/scala/format/pgn/Parser.scala: 377")
+    };
+    return this.Lchess_format_pgn_Parser$TagParser$__f_tagValue
+  };
+}
+const $d_Lchess_format_pgn_Parser$TagParser$ = new $TypeData().initClass({
+  Lchess_format_pgn_Parser$TagParser$: 0
+}, false, "chess.format.pgn.Parser$TagParser$", {
+  Lchess_format_pgn_Parser$TagParser$: 1,
+  O: 1,
+  s_util_parsing_combinator_RegexParsers: 1,
+  s_util_parsing_combinator_Parsers: 1,
+  Lchess_format_pgn_Parser$Logging: 1
+});
+$c_Lchess_format_pgn_Parser$TagParser$.prototype.$classData = $d_Lchess_format_pgn_Parser$TagParser$;
+let $n_Lchess_format_pgn_Parser$TagParser$;
+function $m_Lchess_format_pgn_Parser$TagParser$() {
+  if ((!$n_Lchess_format_pgn_Parser$TagParser$)) {
+    $n_Lchess_format_pgn_Parser$TagParser$ = new $c_Lchess_format_pgn_Parser$TagParser$()
+  };
+  return $n_Lchess_format_pgn_Parser$TagParser$
+}
 class $c_Lchess_format_pgn_Sans extends $c_O {
   constructor(value) {
     super();
@@ -26891,6 +29277,132 @@ const $d_Lchess_format_pgn_Suffixes = new $TypeData().initClass({
   Ljava_io_Serializable: 1
 });
 $c_Lchess_format_pgn_Suffixes.prototype.$classData = $d_Lchess_format_pgn_Suffixes;
+class $c_Lchess_format_pgn_Tag extends $c_O {
+  constructor(name, value) {
+    super();
+    this.Lchess_format_pgn_Tag__f_name = null;
+    this.Lchess_format_pgn_Tag__f_value = null;
+    this.Lchess_format_pgn_Tag__f_name = name;
+    this.Lchess_format_pgn_Tag__f_value = value
+  };
+  toString__T() {
+    return (((("[" + this.Lchess_format_pgn_Tag__f_name) + " \"") + this.Lchess_format_pgn_Tag__f_value) + "\"]")
+  };
+  productPrefix__T() {
+    return "Tag"
+  };
+  productArity__I() {
+    return 2
+  };
+  productElement__I__O(x$1) {
+    switch (x$1) {
+      case 0: {
+        return this.Lchess_format_pgn_Tag__f_name;
+        break
+      }
+      case 1: {
+        return this.Lchess_format_pgn_Tag__f_value;
+        break
+      }
+      default: {
+        return $m_sr_Statics$().ioobe__I__O(x$1)
+      }
+    }
+  };
+  productIterator__sc_Iterator() {
+    return new $c_sr_ScalaRunTime$$anon$1(this)
+  };
+  hashCode__I() {
+    const this$2 = $m_s_util_hashing_MurmurHash3$();
+    return this$2.productHash__s_Product__I__Z__I(this, (-889275714), false)
+  };
+  equals__O__Z(x$1) {
+    if ((this === x$1)) {
+      return true
+    } else if ((x$1 instanceof $c_Lchess_format_pgn_Tag)) {
+      const Tag$1 = $as_Lchess_format_pgn_Tag(x$1);
+      const x = this.Lchess_format_pgn_Tag__f_name;
+      const x$2 = Tag$1.Lchess_format_pgn_Tag__f_name;
+      if (((x === null) ? (x$2 === null) : x.equals__O__Z(x$2))) {
+        return (this.Lchess_format_pgn_Tag__f_value === Tag$1.Lchess_format_pgn_Tag__f_value)
+      } else {
+        return false
+      }
+    } else {
+      return false
+    }
+  };
+}
+function $as_Lchess_format_pgn_Tag(obj) {
+  return (((obj instanceof $c_Lchess_format_pgn_Tag) || (obj === null)) ? obj : $throwClassCastException(obj, "chess.format.pgn.Tag"))
+}
+function $isArrayOf_Lchess_format_pgn_Tag(obj, depth) {
+  return (!(!(((obj && obj.$classData) && (obj.$classData.arrayDepth === depth)) && obj.$classData.arrayBase.ancestors.Lchess_format_pgn_Tag)))
+}
+function $asArrayOf_Lchess_format_pgn_Tag(obj, depth) {
+  return (($isArrayOf_Lchess_format_pgn_Tag(obj, depth) || (obj === null)) ? obj : $throwArrayCastException(obj, "Lchess.format.pgn.Tag;", depth))
+}
+const $d_Lchess_format_pgn_Tag = new $TypeData().initClass({
+  Lchess_format_pgn_Tag: 0
+}, false, "chess.format.pgn.Tag", {
+  Lchess_format_pgn_Tag: 1,
+  O: 1,
+  s_Product: 1,
+  s_Equals: 1,
+  Ljava_io_Serializable: 1
+});
+$c_Lchess_format_pgn_Tag.prototype.$classData = $d_Lchess_format_pgn_Tag;
+class $c_Lchess_format_pgn_Tags extends $c_O {
+  constructor(value) {
+    super();
+    this.Lchess_format_pgn_Tags__f_value = null;
+    this.Lchess_format_pgn_Tags__f_value = value
+  };
+  toString__T() {
+    return $m_Lchess_format_pgn_Tags$().toString$extension__sci_List__T(this.Lchess_format_pgn_Tags__f_value)
+  };
+  productPrefix__T() {
+    $m_Lchess_format_pgn_Tags$();
+    return "Tags"
+  };
+  productArity__I() {
+    $m_Lchess_format_pgn_Tags$();
+    return 1
+  };
+  productElement__I__O(x$1) {
+    return $m_Lchess_format_pgn_Tags$().productElement$extension__sci_List__I__O(this.Lchess_format_pgn_Tags__f_value, x$1)
+  };
+  productIterator__sc_Iterator() {
+    return $m_Lchess_format_pgn_Tags$().productIterator$extension__sci_List__sc_Iterator(this.Lchess_format_pgn_Tags__f_value)
+  };
+  hashCode__I() {
+    $m_Lchess_format_pgn_Tags$();
+    const this$ = this.Lchess_format_pgn_Tags__f_value;
+    return $m_s_util_hashing_MurmurHash3$().seqHash__sc_Seq__I(this$)
+  };
+  equals__O__Z(x$1) {
+    return $m_Lchess_format_pgn_Tags$().equals$extension__sci_List__O__Z(this.Lchess_format_pgn_Tags__f_value, x$1)
+  };
+}
+function $as_Lchess_format_pgn_Tags(obj) {
+  return (((obj instanceof $c_Lchess_format_pgn_Tags) || (obj === null)) ? obj : $throwClassCastException(obj, "chess.format.pgn.Tags"))
+}
+function $isArrayOf_Lchess_format_pgn_Tags(obj, depth) {
+  return (!(!(((obj && obj.$classData) && (obj.$classData.arrayDepth === depth)) && obj.$classData.arrayBase.ancestors.Lchess_format_pgn_Tags)))
+}
+function $asArrayOf_Lchess_format_pgn_Tags(obj, depth) {
+  return (($isArrayOf_Lchess_format_pgn_Tags(obj, depth) || (obj === null)) ? obj : $throwArrayCastException(obj, "Lchess.format.pgn.Tags;", depth))
+}
+const $d_Lchess_format_pgn_Tags = new $TypeData().initClass({
+  Lchess_format_pgn_Tags: 0
+}, false, "chess.format.pgn.Tags", {
+  Lchess_format_pgn_Tags: 1,
+  O: 1,
+  s_Product: 1,
+  s_Equals: 1,
+  Ljava_io_Serializable: 1
+});
+$c_Lchess_format_pgn_Tags.prototype.$classData = $d_Lchess_format_pgn_Tags;
 class $c_Lchess_package$ extends $c_O {
   constructor() {
     super();
@@ -27606,6 +30118,44 @@ function $f_T__toCharArray__AC($thiz) {
   };
   return result
 }
+function $f_T__trim__T($thiz) {
+  const len = $uI($thiz.length);
+  let start = 0;
+  while (true) {
+    let $$x1;
+    if ((start !== len)) {
+      const index = start;
+      $$x1 = ((65535 & $uI($thiz.charCodeAt(index))) <= 32)
+    } else {
+      $$x1 = false
+    };
+    if ($$x1) {
+      start = ((1 + start) | 0)
+    } else {
+      break
+    }
+  };
+  if ((start === len)) {
+    return ""
+  } else {
+    let end = len;
+    while (true) {
+      const index$1 = (((-1) + end) | 0);
+      if (((65535 & $uI($thiz.charCodeAt(index$1))) <= 32)) {
+        end = (((-1) + end) | 0)
+      } else {
+        break
+      }
+    };
+    if (((start === 0) && (end === len))) {
+      return $thiz
+    } else {
+      const beginIndex = start;
+      const endIndex = end;
+      return $as_T($thiz.substring(beginIndex, endIndex))
+    }
+  }
+}
 function $f_T__toString__T($thiz) {
   return $thiz
 }
@@ -27636,6 +30186,14 @@ const $ct_jl_StringBuffer__jl_StringBuilder__ = (function($thiz, builder) {
 });
 const $ct_jl_StringBuffer__ = (function($thiz) {
   $ct_jl_StringBuffer__jl_StringBuilder__($thiz, $ct_jl_StringBuilder__(new $c_jl_StringBuilder()));
+  return $thiz
+});
+const $ct_jl_StringBuffer__T__ = (function($thiz, str) {
+  $ct_jl_StringBuffer__jl_StringBuilder__($thiz, $ct_jl_StringBuilder__T__(new $c_jl_StringBuilder(), str));
+  return $thiz
+});
+const $ct_jl_StringBuffer__jl_CharSequence__ = (function($thiz, seq) {
+  $ct_jl_StringBuffer__T__($thiz, $dp_toString__T(seq));
   return $thiz
 });
 class $c_jl_StringBuffer extends $c_O {
@@ -31498,6 +34056,10 @@ class $c_Lcats_EvalInstances$$anon$9 extends $c_O {
   constructor(outer) {
     super()
   };
+  foldLeft__O__O__F2__O(fa, b, f) {
+    const fa$1 = $as_Lcats_Eval(fa);
+    return f.apply__O__O__O(b, fa$1.value__O())
+  };
 }
 const $d_Lcats_EvalInstances$$anon$9 = new $TypeData().initClass({
   Lcats_EvalInstances$$anon$9: 0
@@ -31725,6 +34287,10 @@ function $f_Lcats_instances_OptionInstances__$init$__V($thiz) {
 class $c_Lcats_instances_SortedSetInstances$$anon$1 extends $c_O {
   constructor(outer) {
     super()
+  };
+  foldLeft__O__O__F2__O(fa, b, f) {
+    const fa$1 = $as_sci_SortedSet(fa);
+    return fa$1.foldLeft__O__F2__O(b, f)
   };
 }
 const $d_Lcats_instances_SortedSetInstances$$anon$1 = new $TypeData().initClass({
@@ -33637,6 +36203,1992 @@ const $d_Lchess_format_pgn_Std = new $TypeData().initClass({
   Ljava_io_Serializable: 1
 });
 $c_Lchess_format_pgn_Std.prototype.$classData = $d_Lchess_format_pgn_Std;
+const $p_Lchess_format_pgn_Tag$Annotator$__name$lzycompute__T = (function($thiz) {
+  if (((((1 & $thiz.Lchess_format_pgn_Tag$Annotator$__f_bitmap$0) << 24) >> 24) === 0)) {
+    $thiz.Lchess_format_pgn_Tag$Annotator$__f_name = "Annotator";
+    $thiz.Lchess_format_pgn_Tag$Annotator$__f_bitmap$0 = (((1 | $thiz.Lchess_format_pgn_Tag$Annotator$__f_bitmap$0) << 24) >> 24)
+  };
+  return $thiz.Lchess_format_pgn_Tag$Annotator$__f_name
+});
+const $p_Lchess_format_pgn_Tag$Annotator$__lowercase$lzycompute__T = (function($thiz) {
+  if (((((2 & $thiz.Lchess_format_pgn_Tag$Annotator$__f_bitmap$0) << 24) >> 24) === 0)) {
+    const this$1 = $thiz.name__T();
+    $thiz.Lchess_format_pgn_Tag$Annotator$__f_lowercase = $as_T(this$1.toLowerCase());
+    $thiz.Lchess_format_pgn_Tag$Annotator$__f_bitmap$0 = (((2 | $thiz.Lchess_format_pgn_Tag$Annotator$__f_bitmap$0) << 24) >> 24)
+  };
+  return $thiz.Lchess_format_pgn_Tag$Annotator$__f_lowercase
+});
+class $c_Lchess_format_pgn_Tag$Annotator$ extends $c_O {
+  constructor() {
+    super();
+    this.Lchess_format_pgn_Tag$Annotator$__f_name = null;
+    this.Lchess_format_pgn_Tag$Annotator$__f_lowercase = null;
+    this.Lchess_format_pgn_Tag$Annotator$__f_isUnknown = false;
+    this.Lchess_format_pgn_Tag$Annotator$__f_bitmap$0 = 0;
+    this.Lchess_format_pgn_Tag$Annotator$__f_bitmap$init$0 = false;
+    $n_Lchess_format_pgn_Tag$Annotator$ = this;
+    this.chess$format$pgn$TagType$_setter_$isUnknown_$eq__Z__V(false)
+  };
+  name__T() {
+    return (((((1 & this.Lchess_format_pgn_Tag$Annotator$__f_bitmap$0) << 24) >> 24) === 0) ? $p_Lchess_format_pgn_Tag$Annotator$__name$lzycompute__T(this) : this.Lchess_format_pgn_Tag$Annotator$__f_name)
+  };
+  lowercase__T() {
+    return (((((2 & this.Lchess_format_pgn_Tag$Annotator$__f_bitmap$0) << 24) >> 24) === 0) ? $p_Lchess_format_pgn_Tag$Annotator$__lowercase$lzycompute__T(this) : this.Lchess_format_pgn_Tag$Annotator$__f_lowercase)
+  };
+  chess$format$pgn$TagType$_setter_$isUnknown_$eq__Z__V(x$1) {
+    this.Lchess_format_pgn_Tag$Annotator$__f_isUnknown = x$1;
+    this.Lchess_format_pgn_Tag$Annotator$__f_bitmap$init$0 = true
+  };
+  productPrefix__T() {
+    return "Annotator"
+  };
+  productArity__I() {
+    return 0
+  };
+  productElement__I__O(x$1) {
+    return $m_sr_Statics$().ioobe__I__O(x$1)
+  };
+  productIterator__sc_Iterator() {
+    return new $c_sr_ScalaRunTime$$anon$1(this)
+  };
+  hashCode__I() {
+    return (-955688516)
+  };
+  toString__T() {
+    return "Annotator"
+  };
+}
+const $d_Lchess_format_pgn_Tag$Annotator$ = new $TypeData().initClass({
+  Lchess_format_pgn_Tag$Annotator$: 0
+}, false, "chess.format.pgn.Tag$Annotator$", {
+  Lchess_format_pgn_Tag$Annotator$: 1,
+  O: 1,
+  Lchess_format_pgn_TagType: 1,
+  s_Product: 1,
+  s_Equals: 1,
+  Ljava_io_Serializable: 1
+});
+$c_Lchess_format_pgn_Tag$Annotator$.prototype.$classData = $d_Lchess_format_pgn_Tag$Annotator$;
+let $n_Lchess_format_pgn_Tag$Annotator$;
+function $m_Lchess_format_pgn_Tag$Annotator$() {
+  if ((!$n_Lchess_format_pgn_Tag$Annotator$)) {
+    $n_Lchess_format_pgn_Tag$Annotator$ = new $c_Lchess_format_pgn_Tag$Annotator$()
+  };
+  return $n_Lchess_format_pgn_Tag$Annotator$
+}
+const $p_Lchess_format_pgn_Tag$Black$__name$lzycompute__T = (function($thiz) {
+  if (((((1 & $thiz.Lchess_format_pgn_Tag$Black$__f_bitmap$0) << 24) >> 24) === 0)) {
+    $thiz.Lchess_format_pgn_Tag$Black$__f_name = "Black";
+    $thiz.Lchess_format_pgn_Tag$Black$__f_bitmap$0 = (((1 | $thiz.Lchess_format_pgn_Tag$Black$__f_bitmap$0) << 24) >> 24)
+  };
+  return $thiz.Lchess_format_pgn_Tag$Black$__f_name
+});
+const $p_Lchess_format_pgn_Tag$Black$__lowercase$lzycompute__T = (function($thiz) {
+  if (((((2 & $thiz.Lchess_format_pgn_Tag$Black$__f_bitmap$0) << 24) >> 24) === 0)) {
+    const this$1 = $thiz.name__T();
+    $thiz.Lchess_format_pgn_Tag$Black$__f_lowercase = $as_T(this$1.toLowerCase());
+    $thiz.Lchess_format_pgn_Tag$Black$__f_bitmap$0 = (((2 | $thiz.Lchess_format_pgn_Tag$Black$__f_bitmap$0) << 24) >> 24)
+  };
+  return $thiz.Lchess_format_pgn_Tag$Black$__f_lowercase
+});
+class $c_Lchess_format_pgn_Tag$Black$ extends $c_O {
+  constructor() {
+    super();
+    this.Lchess_format_pgn_Tag$Black$__f_name = null;
+    this.Lchess_format_pgn_Tag$Black$__f_lowercase = null;
+    this.Lchess_format_pgn_Tag$Black$__f_isUnknown = false;
+    this.Lchess_format_pgn_Tag$Black$__f_bitmap$0 = 0;
+    this.Lchess_format_pgn_Tag$Black$__f_bitmap$init$0 = false;
+    $n_Lchess_format_pgn_Tag$Black$ = this;
+    this.chess$format$pgn$TagType$_setter_$isUnknown_$eq__Z__V(false)
+  };
+  name__T() {
+    return (((((1 & this.Lchess_format_pgn_Tag$Black$__f_bitmap$0) << 24) >> 24) === 0) ? $p_Lchess_format_pgn_Tag$Black$__name$lzycompute__T(this) : this.Lchess_format_pgn_Tag$Black$__f_name)
+  };
+  lowercase__T() {
+    return (((((2 & this.Lchess_format_pgn_Tag$Black$__f_bitmap$0) << 24) >> 24) === 0) ? $p_Lchess_format_pgn_Tag$Black$__lowercase$lzycompute__T(this) : this.Lchess_format_pgn_Tag$Black$__f_lowercase)
+  };
+  chess$format$pgn$TagType$_setter_$isUnknown_$eq__Z__V(x$1) {
+    this.Lchess_format_pgn_Tag$Black$__f_isUnknown = x$1;
+    this.Lchess_format_pgn_Tag$Black$__f_bitmap$init$0 = true
+  };
+  productPrefix__T() {
+    return "Black"
+  };
+  productArity__I() {
+    return 0
+  };
+  productElement__I__O(x$1) {
+    return $m_sr_Statics$().ioobe__I__O(x$1)
+  };
+  productIterator__sc_Iterator() {
+    return new $c_sr_ScalaRunTime$$anon$1(this)
+  };
+  hashCode__I() {
+    return 64266207
+  };
+  toString__T() {
+    return "Black"
+  };
+}
+const $d_Lchess_format_pgn_Tag$Black$ = new $TypeData().initClass({
+  Lchess_format_pgn_Tag$Black$: 0
+}, false, "chess.format.pgn.Tag$Black$", {
+  Lchess_format_pgn_Tag$Black$: 1,
+  O: 1,
+  Lchess_format_pgn_TagType: 1,
+  s_Product: 1,
+  s_Equals: 1,
+  Ljava_io_Serializable: 1
+});
+$c_Lchess_format_pgn_Tag$Black$.prototype.$classData = $d_Lchess_format_pgn_Tag$Black$;
+let $n_Lchess_format_pgn_Tag$Black$;
+function $m_Lchess_format_pgn_Tag$Black$() {
+  if ((!$n_Lchess_format_pgn_Tag$Black$)) {
+    $n_Lchess_format_pgn_Tag$Black$ = new $c_Lchess_format_pgn_Tag$Black$()
+  };
+  return $n_Lchess_format_pgn_Tag$Black$
+}
+const $p_Lchess_format_pgn_Tag$BlackClock$__name$lzycompute__T = (function($thiz) {
+  if (((((1 & $thiz.Lchess_format_pgn_Tag$BlackClock$__f_bitmap$0) << 24) >> 24) === 0)) {
+    $thiz.Lchess_format_pgn_Tag$BlackClock$__f_name = "BlackClock";
+    $thiz.Lchess_format_pgn_Tag$BlackClock$__f_bitmap$0 = (((1 | $thiz.Lchess_format_pgn_Tag$BlackClock$__f_bitmap$0) << 24) >> 24)
+  };
+  return $thiz.Lchess_format_pgn_Tag$BlackClock$__f_name
+});
+const $p_Lchess_format_pgn_Tag$BlackClock$__lowercase$lzycompute__T = (function($thiz) {
+  if (((((2 & $thiz.Lchess_format_pgn_Tag$BlackClock$__f_bitmap$0) << 24) >> 24) === 0)) {
+    const this$1 = $thiz.name__T();
+    $thiz.Lchess_format_pgn_Tag$BlackClock$__f_lowercase = $as_T(this$1.toLowerCase());
+    $thiz.Lchess_format_pgn_Tag$BlackClock$__f_bitmap$0 = (((2 | $thiz.Lchess_format_pgn_Tag$BlackClock$__f_bitmap$0) << 24) >> 24)
+  };
+  return $thiz.Lchess_format_pgn_Tag$BlackClock$__f_lowercase
+});
+class $c_Lchess_format_pgn_Tag$BlackClock$ extends $c_O {
+  constructor() {
+    super();
+    this.Lchess_format_pgn_Tag$BlackClock$__f_name = null;
+    this.Lchess_format_pgn_Tag$BlackClock$__f_lowercase = null;
+    this.Lchess_format_pgn_Tag$BlackClock$__f_isUnknown = false;
+    this.Lchess_format_pgn_Tag$BlackClock$__f_bitmap$0 = 0;
+    this.Lchess_format_pgn_Tag$BlackClock$__f_bitmap$init$0 = false;
+    $n_Lchess_format_pgn_Tag$BlackClock$ = this;
+    this.chess$format$pgn$TagType$_setter_$isUnknown_$eq__Z__V(false)
+  };
+  name__T() {
+    return (((((1 & this.Lchess_format_pgn_Tag$BlackClock$__f_bitmap$0) << 24) >> 24) === 0) ? $p_Lchess_format_pgn_Tag$BlackClock$__name$lzycompute__T(this) : this.Lchess_format_pgn_Tag$BlackClock$__f_name)
+  };
+  lowercase__T() {
+    return (((((2 & this.Lchess_format_pgn_Tag$BlackClock$__f_bitmap$0) << 24) >> 24) === 0) ? $p_Lchess_format_pgn_Tag$BlackClock$__lowercase$lzycompute__T(this) : this.Lchess_format_pgn_Tag$BlackClock$__f_lowercase)
+  };
+  chess$format$pgn$TagType$_setter_$isUnknown_$eq__Z__V(x$1) {
+    this.Lchess_format_pgn_Tag$BlackClock$__f_isUnknown = x$1;
+    this.Lchess_format_pgn_Tag$BlackClock$__f_bitmap$init$0 = true
+  };
+  productPrefix__T() {
+    return "BlackClock"
+  };
+  productArity__I() {
+    return 0
+  };
+  productElement__I__O(x$1) {
+    return $m_sr_Statics$().ioobe__I__O(x$1)
+  };
+  productIterator__sc_Iterator() {
+    return new $c_sr_ScalaRunTime$$anon$1(this)
+  };
+  hashCode__I() {
+    return 329408367
+  };
+  toString__T() {
+    return "BlackClock"
+  };
+}
+const $d_Lchess_format_pgn_Tag$BlackClock$ = new $TypeData().initClass({
+  Lchess_format_pgn_Tag$BlackClock$: 0
+}, false, "chess.format.pgn.Tag$BlackClock$", {
+  Lchess_format_pgn_Tag$BlackClock$: 1,
+  O: 1,
+  Lchess_format_pgn_TagType: 1,
+  s_Product: 1,
+  s_Equals: 1,
+  Ljava_io_Serializable: 1
+});
+$c_Lchess_format_pgn_Tag$BlackClock$.prototype.$classData = $d_Lchess_format_pgn_Tag$BlackClock$;
+let $n_Lchess_format_pgn_Tag$BlackClock$;
+function $m_Lchess_format_pgn_Tag$BlackClock$() {
+  if ((!$n_Lchess_format_pgn_Tag$BlackClock$)) {
+    $n_Lchess_format_pgn_Tag$BlackClock$ = new $c_Lchess_format_pgn_Tag$BlackClock$()
+  };
+  return $n_Lchess_format_pgn_Tag$BlackClock$
+}
+const $p_Lchess_format_pgn_Tag$BlackElo$__name$lzycompute__T = (function($thiz) {
+  if (((((1 & $thiz.Lchess_format_pgn_Tag$BlackElo$__f_bitmap$0) << 24) >> 24) === 0)) {
+    $thiz.Lchess_format_pgn_Tag$BlackElo$__f_name = "BlackElo";
+    $thiz.Lchess_format_pgn_Tag$BlackElo$__f_bitmap$0 = (((1 | $thiz.Lchess_format_pgn_Tag$BlackElo$__f_bitmap$0) << 24) >> 24)
+  };
+  return $thiz.Lchess_format_pgn_Tag$BlackElo$__f_name
+});
+const $p_Lchess_format_pgn_Tag$BlackElo$__lowercase$lzycompute__T = (function($thiz) {
+  if (((((2 & $thiz.Lchess_format_pgn_Tag$BlackElo$__f_bitmap$0) << 24) >> 24) === 0)) {
+    const this$1 = $thiz.name__T();
+    $thiz.Lchess_format_pgn_Tag$BlackElo$__f_lowercase = $as_T(this$1.toLowerCase());
+    $thiz.Lchess_format_pgn_Tag$BlackElo$__f_bitmap$0 = (((2 | $thiz.Lchess_format_pgn_Tag$BlackElo$__f_bitmap$0) << 24) >> 24)
+  };
+  return $thiz.Lchess_format_pgn_Tag$BlackElo$__f_lowercase
+});
+class $c_Lchess_format_pgn_Tag$BlackElo$ extends $c_O {
+  constructor() {
+    super();
+    this.Lchess_format_pgn_Tag$BlackElo$__f_name = null;
+    this.Lchess_format_pgn_Tag$BlackElo$__f_lowercase = null;
+    this.Lchess_format_pgn_Tag$BlackElo$__f_isUnknown = false;
+    this.Lchess_format_pgn_Tag$BlackElo$__f_bitmap$0 = 0;
+    this.Lchess_format_pgn_Tag$BlackElo$__f_bitmap$init$0 = false;
+    $n_Lchess_format_pgn_Tag$BlackElo$ = this;
+    this.chess$format$pgn$TagType$_setter_$isUnknown_$eq__Z__V(false)
+  };
+  name__T() {
+    return (((((1 & this.Lchess_format_pgn_Tag$BlackElo$__f_bitmap$0) << 24) >> 24) === 0) ? $p_Lchess_format_pgn_Tag$BlackElo$__name$lzycompute__T(this) : this.Lchess_format_pgn_Tag$BlackElo$__f_name)
+  };
+  lowercase__T() {
+    return (((((2 & this.Lchess_format_pgn_Tag$BlackElo$__f_bitmap$0) << 24) >> 24) === 0) ? $p_Lchess_format_pgn_Tag$BlackElo$__lowercase$lzycompute__T(this) : this.Lchess_format_pgn_Tag$BlackElo$__f_lowercase)
+  };
+  chess$format$pgn$TagType$_setter_$isUnknown_$eq__Z__V(x$1) {
+    this.Lchess_format_pgn_Tag$BlackElo$__f_isUnknown = x$1;
+    this.Lchess_format_pgn_Tag$BlackElo$__f_bitmap$init$0 = true
+  };
+  productPrefix__T() {
+    return "BlackElo"
+  };
+  productArity__I() {
+    return 0
+  };
+  productElement__I__O(x$1) {
+    return $m_sr_Statics$().ioobe__I__O(x$1)
+  };
+  productIterator__sc_Iterator() {
+    return new $c_sr_ScalaRunTime$$anon$1(this)
+  };
+  hashCode__I() {
+    return (-1000771511)
+  };
+  toString__T() {
+    return "BlackElo"
+  };
+}
+const $d_Lchess_format_pgn_Tag$BlackElo$ = new $TypeData().initClass({
+  Lchess_format_pgn_Tag$BlackElo$: 0
+}, false, "chess.format.pgn.Tag$BlackElo$", {
+  Lchess_format_pgn_Tag$BlackElo$: 1,
+  O: 1,
+  Lchess_format_pgn_TagType: 1,
+  s_Product: 1,
+  s_Equals: 1,
+  Ljava_io_Serializable: 1
+});
+$c_Lchess_format_pgn_Tag$BlackElo$.prototype.$classData = $d_Lchess_format_pgn_Tag$BlackElo$;
+let $n_Lchess_format_pgn_Tag$BlackElo$;
+function $m_Lchess_format_pgn_Tag$BlackElo$() {
+  if ((!$n_Lchess_format_pgn_Tag$BlackElo$)) {
+    $n_Lchess_format_pgn_Tag$BlackElo$ = new $c_Lchess_format_pgn_Tag$BlackElo$()
+  };
+  return $n_Lchess_format_pgn_Tag$BlackElo$
+}
+const $p_Lchess_format_pgn_Tag$BlackRatingDiff$__name$lzycompute__T = (function($thiz) {
+  if (((((1 & $thiz.Lchess_format_pgn_Tag$BlackRatingDiff$__f_bitmap$0) << 24) >> 24) === 0)) {
+    $thiz.Lchess_format_pgn_Tag$BlackRatingDiff$__f_name = "BlackRatingDiff";
+    $thiz.Lchess_format_pgn_Tag$BlackRatingDiff$__f_bitmap$0 = (((1 | $thiz.Lchess_format_pgn_Tag$BlackRatingDiff$__f_bitmap$0) << 24) >> 24)
+  };
+  return $thiz.Lchess_format_pgn_Tag$BlackRatingDiff$__f_name
+});
+const $p_Lchess_format_pgn_Tag$BlackRatingDiff$__lowercase$lzycompute__T = (function($thiz) {
+  if (((((2 & $thiz.Lchess_format_pgn_Tag$BlackRatingDiff$__f_bitmap$0) << 24) >> 24) === 0)) {
+    const this$1 = $thiz.name__T();
+    $thiz.Lchess_format_pgn_Tag$BlackRatingDiff$__f_lowercase = $as_T(this$1.toLowerCase());
+    $thiz.Lchess_format_pgn_Tag$BlackRatingDiff$__f_bitmap$0 = (((2 | $thiz.Lchess_format_pgn_Tag$BlackRatingDiff$__f_bitmap$0) << 24) >> 24)
+  };
+  return $thiz.Lchess_format_pgn_Tag$BlackRatingDiff$__f_lowercase
+});
+class $c_Lchess_format_pgn_Tag$BlackRatingDiff$ extends $c_O {
+  constructor() {
+    super();
+    this.Lchess_format_pgn_Tag$BlackRatingDiff$__f_name = null;
+    this.Lchess_format_pgn_Tag$BlackRatingDiff$__f_lowercase = null;
+    this.Lchess_format_pgn_Tag$BlackRatingDiff$__f_isUnknown = false;
+    this.Lchess_format_pgn_Tag$BlackRatingDiff$__f_bitmap$0 = 0;
+    this.Lchess_format_pgn_Tag$BlackRatingDiff$__f_bitmap$init$0 = false;
+    $n_Lchess_format_pgn_Tag$BlackRatingDiff$ = this;
+    this.chess$format$pgn$TagType$_setter_$isUnknown_$eq__Z__V(false)
+  };
+  name__T() {
+    return (((((1 & this.Lchess_format_pgn_Tag$BlackRatingDiff$__f_bitmap$0) << 24) >> 24) === 0) ? $p_Lchess_format_pgn_Tag$BlackRatingDiff$__name$lzycompute__T(this) : this.Lchess_format_pgn_Tag$BlackRatingDiff$__f_name)
+  };
+  lowercase__T() {
+    return (((((2 & this.Lchess_format_pgn_Tag$BlackRatingDiff$__f_bitmap$0) << 24) >> 24) === 0) ? $p_Lchess_format_pgn_Tag$BlackRatingDiff$__lowercase$lzycompute__T(this) : this.Lchess_format_pgn_Tag$BlackRatingDiff$__f_lowercase)
+  };
+  chess$format$pgn$TagType$_setter_$isUnknown_$eq__Z__V(x$1) {
+    this.Lchess_format_pgn_Tag$BlackRatingDiff$__f_isUnknown = x$1;
+    this.Lchess_format_pgn_Tag$BlackRatingDiff$__f_bitmap$init$0 = true
+  };
+  productPrefix__T() {
+    return "BlackRatingDiff"
+  };
+  productArity__I() {
+    return 0
+  };
+  productElement__I__O(x$1) {
+    return $m_sr_Statics$().ioobe__I__O(x$1)
+  };
+  productIterator__sc_Iterator() {
+    return new $c_sr_ScalaRunTime$$anon$1(this)
+  };
+  hashCode__I() {
+    return (-58880895)
+  };
+  toString__T() {
+    return "BlackRatingDiff"
+  };
+}
+const $d_Lchess_format_pgn_Tag$BlackRatingDiff$ = new $TypeData().initClass({
+  Lchess_format_pgn_Tag$BlackRatingDiff$: 0
+}, false, "chess.format.pgn.Tag$BlackRatingDiff$", {
+  Lchess_format_pgn_Tag$BlackRatingDiff$: 1,
+  O: 1,
+  Lchess_format_pgn_TagType: 1,
+  s_Product: 1,
+  s_Equals: 1,
+  Ljava_io_Serializable: 1
+});
+$c_Lchess_format_pgn_Tag$BlackRatingDiff$.prototype.$classData = $d_Lchess_format_pgn_Tag$BlackRatingDiff$;
+let $n_Lchess_format_pgn_Tag$BlackRatingDiff$;
+function $m_Lchess_format_pgn_Tag$BlackRatingDiff$() {
+  if ((!$n_Lchess_format_pgn_Tag$BlackRatingDiff$)) {
+    $n_Lchess_format_pgn_Tag$BlackRatingDiff$ = new $c_Lchess_format_pgn_Tag$BlackRatingDiff$()
+  };
+  return $n_Lchess_format_pgn_Tag$BlackRatingDiff$
+}
+const $p_Lchess_format_pgn_Tag$BlackTeam$__name$lzycompute__T = (function($thiz) {
+  if (((((1 & $thiz.Lchess_format_pgn_Tag$BlackTeam$__f_bitmap$0) << 24) >> 24) === 0)) {
+    $thiz.Lchess_format_pgn_Tag$BlackTeam$__f_name = "BlackTeam";
+    $thiz.Lchess_format_pgn_Tag$BlackTeam$__f_bitmap$0 = (((1 | $thiz.Lchess_format_pgn_Tag$BlackTeam$__f_bitmap$0) << 24) >> 24)
+  };
+  return $thiz.Lchess_format_pgn_Tag$BlackTeam$__f_name
+});
+const $p_Lchess_format_pgn_Tag$BlackTeam$__lowercase$lzycompute__T = (function($thiz) {
+  if (((((2 & $thiz.Lchess_format_pgn_Tag$BlackTeam$__f_bitmap$0) << 24) >> 24) === 0)) {
+    const this$1 = $thiz.name__T();
+    $thiz.Lchess_format_pgn_Tag$BlackTeam$__f_lowercase = $as_T(this$1.toLowerCase());
+    $thiz.Lchess_format_pgn_Tag$BlackTeam$__f_bitmap$0 = (((2 | $thiz.Lchess_format_pgn_Tag$BlackTeam$__f_bitmap$0) << 24) >> 24)
+  };
+  return $thiz.Lchess_format_pgn_Tag$BlackTeam$__f_lowercase
+});
+class $c_Lchess_format_pgn_Tag$BlackTeam$ extends $c_O {
+  constructor() {
+    super();
+    this.Lchess_format_pgn_Tag$BlackTeam$__f_name = null;
+    this.Lchess_format_pgn_Tag$BlackTeam$__f_lowercase = null;
+    this.Lchess_format_pgn_Tag$BlackTeam$__f_isUnknown = false;
+    this.Lchess_format_pgn_Tag$BlackTeam$__f_bitmap$0 = 0;
+    this.Lchess_format_pgn_Tag$BlackTeam$__f_bitmap$init$0 = false;
+    $n_Lchess_format_pgn_Tag$BlackTeam$ = this;
+    this.chess$format$pgn$TagType$_setter_$isUnknown_$eq__Z__V(false)
+  };
+  name__T() {
+    return (((((1 & this.Lchess_format_pgn_Tag$BlackTeam$__f_bitmap$0) << 24) >> 24) === 0) ? $p_Lchess_format_pgn_Tag$BlackTeam$__name$lzycompute__T(this) : this.Lchess_format_pgn_Tag$BlackTeam$__f_name)
+  };
+  lowercase__T() {
+    return (((((2 & this.Lchess_format_pgn_Tag$BlackTeam$__f_bitmap$0) << 24) >> 24) === 0) ? $p_Lchess_format_pgn_Tag$BlackTeam$__lowercase$lzycompute__T(this) : this.Lchess_format_pgn_Tag$BlackTeam$__f_lowercase)
+  };
+  chess$format$pgn$TagType$_setter_$isUnknown_$eq__Z__V(x$1) {
+    this.Lchess_format_pgn_Tag$BlackTeam$__f_isUnknown = x$1;
+    this.Lchess_format_pgn_Tag$BlackTeam$__f_bitmap$init$0 = true
+  };
+  productPrefix__T() {
+    return "BlackTeam"
+  };
+  productArity__I() {
+    return 0
+  };
+  productElement__I__O(x$1) {
+    return $m_sr_Statics$().ioobe__I__O(x$1)
+  };
+  productIterator__sc_Iterator() {
+    return new $c_sr_ScalaRunTime$$anon$1(this)
+  };
+  hashCode__I() {
+    return (-958705956)
+  };
+  toString__T() {
+    return "BlackTeam"
+  };
+}
+const $d_Lchess_format_pgn_Tag$BlackTeam$ = new $TypeData().initClass({
+  Lchess_format_pgn_Tag$BlackTeam$: 0
+}, false, "chess.format.pgn.Tag$BlackTeam$", {
+  Lchess_format_pgn_Tag$BlackTeam$: 1,
+  O: 1,
+  Lchess_format_pgn_TagType: 1,
+  s_Product: 1,
+  s_Equals: 1,
+  Ljava_io_Serializable: 1
+});
+$c_Lchess_format_pgn_Tag$BlackTeam$.prototype.$classData = $d_Lchess_format_pgn_Tag$BlackTeam$;
+let $n_Lchess_format_pgn_Tag$BlackTeam$;
+function $m_Lchess_format_pgn_Tag$BlackTeam$() {
+  if ((!$n_Lchess_format_pgn_Tag$BlackTeam$)) {
+    $n_Lchess_format_pgn_Tag$BlackTeam$ = new $c_Lchess_format_pgn_Tag$BlackTeam$()
+  };
+  return $n_Lchess_format_pgn_Tag$BlackTeam$
+}
+const $p_Lchess_format_pgn_Tag$BlackTitle$__name$lzycompute__T = (function($thiz) {
+  if (((((1 & $thiz.Lchess_format_pgn_Tag$BlackTitle$__f_bitmap$0) << 24) >> 24) === 0)) {
+    $thiz.Lchess_format_pgn_Tag$BlackTitle$__f_name = "BlackTitle";
+    $thiz.Lchess_format_pgn_Tag$BlackTitle$__f_bitmap$0 = (((1 | $thiz.Lchess_format_pgn_Tag$BlackTitle$__f_bitmap$0) << 24) >> 24)
+  };
+  return $thiz.Lchess_format_pgn_Tag$BlackTitle$__f_name
+});
+const $p_Lchess_format_pgn_Tag$BlackTitle$__lowercase$lzycompute__T = (function($thiz) {
+  if (((((2 & $thiz.Lchess_format_pgn_Tag$BlackTitle$__f_bitmap$0) << 24) >> 24) === 0)) {
+    const this$1 = $thiz.name__T();
+    $thiz.Lchess_format_pgn_Tag$BlackTitle$__f_lowercase = $as_T(this$1.toLowerCase());
+    $thiz.Lchess_format_pgn_Tag$BlackTitle$__f_bitmap$0 = (((2 | $thiz.Lchess_format_pgn_Tag$BlackTitle$__f_bitmap$0) << 24) >> 24)
+  };
+  return $thiz.Lchess_format_pgn_Tag$BlackTitle$__f_lowercase
+});
+class $c_Lchess_format_pgn_Tag$BlackTitle$ extends $c_O {
+  constructor() {
+    super();
+    this.Lchess_format_pgn_Tag$BlackTitle$__f_name = null;
+    this.Lchess_format_pgn_Tag$BlackTitle$__f_lowercase = null;
+    this.Lchess_format_pgn_Tag$BlackTitle$__f_isUnknown = false;
+    this.Lchess_format_pgn_Tag$BlackTitle$__f_bitmap$0 = 0;
+    this.Lchess_format_pgn_Tag$BlackTitle$__f_bitmap$init$0 = false;
+    $n_Lchess_format_pgn_Tag$BlackTitle$ = this;
+    this.chess$format$pgn$TagType$_setter_$isUnknown_$eq__Z__V(false)
+  };
+  name__T() {
+    return (((((1 & this.Lchess_format_pgn_Tag$BlackTitle$__f_bitmap$0) << 24) >> 24) === 0) ? $p_Lchess_format_pgn_Tag$BlackTitle$__name$lzycompute__T(this) : this.Lchess_format_pgn_Tag$BlackTitle$__f_name)
+  };
+  lowercase__T() {
+    return (((((2 & this.Lchess_format_pgn_Tag$BlackTitle$__f_bitmap$0) << 24) >> 24) === 0) ? $p_Lchess_format_pgn_Tag$BlackTitle$__lowercase$lzycompute__T(this) : this.Lchess_format_pgn_Tag$BlackTitle$__f_lowercase)
+  };
+  chess$format$pgn$TagType$_setter_$isUnknown_$eq__Z__V(x$1) {
+    this.Lchess_format_pgn_Tag$BlackTitle$__f_isUnknown = x$1;
+    this.Lchess_format_pgn_Tag$BlackTitle$__f_bitmap$init$0 = true
+  };
+  productPrefix__T() {
+    return "BlackTitle"
+  };
+  productArity__I() {
+    return 0
+  };
+  productElement__I__O(x$1) {
+    return $m_sr_Statics$().ioobe__I__O(x$1)
+  };
+  productIterator__sc_Iterator() {
+    return new $c_sr_ScalaRunTime$$anon$1(this)
+  };
+  hashCode__I() {
+    return 345023929
+  };
+  toString__T() {
+    return "BlackTitle"
+  };
+}
+const $d_Lchess_format_pgn_Tag$BlackTitle$ = new $TypeData().initClass({
+  Lchess_format_pgn_Tag$BlackTitle$: 0
+}, false, "chess.format.pgn.Tag$BlackTitle$", {
+  Lchess_format_pgn_Tag$BlackTitle$: 1,
+  O: 1,
+  Lchess_format_pgn_TagType: 1,
+  s_Product: 1,
+  s_Equals: 1,
+  Ljava_io_Serializable: 1
+});
+$c_Lchess_format_pgn_Tag$BlackTitle$.prototype.$classData = $d_Lchess_format_pgn_Tag$BlackTitle$;
+let $n_Lchess_format_pgn_Tag$BlackTitle$;
+function $m_Lchess_format_pgn_Tag$BlackTitle$() {
+  if ((!$n_Lchess_format_pgn_Tag$BlackTitle$)) {
+    $n_Lchess_format_pgn_Tag$BlackTitle$ = new $c_Lchess_format_pgn_Tag$BlackTitle$()
+  };
+  return $n_Lchess_format_pgn_Tag$BlackTitle$
+}
+const $p_Lchess_format_pgn_Tag$Date$__name$lzycompute__T = (function($thiz) {
+  if (((((1 & $thiz.Lchess_format_pgn_Tag$Date$__f_bitmap$0) << 24) >> 24) === 0)) {
+    $thiz.Lchess_format_pgn_Tag$Date$__f_name = "Date";
+    $thiz.Lchess_format_pgn_Tag$Date$__f_bitmap$0 = (((1 | $thiz.Lchess_format_pgn_Tag$Date$__f_bitmap$0) << 24) >> 24)
+  };
+  return $thiz.Lchess_format_pgn_Tag$Date$__f_name
+});
+const $p_Lchess_format_pgn_Tag$Date$__lowercase$lzycompute__T = (function($thiz) {
+  if (((((2 & $thiz.Lchess_format_pgn_Tag$Date$__f_bitmap$0) << 24) >> 24) === 0)) {
+    const this$1 = $thiz.name__T();
+    $thiz.Lchess_format_pgn_Tag$Date$__f_lowercase = $as_T(this$1.toLowerCase());
+    $thiz.Lchess_format_pgn_Tag$Date$__f_bitmap$0 = (((2 | $thiz.Lchess_format_pgn_Tag$Date$__f_bitmap$0) << 24) >> 24)
+  };
+  return $thiz.Lchess_format_pgn_Tag$Date$__f_lowercase
+});
+class $c_Lchess_format_pgn_Tag$Date$ extends $c_O {
+  constructor() {
+    super();
+    this.Lchess_format_pgn_Tag$Date$__f_name = null;
+    this.Lchess_format_pgn_Tag$Date$__f_lowercase = null;
+    this.Lchess_format_pgn_Tag$Date$__f_isUnknown = false;
+    this.Lchess_format_pgn_Tag$Date$__f_bitmap$0 = 0;
+    this.Lchess_format_pgn_Tag$Date$__f_bitmap$init$0 = false;
+    $n_Lchess_format_pgn_Tag$Date$ = this;
+    this.chess$format$pgn$TagType$_setter_$isUnknown_$eq__Z__V(false)
+  };
+  name__T() {
+    return (((((1 & this.Lchess_format_pgn_Tag$Date$__f_bitmap$0) << 24) >> 24) === 0) ? $p_Lchess_format_pgn_Tag$Date$__name$lzycompute__T(this) : this.Lchess_format_pgn_Tag$Date$__f_name)
+  };
+  lowercase__T() {
+    return (((((2 & this.Lchess_format_pgn_Tag$Date$__f_bitmap$0) << 24) >> 24) === 0) ? $p_Lchess_format_pgn_Tag$Date$__lowercase$lzycompute__T(this) : this.Lchess_format_pgn_Tag$Date$__f_lowercase)
+  };
+  chess$format$pgn$TagType$_setter_$isUnknown_$eq__Z__V(x$1) {
+    this.Lchess_format_pgn_Tag$Date$__f_isUnknown = x$1;
+    this.Lchess_format_pgn_Tag$Date$__f_bitmap$init$0 = true
+  };
+  productPrefix__T() {
+    return "Date"
+  };
+  productArity__I() {
+    return 0
+  };
+  productElement__I__O(x$1) {
+    return $m_sr_Statics$().ioobe__I__O(x$1)
+  };
+  productIterator__sc_Iterator() {
+    return new $c_sr_ScalaRunTime$$anon$1(this)
+  };
+  hashCode__I() {
+    return 2122702
+  };
+  toString__T() {
+    return "Date"
+  };
+}
+const $d_Lchess_format_pgn_Tag$Date$ = new $TypeData().initClass({
+  Lchess_format_pgn_Tag$Date$: 0
+}, false, "chess.format.pgn.Tag$Date$", {
+  Lchess_format_pgn_Tag$Date$: 1,
+  O: 1,
+  Lchess_format_pgn_TagType: 1,
+  s_Product: 1,
+  s_Equals: 1,
+  Ljava_io_Serializable: 1
+});
+$c_Lchess_format_pgn_Tag$Date$.prototype.$classData = $d_Lchess_format_pgn_Tag$Date$;
+let $n_Lchess_format_pgn_Tag$Date$;
+function $m_Lchess_format_pgn_Tag$Date$() {
+  if ((!$n_Lchess_format_pgn_Tag$Date$)) {
+    $n_Lchess_format_pgn_Tag$Date$ = new $c_Lchess_format_pgn_Tag$Date$()
+  };
+  return $n_Lchess_format_pgn_Tag$Date$
+}
+const $p_Lchess_format_pgn_Tag$ECO$__name$lzycompute__T = (function($thiz) {
+  if (((((1 & $thiz.Lchess_format_pgn_Tag$ECO$__f_bitmap$0) << 24) >> 24) === 0)) {
+    $thiz.Lchess_format_pgn_Tag$ECO$__f_name = "ECO";
+    $thiz.Lchess_format_pgn_Tag$ECO$__f_bitmap$0 = (((1 | $thiz.Lchess_format_pgn_Tag$ECO$__f_bitmap$0) << 24) >> 24)
+  };
+  return $thiz.Lchess_format_pgn_Tag$ECO$__f_name
+});
+const $p_Lchess_format_pgn_Tag$ECO$__lowercase$lzycompute__T = (function($thiz) {
+  if (((((2 & $thiz.Lchess_format_pgn_Tag$ECO$__f_bitmap$0) << 24) >> 24) === 0)) {
+    const this$1 = $thiz.name__T();
+    $thiz.Lchess_format_pgn_Tag$ECO$__f_lowercase = $as_T(this$1.toLowerCase());
+    $thiz.Lchess_format_pgn_Tag$ECO$__f_bitmap$0 = (((2 | $thiz.Lchess_format_pgn_Tag$ECO$__f_bitmap$0) << 24) >> 24)
+  };
+  return $thiz.Lchess_format_pgn_Tag$ECO$__f_lowercase
+});
+class $c_Lchess_format_pgn_Tag$ECO$ extends $c_O {
+  constructor() {
+    super();
+    this.Lchess_format_pgn_Tag$ECO$__f_name = null;
+    this.Lchess_format_pgn_Tag$ECO$__f_lowercase = null;
+    this.Lchess_format_pgn_Tag$ECO$__f_isUnknown = false;
+    this.Lchess_format_pgn_Tag$ECO$__f_bitmap$0 = 0;
+    this.Lchess_format_pgn_Tag$ECO$__f_bitmap$init$0 = false;
+    $n_Lchess_format_pgn_Tag$ECO$ = this;
+    this.chess$format$pgn$TagType$_setter_$isUnknown_$eq__Z__V(false)
+  };
+  name__T() {
+    return (((((1 & this.Lchess_format_pgn_Tag$ECO$__f_bitmap$0) << 24) >> 24) === 0) ? $p_Lchess_format_pgn_Tag$ECO$__name$lzycompute__T(this) : this.Lchess_format_pgn_Tag$ECO$__f_name)
+  };
+  lowercase__T() {
+    return (((((2 & this.Lchess_format_pgn_Tag$ECO$__f_bitmap$0) << 24) >> 24) === 0) ? $p_Lchess_format_pgn_Tag$ECO$__lowercase$lzycompute__T(this) : this.Lchess_format_pgn_Tag$ECO$__f_lowercase)
+  };
+  chess$format$pgn$TagType$_setter_$isUnknown_$eq__Z__V(x$1) {
+    this.Lchess_format_pgn_Tag$ECO$__f_isUnknown = x$1;
+    this.Lchess_format_pgn_Tag$ECO$__f_bitmap$init$0 = true
+  };
+  productPrefix__T() {
+    return "ECO"
+  };
+  productArity__I() {
+    return 0
+  };
+  productElement__I__O(x$1) {
+    return $m_sr_Statics$().ioobe__I__O(x$1)
+  };
+  productIterator__sc_Iterator() {
+    return new $c_sr_ScalaRunTime$$anon$1(this)
+  };
+  hashCode__I() {
+    return 68465
+  };
+  toString__T() {
+    return "ECO"
+  };
+}
+const $d_Lchess_format_pgn_Tag$ECO$ = new $TypeData().initClass({
+  Lchess_format_pgn_Tag$ECO$: 0
+}, false, "chess.format.pgn.Tag$ECO$", {
+  Lchess_format_pgn_Tag$ECO$: 1,
+  O: 1,
+  Lchess_format_pgn_TagType: 1,
+  s_Product: 1,
+  s_Equals: 1,
+  Ljava_io_Serializable: 1
+});
+$c_Lchess_format_pgn_Tag$ECO$.prototype.$classData = $d_Lchess_format_pgn_Tag$ECO$;
+let $n_Lchess_format_pgn_Tag$ECO$;
+function $m_Lchess_format_pgn_Tag$ECO$() {
+  if ((!$n_Lchess_format_pgn_Tag$ECO$)) {
+    $n_Lchess_format_pgn_Tag$ECO$ = new $c_Lchess_format_pgn_Tag$ECO$()
+  };
+  return $n_Lchess_format_pgn_Tag$ECO$
+}
+const $p_Lchess_format_pgn_Tag$Event$__name$lzycompute__T = (function($thiz) {
+  if (((((1 & $thiz.Lchess_format_pgn_Tag$Event$__f_bitmap$0) << 24) >> 24) === 0)) {
+    $thiz.Lchess_format_pgn_Tag$Event$__f_name = "Event";
+    $thiz.Lchess_format_pgn_Tag$Event$__f_bitmap$0 = (((1 | $thiz.Lchess_format_pgn_Tag$Event$__f_bitmap$0) << 24) >> 24)
+  };
+  return $thiz.Lchess_format_pgn_Tag$Event$__f_name
+});
+const $p_Lchess_format_pgn_Tag$Event$__lowercase$lzycompute__T = (function($thiz) {
+  if (((((2 & $thiz.Lchess_format_pgn_Tag$Event$__f_bitmap$0) << 24) >> 24) === 0)) {
+    const this$1 = $thiz.name__T();
+    $thiz.Lchess_format_pgn_Tag$Event$__f_lowercase = $as_T(this$1.toLowerCase());
+    $thiz.Lchess_format_pgn_Tag$Event$__f_bitmap$0 = (((2 | $thiz.Lchess_format_pgn_Tag$Event$__f_bitmap$0) << 24) >> 24)
+  };
+  return $thiz.Lchess_format_pgn_Tag$Event$__f_lowercase
+});
+class $c_Lchess_format_pgn_Tag$Event$ extends $c_O {
+  constructor() {
+    super();
+    this.Lchess_format_pgn_Tag$Event$__f_name = null;
+    this.Lchess_format_pgn_Tag$Event$__f_lowercase = null;
+    this.Lchess_format_pgn_Tag$Event$__f_isUnknown = false;
+    this.Lchess_format_pgn_Tag$Event$__f_bitmap$0 = 0;
+    this.Lchess_format_pgn_Tag$Event$__f_bitmap$init$0 = false;
+    $n_Lchess_format_pgn_Tag$Event$ = this;
+    this.chess$format$pgn$TagType$_setter_$isUnknown_$eq__Z__V(false)
+  };
+  name__T() {
+    return (((((1 & this.Lchess_format_pgn_Tag$Event$__f_bitmap$0) << 24) >> 24) === 0) ? $p_Lchess_format_pgn_Tag$Event$__name$lzycompute__T(this) : this.Lchess_format_pgn_Tag$Event$__f_name)
+  };
+  lowercase__T() {
+    return (((((2 & this.Lchess_format_pgn_Tag$Event$__f_bitmap$0) << 24) >> 24) === 0) ? $p_Lchess_format_pgn_Tag$Event$__lowercase$lzycompute__T(this) : this.Lchess_format_pgn_Tag$Event$__f_lowercase)
+  };
+  chess$format$pgn$TagType$_setter_$isUnknown_$eq__Z__V(x$1) {
+    this.Lchess_format_pgn_Tag$Event$__f_isUnknown = x$1;
+    this.Lchess_format_pgn_Tag$Event$__f_bitmap$init$0 = true
+  };
+  productPrefix__T() {
+    return "Event"
+  };
+  productArity__I() {
+    return 0
+  };
+  productElement__I__O(x$1) {
+    return $m_sr_Statics$().ioobe__I__O(x$1)
+  };
+  productIterator__sc_Iterator() {
+    return new $c_sr_ScalaRunTime$$anon$1(this)
+  };
+  hashCode__I() {
+    return 67338874
+  };
+  toString__T() {
+    return "Event"
+  };
+}
+const $d_Lchess_format_pgn_Tag$Event$ = new $TypeData().initClass({
+  Lchess_format_pgn_Tag$Event$: 0
+}, false, "chess.format.pgn.Tag$Event$", {
+  Lchess_format_pgn_Tag$Event$: 1,
+  O: 1,
+  Lchess_format_pgn_TagType: 1,
+  s_Product: 1,
+  s_Equals: 1,
+  Ljava_io_Serializable: 1
+});
+$c_Lchess_format_pgn_Tag$Event$.prototype.$classData = $d_Lchess_format_pgn_Tag$Event$;
+let $n_Lchess_format_pgn_Tag$Event$;
+function $m_Lchess_format_pgn_Tag$Event$() {
+  if ((!$n_Lchess_format_pgn_Tag$Event$)) {
+    $n_Lchess_format_pgn_Tag$Event$ = new $c_Lchess_format_pgn_Tag$Event$()
+  };
+  return $n_Lchess_format_pgn_Tag$Event$
+}
+const $p_Lchess_format_pgn_Tag$FEN$__name$lzycompute__T = (function($thiz) {
+  if (((((1 & $thiz.Lchess_format_pgn_Tag$FEN$__f_bitmap$0) << 24) >> 24) === 0)) {
+    $thiz.Lchess_format_pgn_Tag$FEN$__f_name = "FEN";
+    $thiz.Lchess_format_pgn_Tag$FEN$__f_bitmap$0 = (((1 | $thiz.Lchess_format_pgn_Tag$FEN$__f_bitmap$0) << 24) >> 24)
+  };
+  return $thiz.Lchess_format_pgn_Tag$FEN$__f_name
+});
+const $p_Lchess_format_pgn_Tag$FEN$__lowercase$lzycompute__T = (function($thiz) {
+  if (((((2 & $thiz.Lchess_format_pgn_Tag$FEN$__f_bitmap$0) << 24) >> 24) === 0)) {
+    const this$1 = $thiz.name__T();
+    $thiz.Lchess_format_pgn_Tag$FEN$__f_lowercase = $as_T(this$1.toLowerCase());
+    $thiz.Lchess_format_pgn_Tag$FEN$__f_bitmap$0 = (((2 | $thiz.Lchess_format_pgn_Tag$FEN$__f_bitmap$0) << 24) >> 24)
+  };
+  return $thiz.Lchess_format_pgn_Tag$FEN$__f_lowercase
+});
+class $c_Lchess_format_pgn_Tag$FEN$ extends $c_O {
+  constructor() {
+    super();
+    this.Lchess_format_pgn_Tag$FEN$__f_name = null;
+    this.Lchess_format_pgn_Tag$FEN$__f_lowercase = null;
+    this.Lchess_format_pgn_Tag$FEN$__f_isUnknown = false;
+    this.Lchess_format_pgn_Tag$FEN$__f_bitmap$0 = 0;
+    this.Lchess_format_pgn_Tag$FEN$__f_bitmap$init$0 = false;
+    $n_Lchess_format_pgn_Tag$FEN$ = this;
+    this.chess$format$pgn$TagType$_setter_$isUnknown_$eq__Z__V(false)
+  };
+  name__T() {
+    return (((((1 & this.Lchess_format_pgn_Tag$FEN$__f_bitmap$0) << 24) >> 24) === 0) ? $p_Lchess_format_pgn_Tag$FEN$__name$lzycompute__T(this) : this.Lchess_format_pgn_Tag$FEN$__f_name)
+  };
+  lowercase__T() {
+    return (((((2 & this.Lchess_format_pgn_Tag$FEN$__f_bitmap$0) << 24) >> 24) === 0) ? $p_Lchess_format_pgn_Tag$FEN$__lowercase$lzycompute__T(this) : this.Lchess_format_pgn_Tag$FEN$__f_lowercase)
+  };
+  chess$format$pgn$TagType$_setter_$isUnknown_$eq__Z__V(x$1) {
+    this.Lchess_format_pgn_Tag$FEN$__f_isUnknown = x$1;
+    this.Lchess_format_pgn_Tag$FEN$__f_bitmap$init$0 = true
+  };
+  productPrefix__T() {
+    return "FEN"
+  };
+  productArity__I() {
+    return 0
+  };
+  productElement__I__O(x$1) {
+    return $m_sr_Statics$().ioobe__I__O(x$1)
+  };
+  productIterator__sc_Iterator() {
+    return new $c_sr_ScalaRunTime$$anon$1(this)
+  };
+  hashCode__I() {
+    return 69487
+  };
+  toString__T() {
+    return "FEN"
+  };
+}
+const $d_Lchess_format_pgn_Tag$FEN$ = new $TypeData().initClass({
+  Lchess_format_pgn_Tag$FEN$: 0
+}, false, "chess.format.pgn.Tag$FEN$", {
+  Lchess_format_pgn_Tag$FEN$: 1,
+  O: 1,
+  Lchess_format_pgn_TagType: 1,
+  s_Product: 1,
+  s_Equals: 1,
+  Ljava_io_Serializable: 1
+});
+$c_Lchess_format_pgn_Tag$FEN$.prototype.$classData = $d_Lchess_format_pgn_Tag$FEN$;
+let $n_Lchess_format_pgn_Tag$FEN$;
+function $m_Lchess_format_pgn_Tag$FEN$() {
+  if ((!$n_Lchess_format_pgn_Tag$FEN$)) {
+    $n_Lchess_format_pgn_Tag$FEN$ = new $c_Lchess_format_pgn_Tag$FEN$()
+  };
+  return $n_Lchess_format_pgn_Tag$FEN$
+}
+const $p_Lchess_format_pgn_Tag$Opening$__name$lzycompute__T = (function($thiz) {
+  if (((((1 & $thiz.Lchess_format_pgn_Tag$Opening$__f_bitmap$0) << 24) >> 24) === 0)) {
+    $thiz.Lchess_format_pgn_Tag$Opening$__f_name = "Opening";
+    $thiz.Lchess_format_pgn_Tag$Opening$__f_bitmap$0 = (((1 | $thiz.Lchess_format_pgn_Tag$Opening$__f_bitmap$0) << 24) >> 24)
+  };
+  return $thiz.Lchess_format_pgn_Tag$Opening$__f_name
+});
+const $p_Lchess_format_pgn_Tag$Opening$__lowercase$lzycompute__T = (function($thiz) {
+  if (((((2 & $thiz.Lchess_format_pgn_Tag$Opening$__f_bitmap$0) << 24) >> 24) === 0)) {
+    const this$1 = $thiz.name__T();
+    $thiz.Lchess_format_pgn_Tag$Opening$__f_lowercase = $as_T(this$1.toLowerCase());
+    $thiz.Lchess_format_pgn_Tag$Opening$__f_bitmap$0 = (((2 | $thiz.Lchess_format_pgn_Tag$Opening$__f_bitmap$0) << 24) >> 24)
+  };
+  return $thiz.Lchess_format_pgn_Tag$Opening$__f_lowercase
+});
+class $c_Lchess_format_pgn_Tag$Opening$ extends $c_O {
+  constructor() {
+    super();
+    this.Lchess_format_pgn_Tag$Opening$__f_name = null;
+    this.Lchess_format_pgn_Tag$Opening$__f_lowercase = null;
+    this.Lchess_format_pgn_Tag$Opening$__f_isUnknown = false;
+    this.Lchess_format_pgn_Tag$Opening$__f_bitmap$0 = 0;
+    this.Lchess_format_pgn_Tag$Opening$__f_bitmap$init$0 = false;
+    $n_Lchess_format_pgn_Tag$Opening$ = this;
+    this.chess$format$pgn$TagType$_setter_$isUnknown_$eq__Z__V(false)
+  };
+  name__T() {
+    return (((((1 & this.Lchess_format_pgn_Tag$Opening$__f_bitmap$0) << 24) >> 24) === 0) ? $p_Lchess_format_pgn_Tag$Opening$__name$lzycompute__T(this) : this.Lchess_format_pgn_Tag$Opening$__f_name)
+  };
+  lowercase__T() {
+    return (((((2 & this.Lchess_format_pgn_Tag$Opening$__f_bitmap$0) << 24) >> 24) === 0) ? $p_Lchess_format_pgn_Tag$Opening$__lowercase$lzycompute__T(this) : this.Lchess_format_pgn_Tag$Opening$__f_lowercase)
+  };
+  chess$format$pgn$TagType$_setter_$isUnknown_$eq__Z__V(x$1) {
+    this.Lchess_format_pgn_Tag$Opening$__f_isUnknown = x$1;
+    this.Lchess_format_pgn_Tag$Opening$__f_bitmap$init$0 = true
+  };
+  productPrefix__T() {
+    return "Opening"
+  };
+  productArity__I() {
+    return 0
+  };
+  productElement__I__O(x$1) {
+    return $m_sr_Statics$().ioobe__I__O(x$1)
+  };
+  productIterator__sc_Iterator() {
+    return new $c_sr_ScalaRunTime$$anon$1(this)
+  };
+  hashCode__I() {
+    return 401468728
+  };
+  toString__T() {
+    return "Opening"
+  };
+}
+const $d_Lchess_format_pgn_Tag$Opening$ = new $TypeData().initClass({
+  Lchess_format_pgn_Tag$Opening$: 0
+}, false, "chess.format.pgn.Tag$Opening$", {
+  Lchess_format_pgn_Tag$Opening$: 1,
+  O: 1,
+  Lchess_format_pgn_TagType: 1,
+  s_Product: 1,
+  s_Equals: 1,
+  Ljava_io_Serializable: 1
+});
+$c_Lchess_format_pgn_Tag$Opening$.prototype.$classData = $d_Lchess_format_pgn_Tag$Opening$;
+let $n_Lchess_format_pgn_Tag$Opening$;
+function $m_Lchess_format_pgn_Tag$Opening$() {
+  if ((!$n_Lchess_format_pgn_Tag$Opening$)) {
+    $n_Lchess_format_pgn_Tag$Opening$ = new $c_Lchess_format_pgn_Tag$Opening$()
+  };
+  return $n_Lchess_format_pgn_Tag$Opening$
+}
+const $p_Lchess_format_pgn_Tag$Result$__name$lzycompute__T = (function($thiz) {
+  if (((((1 & $thiz.Lchess_format_pgn_Tag$Result$__f_bitmap$0) << 24) >> 24) === 0)) {
+    $thiz.Lchess_format_pgn_Tag$Result$__f_name = "Result";
+    $thiz.Lchess_format_pgn_Tag$Result$__f_bitmap$0 = (((1 | $thiz.Lchess_format_pgn_Tag$Result$__f_bitmap$0) << 24) >> 24)
+  };
+  return $thiz.Lchess_format_pgn_Tag$Result$__f_name
+});
+const $p_Lchess_format_pgn_Tag$Result$__lowercase$lzycompute__T = (function($thiz) {
+  if (((((2 & $thiz.Lchess_format_pgn_Tag$Result$__f_bitmap$0) << 24) >> 24) === 0)) {
+    const this$1 = $thiz.name__T();
+    $thiz.Lchess_format_pgn_Tag$Result$__f_lowercase = $as_T(this$1.toLowerCase());
+    $thiz.Lchess_format_pgn_Tag$Result$__f_bitmap$0 = (((2 | $thiz.Lchess_format_pgn_Tag$Result$__f_bitmap$0) << 24) >> 24)
+  };
+  return $thiz.Lchess_format_pgn_Tag$Result$__f_lowercase
+});
+class $c_Lchess_format_pgn_Tag$Result$ extends $c_O {
+  constructor() {
+    super();
+    this.Lchess_format_pgn_Tag$Result$__f_name = null;
+    this.Lchess_format_pgn_Tag$Result$__f_lowercase = null;
+    this.Lchess_format_pgn_Tag$Result$__f_isUnknown = false;
+    this.Lchess_format_pgn_Tag$Result$__f_bitmap$0 = 0;
+    this.Lchess_format_pgn_Tag$Result$__f_bitmap$init$0 = false;
+    $n_Lchess_format_pgn_Tag$Result$ = this;
+    this.chess$format$pgn$TagType$_setter_$isUnknown_$eq__Z__V(false)
+  };
+  name__T() {
+    return (((((1 & this.Lchess_format_pgn_Tag$Result$__f_bitmap$0) << 24) >> 24) === 0) ? $p_Lchess_format_pgn_Tag$Result$__name$lzycompute__T(this) : this.Lchess_format_pgn_Tag$Result$__f_name)
+  };
+  lowercase__T() {
+    return (((((2 & this.Lchess_format_pgn_Tag$Result$__f_bitmap$0) << 24) >> 24) === 0) ? $p_Lchess_format_pgn_Tag$Result$__lowercase$lzycompute__T(this) : this.Lchess_format_pgn_Tag$Result$__f_lowercase)
+  };
+  chess$format$pgn$TagType$_setter_$isUnknown_$eq__Z__V(x$1) {
+    this.Lchess_format_pgn_Tag$Result$__f_isUnknown = x$1;
+    this.Lchess_format_pgn_Tag$Result$__f_bitmap$init$0 = true
+  };
+  productPrefix__T() {
+    return "Result"
+  };
+  productArity__I() {
+    return 0
+  };
+  productElement__I__O(x$1) {
+    return $m_sr_Statics$().ioobe__I__O(x$1)
+  };
+  productIterator__sc_Iterator() {
+    return new $c_sr_ScalaRunTime$$anon$1(this)
+  };
+  hashCode__I() {
+    return (-1850559427)
+  };
+  toString__T() {
+    return "Result"
+  };
+}
+const $d_Lchess_format_pgn_Tag$Result$ = new $TypeData().initClass({
+  Lchess_format_pgn_Tag$Result$: 0
+}, false, "chess.format.pgn.Tag$Result$", {
+  Lchess_format_pgn_Tag$Result$: 1,
+  O: 1,
+  Lchess_format_pgn_TagType: 1,
+  s_Product: 1,
+  s_Equals: 1,
+  Ljava_io_Serializable: 1
+});
+$c_Lchess_format_pgn_Tag$Result$.prototype.$classData = $d_Lchess_format_pgn_Tag$Result$;
+let $n_Lchess_format_pgn_Tag$Result$;
+function $m_Lchess_format_pgn_Tag$Result$() {
+  if ((!$n_Lchess_format_pgn_Tag$Result$)) {
+    $n_Lchess_format_pgn_Tag$Result$ = new $c_Lchess_format_pgn_Tag$Result$()
+  };
+  return $n_Lchess_format_pgn_Tag$Result$
+}
+const $p_Lchess_format_pgn_Tag$Round$__name$lzycompute__T = (function($thiz) {
+  if (((((1 & $thiz.Lchess_format_pgn_Tag$Round$__f_bitmap$0) << 24) >> 24) === 0)) {
+    $thiz.Lchess_format_pgn_Tag$Round$__f_name = "Round";
+    $thiz.Lchess_format_pgn_Tag$Round$__f_bitmap$0 = (((1 | $thiz.Lchess_format_pgn_Tag$Round$__f_bitmap$0) << 24) >> 24)
+  };
+  return $thiz.Lchess_format_pgn_Tag$Round$__f_name
+});
+const $p_Lchess_format_pgn_Tag$Round$__lowercase$lzycompute__T = (function($thiz) {
+  if (((((2 & $thiz.Lchess_format_pgn_Tag$Round$__f_bitmap$0) << 24) >> 24) === 0)) {
+    const this$1 = $thiz.name__T();
+    $thiz.Lchess_format_pgn_Tag$Round$__f_lowercase = $as_T(this$1.toLowerCase());
+    $thiz.Lchess_format_pgn_Tag$Round$__f_bitmap$0 = (((2 | $thiz.Lchess_format_pgn_Tag$Round$__f_bitmap$0) << 24) >> 24)
+  };
+  return $thiz.Lchess_format_pgn_Tag$Round$__f_lowercase
+});
+class $c_Lchess_format_pgn_Tag$Round$ extends $c_O {
+  constructor() {
+    super();
+    this.Lchess_format_pgn_Tag$Round$__f_name = null;
+    this.Lchess_format_pgn_Tag$Round$__f_lowercase = null;
+    this.Lchess_format_pgn_Tag$Round$__f_isUnknown = false;
+    this.Lchess_format_pgn_Tag$Round$__f_bitmap$0 = 0;
+    this.Lchess_format_pgn_Tag$Round$__f_bitmap$init$0 = false;
+    $n_Lchess_format_pgn_Tag$Round$ = this;
+    this.chess$format$pgn$TagType$_setter_$isUnknown_$eq__Z__V(false)
+  };
+  name__T() {
+    return (((((1 & this.Lchess_format_pgn_Tag$Round$__f_bitmap$0) << 24) >> 24) === 0) ? $p_Lchess_format_pgn_Tag$Round$__name$lzycompute__T(this) : this.Lchess_format_pgn_Tag$Round$__f_name)
+  };
+  lowercase__T() {
+    return (((((2 & this.Lchess_format_pgn_Tag$Round$__f_bitmap$0) << 24) >> 24) === 0) ? $p_Lchess_format_pgn_Tag$Round$__lowercase$lzycompute__T(this) : this.Lchess_format_pgn_Tag$Round$__f_lowercase)
+  };
+  chess$format$pgn$TagType$_setter_$isUnknown_$eq__Z__V(x$1) {
+    this.Lchess_format_pgn_Tag$Round$__f_isUnknown = x$1;
+    this.Lchess_format_pgn_Tag$Round$__f_bitmap$init$0 = true
+  };
+  productPrefix__T() {
+    return "Round"
+  };
+  productArity__I() {
+    return 0
+  };
+  productElement__I__O(x$1) {
+    return $m_sr_Statics$().ioobe__I__O(x$1)
+  };
+  productIterator__sc_Iterator() {
+    return new $c_sr_ScalaRunTime$$anon$1(this)
+  };
+  hashCode__I() {
+    return 79151470
+  };
+  toString__T() {
+    return "Round"
+  };
+}
+const $d_Lchess_format_pgn_Tag$Round$ = new $TypeData().initClass({
+  Lchess_format_pgn_Tag$Round$: 0
+}, false, "chess.format.pgn.Tag$Round$", {
+  Lchess_format_pgn_Tag$Round$: 1,
+  O: 1,
+  Lchess_format_pgn_TagType: 1,
+  s_Product: 1,
+  s_Equals: 1,
+  Ljava_io_Serializable: 1
+});
+$c_Lchess_format_pgn_Tag$Round$.prototype.$classData = $d_Lchess_format_pgn_Tag$Round$;
+let $n_Lchess_format_pgn_Tag$Round$;
+function $m_Lchess_format_pgn_Tag$Round$() {
+  if ((!$n_Lchess_format_pgn_Tag$Round$)) {
+    $n_Lchess_format_pgn_Tag$Round$ = new $c_Lchess_format_pgn_Tag$Round$()
+  };
+  return $n_Lchess_format_pgn_Tag$Round$
+}
+const $p_Lchess_format_pgn_Tag$Site$__name$lzycompute__T = (function($thiz) {
+  if (((((1 & $thiz.Lchess_format_pgn_Tag$Site$__f_bitmap$0) << 24) >> 24) === 0)) {
+    $thiz.Lchess_format_pgn_Tag$Site$__f_name = "Site";
+    $thiz.Lchess_format_pgn_Tag$Site$__f_bitmap$0 = (((1 | $thiz.Lchess_format_pgn_Tag$Site$__f_bitmap$0) << 24) >> 24)
+  };
+  return $thiz.Lchess_format_pgn_Tag$Site$__f_name
+});
+const $p_Lchess_format_pgn_Tag$Site$__lowercase$lzycompute__T = (function($thiz) {
+  if (((((2 & $thiz.Lchess_format_pgn_Tag$Site$__f_bitmap$0) << 24) >> 24) === 0)) {
+    const this$1 = $thiz.name__T();
+    $thiz.Lchess_format_pgn_Tag$Site$__f_lowercase = $as_T(this$1.toLowerCase());
+    $thiz.Lchess_format_pgn_Tag$Site$__f_bitmap$0 = (((2 | $thiz.Lchess_format_pgn_Tag$Site$__f_bitmap$0) << 24) >> 24)
+  };
+  return $thiz.Lchess_format_pgn_Tag$Site$__f_lowercase
+});
+class $c_Lchess_format_pgn_Tag$Site$ extends $c_O {
+  constructor() {
+    super();
+    this.Lchess_format_pgn_Tag$Site$__f_name = null;
+    this.Lchess_format_pgn_Tag$Site$__f_lowercase = null;
+    this.Lchess_format_pgn_Tag$Site$__f_isUnknown = false;
+    this.Lchess_format_pgn_Tag$Site$__f_bitmap$0 = 0;
+    this.Lchess_format_pgn_Tag$Site$__f_bitmap$init$0 = false;
+    $n_Lchess_format_pgn_Tag$Site$ = this;
+    this.chess$format$pgn$TagType$_setter_$isUnknown_$eq__Z__V(false)
+  };
+  name__T() {
+    return (((((1 & this.Lchess_format_pgn_Tag$Site$__f_bitmap$0) << 24) >> 24) === 0) ? $p_Lchess_format_pgn_Tag$Site$__name$lzycompute__T(this) : this.Lchess_format_pgn_Tag$Site$__f_name)
+  };
+  lowercase__T() {
+    return (((((2 & this.Lchess_format_pgn_Tag$Site$__f_bitmap$0) << 24) >> 24) === 0) ? $p_Lchess_format_pgn_Tag$Site$__lowercase$lzycompute__T(this) : this.Lchess_format_pgn_Tag$Site$__f_lowercase)
+  };
+  chess$format$pgn$TagType$_setter_$isUnknown_$eq__Z__V(x$1) {
+    this.Lchess_format_pgn_Tag$Site$__f_isUnknown = x$1;
+    this.Lchess_format_pgn_Tag$Site$__f_bitmap$init$0 = true
+  };
+  productPrefix__T() {
+    return "Site"
+  };
+  productArity__I() {
+    return 0
+  };
+  productElement__I__O(x$1) {
+    return $m_sr_Statics$().ioobe__I__O(x$1)
+  };
+  productIterator__sc_Iterator() {
+    return new $c_sr_ScalaRunTime$$anon$1(this)
+  };
+  hashCode__I() {
+    return 2577255
+  };
+  toString__T() {
+    return "Site"
+  };
+}
+const $d_Lchess_format_pgn_Tag$Site$ = new $TypeData().initClass({
+  Lchess_format_pgn_Tag$Site$: 0
+}, false, "chess.format.pgn.Tag$Site$", {
+  Lchess_format_pgn_Tag$Site$: 1,
+  O: 1,
+  Lchess_format_pgn_TagType: 1,
+  s_Product: 1,
+  s_Equals: 1,
+  Ljava_io_Serializable: 1
+});
+$c_Lchess_format_pgn_Tag$Site$.prototype.$classData = $d_Lchess_format_pgn_Tag$Site$;
+let $n_Lchess_format_pgn_Tag$Site$;
+function $m_Lchess_format_pgn_Tag$Site$() {
+  if ((!$n_Lchess_format_pgn_Tag$Site$)) {
+    $n_Lchess_format_pgn_Tag$Site$ = new $c_Lchess_format_pgn_Tag$Site$()
+  };
+  return $n_Lchess_format_pgn_Tag$Site$
+}
+const $p_Lchess_format_pgn_Tag$Termination$__name$lzycompute__T = (function($thiz) {
+  if (((((1 & $thiz.Lchess_format_pgn_Tag$Termination$__f_bitmap$0) << 24) >> 24) === 0)) {
+    $thiz.Lchess_format_pgn_Tag$Termination$__f_name = "Termination";
+    $thiz.Lchess_format_pgn_Tag$Termination$__f_bitmap$0 = (((1 | $thiz.Lchess_format_pgn_Tag$Termination$__f_bitmap$0) << 24) >> 24)
+  };
+  return $thiz.Lchess_format_pgn_Tag$Termination$__f_name
+});
+const $p_Lchess_format_pgn_Tag$Termination$__lowercase$lzycompute__T = (function($thiz) {
+  if (((((2 & $thiz.Lchess_format_pgn_Tag$Termination$__f_bitmap$0) << 24) >> 24) === 0)) {
+    const this$1 = $thiz.name__T();
+    $thiz.Lchess_format_pgn_Tag$Termination$__f_lowercase = $as_T(this$1.toLowerCase());
+    $thiz.Lchess_format_pgn_Tag$Termination$__f_bitmap$0 = (((2 | $thiz.Lchess_format_pgn_Tag$Termination$__f_bitmap$0) << 24) >> 24)
+  };
+  return $thiz.Lchess_format_pgn_Tag$Termination$__f_lowercase
+});
+class $c_Lchess_format_pgn_Tag$Termination$ extends $c_O {
+  constructor() {
+    super();
+    this.Lchess_format_pgn_Tag$Termination$__f_name = null;
+    this.Lchess_format_pgn_Tag$Termination$__f_lowercase = null;
+    this.Lchess_format_pgn_Tag$Termination$__f_isUnknown = false;
+    this.Lchess_format_pgn_Tag$Termination$__f_bitmap$0 = 0;
+    this.Lchess_format_pgn_Tag$Termination$__f_bitmap$init$0 = false;
+    $n_Lchess_format_pgn_Tag$Termination$ = this;
+    this.chess$format$pgn$TagType$_setter_$isUnknown_$eq__Z__V(false)
+  };
+  name__T() {
+    return (((((1 & this.Lchess_format_pgn_Tag$Termination$__f_bitmap$0) << 24) >> 24) === 0) ? $p_Lchess_format_pgn_Tag$Termination$__name$lzycompute__T(this) : this.Lchess_format_pgn_Tag$Termination$__f_name)
+  };
+  lowercase__T() {
+    return (((((2 & this.Lchess_format_pgn_Tag$Termination$__f_bitmap$0) << 24) >> 24) === 0) ? $p_Lchess_format_pgn_Tag$Termination$__lowercase$lzycompute__T(this) : this.Lchess_format_pgn_Tag$Termination$__f_lowercase)
+  };
+  chess$format$pgn$TagType$_setter_$isUnknown_$eq__Z__V(x$1) {
+    this.Lchess_format_pgn_Tag$Termination$__f_isUnknown = x$1;
+    this.Lchess_format_pgn_Tag$Termination$__f_bitmap$init$0 = true
+  };
+  productPrefix__T() {
+    return "Termination"
+  };
+  productArity__I() {
+    return 0
+  };
+  productElement__I__O(x$1) {
+    return $m_sr_Statics$().ioobe__I__O(x$1)
+  };
+  productIterator__sc_Iterator() {
+    return new $c_sr_ScalaRunTime$$anon$1(this)
+  };
+  hashCode__I() {
+    return (-250712348)
+  };
+  toString__T() {
+    return "Termination"
+  };
+}
+const $d_Lchess_format_pgn_Tag$Termination$ = new $TypeData().initClass({
+  Lchess_format_pgn_Tag$Termination$: 0
+}, false, "chess.format.pgn.Tag$Termination$", {
+  Lchess_format_pgn_Tag$Termination$: 1,
+  O: 1,
+  Lchess_format_pgn_TagType: 1,
+  s_Product: 1,
+  s_Equals: 1,
+  Ljava_io_Serializable: 1
+});
+$c_Lchess_format_pgn_Tag$Termination$.prototype.$classData = $d_Lchess_format_pgn_Tag$Termination$;
+let $n_Lchess_format_pgn_Tag$Termination$;
+function $m_Lchess_format_pgn_Tag$Termination$() {
+  if ((!$n_Lchess_format_pgn_Tag$Termination$)) {
+    $n_Lchess_format_pgn_Tag$Termination$ = new $c_Lchess_format_pgn_Tag$Termination$()
+  };
+  return $n_Lchess_format_pgn_Tag$Termination$
+}
+const $p_Lchess_format_pgn_Tag$TimeControl$__name$lzycompute__T = (function($thiz) {
+  if (((((1 & $thiz.Lchess_format_pgn_Tag$TimeControl$__f_bitmap$0) << 24) >> 24) === 0)) {
+    $thiz.Lchess_format_pgn_Tag$TimeControl$__f_name = "TimeControl";
+    $thiz.Lchess_format_pgn_Tag$TimeControl$__f_bitmap$0 = (((1 | $thiz.Lchess_format_pgn_Tag$TimeControl$__f_bitmap$0) << 24) >> 24)
+  };
+  return $thiz.Lchess_format_pgn_Tag$TimeControl$__f_name
+});
+const $p_Lchess_format_pgn_Tag$TimeControl$__lowercase$lzycompute__T = (function($thiz) {
+  if (((((2 & $thiz.Lchess_format_pgn_Tag$TimeControl$__f_bitmap$0) << 24) >> 24) === 0)) {
+    const this$1 = $thiz.name__T();
+    $thiz.Lchess_format_pgn_Tag$TimeControl$__f_lowercase = $as_T(this$1.toLowerCase());
+    $thiz.Lchess_format_pgn_Tag$TimeControl$__f_bitmap$0 = (((2 | $thiz.Lchess_format_pgn_Tag$TimeControl$__f_bitmap$0) << 24) >> 24)
+  };
+  return $thiz.Lchess_format_pgn_Tag$TimeControl$__f_lowercase
+});
+class $c_Lchess_format_pgn_Tag$TimeControl$ extends $c_O {
+  constructor() {
+    super();
+    this.Lchess_format_pgn_Tag$TimeControl$__f_name = null;
+    this.Lchess_format_pgn_Tag$TimeControl$__f_lowercase = null;
+    this.Lchess_format_pgn_Tag$TimeControl$__f_isUnknown = false;
+    this.Lchess_format_pgn_Tag$TimeControl$__f_bitmap$0 = 0;
+    this.Lchess_format_pgn_Tag$TimeControl$__f_bitmap$init$0 = false;
+    $n_Lchess_format_pgn_Tag$TimeControl$ = this;
+    this.chess$format$pgn$TagType$_setter_$isUnknown_$eq__Z__V(false)
+  };
+  name__T() {
+    return (((((1 & this.Lchess_format_pgn_Tag$TimeControl$__f_bitmap$0) << 24) >> 24) === 0) ? $p_Lchess_format_pgn_Tag$TimeControl$__name$lzycompute__T(this) : this.Lchess_format_pgn_Tag$TimeControl$__f_name)
+  };
+  lowercase__T() {
+    return (((((2 & this.Lchess_format_pgn_Tag$TimeControl$__f_bitmap$0) << 24) >> 24) === 0) ? $p_Lchess_format_pgn_Tag$TimeControl$__lowercase$lzycompute__T(this) : this.Lchess_format_pgn_Tag$TimeControl$__f_lowercase)
+  };
+  chess$format$pgn$TagType$_setter_$isUnknown_$eq__Z__V(x$1) {
+    this.Lchess_format_pgn_Tag$TimeControl$__f_isUnknown = x$1;
+    this.Lchess_format_pgn_Tag$TimeControl$__f_bitmap$init$0 = true
+  };
+  productPrefix__T() {
+    return "TimeControl"
+  };
+  productArity__I() {
+    return 0
+  };
+  productElement__I__O(x$1) {
+    return $m_sr_Statics$().ioobe__I__O(x$1)
+  };
+  productIterator__sc_Iterator() {
+    return new $c_sr_ScalaRunTime$$anon$1(this)
+  };
+  hashCode__I() {
+    return (-971767376)
+  };
+  toString__T() {
+    return "TimeControl"
+  };
+}
+const $d_Lchess_format_pgn_Tag$TimeControl$ = new $TypeData().initClass({
+  Lchess_format_pgn_Tag$TimeControl$: 0
+}, false, "chess.format.pgn.Tag$TimeControl$", {
+  Lchess_format_pgn_Tag$TimeControl$: 1,
+  O: 1,
+  Lchess_format_pgn_TagType: 1,
+  s_Product: 1,
+  s_Equals: 1,
+  Ljava_io_Serializable: 1
+});
+$c_Lchess_format_pgn_Tag$TimeControl$.prototype.$classData = $d_Lchess_format_pgn_Tag$TimeControl$;
+let $n_Lchess_format_pgn_Tag$TimeControl$;
+function $m_Lchess_format_pgn_Tag$TimeControl$() {
+  if ((!$n_Lchess_format_pgn_Tag$TimeControl$)) {
+    $n_Lchess_format_pgn_Tag$TimeControl$ = new $c_Lchess_format_pgn_Tag$TimeControl$()
+  };
+  return $n_Lchess_format_pgn_Tag$TimeControl$
+}
+const $p_Lchess_format_pgn_Tag$UTCDate$__name$lzycompute__T = (function($thiz) {
+  if (((((1 & $thiz.Lchess_format_pgn_Tag$UTCDate$__f_bitmap$0) << 24) >> 24) === 0)) {
+    $thiz.Lchess_format_pgn_Tag$UTCDate$__f_name = "UTCDate";
+    $thiz.Lchess_format_pgn_Tag$UTCDate$__f_bitmap$0 = (((1 | $thiz.Lchess_format_pgn_Tag$UTCDate$__f_bitmap$0) << 24) >> 24)
+  };
+  return $thiz.Lchess_format_pgn_Tag$UTCDate$__f_name
+});
+const $p_Lchess_format_pgn_Tag$UTCDate$__lowercase$lzycompute__T = (function($thiz) {
+  if (((((2 & $thiz.Lchess_format_pgn_Tag$UTCDate$__f_bitmap$0) << 24) >> 24) === 0)) {
+    const this$1 = $thiz.name__T();
+    $thiz.Lchess_format_pgn_Tag$UTCDate$__f_lowercase = $as_T(this$1.toLowerCase());
+    $thiz.Lchess_format_pgn_Tag$UTCDate$__f_bitmap$0 = (((2 | $thiz.Lchess_format_pgn_Tag$UTCDate$__f_bitmap$0) << 24) >> 24)
+  };
+  return $thiz.Lchess_format_pgn_Tag$UTCDate$__f_lowercase
+});
+class $c_Lchess_format_pgn_Tag$UTCDate$ extends $c_O {
+  constructor() {
+    super();
+    this.Lchess_format_pgn_Tag$UTCDate$__f_name = null;
+    this.Lchess_format_pgn_Tag$UTCDate$__f_lowercase = null;
+    this.Lchess_format_pgn_Tag$UTCDate$__f_isUnknown = false;
+    this.Lchess_format_pgn_Tag$UTCDate$__f_bitmap$0 = 0;
+    this.Lchess_format_pgn_Tag$UTCDate$__f_bitmap$init$0 = false;
+    $n_Lchess_format_pgn_Tag$UTCDate$ = this;
+    this.chess$format$pgn$TagType$_setter_$isUnknown_$eq__Z__V(false)
+  };
+  name__T() {
+    return (((((1 & this.Lchess_format_pgn_Tag$UTCDate$__f_bitmap$0) << 24) >> 24) === 0) ? $p_Lchess_format_pgn_Tag$UTCDate$__name$lzycompute__T(this) : this.Lchess_format_pgn_Tag$UTCDate$__f_name)
+  };
+  lowercase__T() {
+    return (((((2 & this.Lchess_format_pgn_Tag$UTCDate$__f_bitmap$0) << 24) >> 24) === 0) ? $p_Lchess_format_pgn_Tag$UTCDate$__lowercase$lzycompute__T(this) : this.Lchess_format_pgn_Tag$UTCDate$__f_lowercase)
+  };
+  chess$format$pgn$TagType$_setter_$isUnknown_$eq__Z__V(x$1) {
+    this.Lchess_format_pgn_Tag$UTCDate$__f_isUnknown = x$1;
+    this.Lchess_format_pgn_Tag$UTCDate$__f_bitmap$init$0 = true
+  };
+  productPrefix__T() {
+    return "UTCDate"
+  };
+  productArity__I() {
+    return 0
+  };
+  productElement__I__O(x$1) {
+    return $m_sr_Statics$().ioobe__I__O(x$1)
+  };
+  productIterator__sc_Iterator() {
+    return new $c_sr_ScalaRunTime$$anon$1(this)
+  };
+  hashCode__I() {
+    return 597248850
+  };
+  toString__T() {
+    return "UTCDate"
+  };
+}
+const $d_Lchess_format_pgn_Tag$UTCDate$ = new $TypeData().initClass({
+  Lchess_format_pgn_Tag$UTCDate$: 0
+}, false, "chess.format.pgn.Tag$UTCDate$", {
+  Lchess_format_pgn_Tag$UTCDate$: 1,
+  O: 1,
+  Lchess_format_pgn_TagType: 1,
+  s_Product: 1,
+  s_Equals: 1,
+  Ljava_io_Serializable: 1
+});
+$c_Lchess_format_pgn_Tag$UTCDate$.prototype.$classData = $d_Lchess_format_pgn_Tag$UTCDate$;
+let $n_Lchess_format_pgn_Tag$UTCDate$;
+function $m_Lchess_format_pgn_Tag$UTCDate$() {
+  if ((!$n_Lchess_format_pgn_Tag$UTCDate$)) {
+    $n_Lchess_format_pgn_Tag$UTCDate$ = new $c_Lchess_format_pgn_Tag$UTCDate$()
+  };
+  return $n_Lchess_format_pgn_Tag$UTCDate$
+}
+const $p_Lchess_format_pgn_Tag$UTCTime$__name$lzycompute__T = (function($thiz) {
+  if (((((1 & $thiz.Lchess_format_pgn_Tag$UTCTime$__f_bitmap$0) << 24) >> 24) === 0)) {
+    $thiz.Lchess_format_pgn_Tag$UTCTime$__f_name = "UTCTime";
+    $thiz.Lchess_format_pgn_Tag$UTCTime$__f_bitmap$0 = (((1 | $thiz.Lchess_format_pgn_Tag$UTCTime$__f_bitmap$0) << 24) >> 24)
+  };
+  return $thiz.Lchess_format_pgn_Tag$UTCTime$__f_name
+});
+const $p_Lchess_format_pgn_Tag$UTCTime$__lowercase$lzycompute__T = (function($thiz) {
+  if (((((2 & $thiz.Lchess_format_pgn_Tag$UTCTime$__f_bitmap$0) << 24) >> 24) === 0)) {
+    const this$1 = $thiz.name__T();
+    $thiz.Lchess_format_pgn_Tag$UTCTime$__f_lowercase = $as_T(this$1.toLowerCase());
+    $thiz.Lchess_format_pgn_Tag$UTCTime$__f_bitmap$0 = (((2 | $thiz.Lchess_format_pgn_Tag$UTCTime$__f_bitmap$0) << 24) >> 24)
+  };
+  return $thiz.Lchess_format_pgn_Tag$UTCTime$__f_lowercase
+});
+class $c_Lchess_format_pgn_Tag$UTCTime$ extends $c_O {
+  constructor() {
+    super();
+    this.Lchess_format_pgn_Tag$UTCTime$__f_name = null;
+    this.Lchess_format_pgn_Tag$UTCTime$__f_lowercase = null;
+    this.Lchess_format_pgn_Tag$UTCTime$__f_isUnknown = false;
+    this.Lchess_format_pgn_Tag$UTCTime$__f_bitmap$0 = 0;
+    this.Lchess_format_pgn_Tag$UTCTime$__f_bitmap$init$0 = false;
+    $n_Lchess_format_pgn_Tag$UTCTime$ = this;
+    this.chess$format$pgn$TagType$_setter_$isUnknown_$eq__Z__V(false)
+  };
+  name__T() {
+    return (((((1 & this.Lchess_format_pgn_Tag$UTCTime$__f_bitmap$0) << 24) >> 24) === 0) ? $p_Lchess_format_pgn_Tag$UTCTime$__name$lzycompute__T(this) : this.Lchess_format_pgn_Tag$UTCTime$__f_name)
+  };
+  lowercase__T() {
+    return (((((2 & this.Lchess_format_pgn_Tag$UTCTime$__f_bitmap$0) << 24) >> 24) === 0) ? $p_Lchess_format_pgn_Tag$UTCTime$__lowercase$lzycompute__T(this) : this.Lchess_format_pgn_Tag$UTCTime$__f_lowercase)
+  };
+  chess$format$pgn$TagType$_setter_$isUnknown_$eq__Z__V(x$1) {
+    this.Lchess_format_pgn_Tag$UTCTime$__f_isUnknown = x$1;
+    this.Lchess_format_pgn_Tag$UTCTime$__f_bitmap$init$0 = true
+  };
+  productPrefix__T() {
+    return "UTCTime"
+  };
+  productArity__I() {
+    return 0
+  };
+  productElement__I__O(x$1) {
+    return $m_sr_Statics$().ioobe__I__O(x$1)
+  };
+  productIterator__sc_Iterator() {
+    return new $c_sr_ScalaRunTime$$anon$1(this)
+  };
+  hashCode__I() {
+    return 597732977
+  };
+  toString__T() {
+    return "UTCTime"
+  };
+}
+const $d_Lchess_format_pgn_Tag$UTCTime$ = new $TypeData().initClass({
+  Lchess_format_pgn_Tag$UTCTime$: 0
+}, false, "chess.format.pgn.Tag$UTCTime$", {
+  Lchess_format_pgn_Tag$UTCTime$: 1,
+  O: 1,
+  Lchess_format_pgn_TagType: 1,
+  s_Product: 1,
+  s_Equals: 1,
+  Ljava_io_Serializable: 1
+});
+$c_Lchess_format_pgn_Tag$UTCTime$.prototype.$classData = $d_Lchess_format_pgn_Tag$UTCTime$;
+let $n_Lchess_format_pgn_Tag$UTCTime$;
+function $m_Lchess_format_pgn_Tag$UTCTime$() {
+  if ((!$n_Lchess_format_pgn_Tag$UTCTime$)) {
+    $n_Lchess_format_pgn_Tag$UTCTime$ = new $c_Lchess_format_pgn_Tag$UTCTime$()
+  };
+  return $n_Lchess_format_pgn_Tag$UTCTime$
+}
+const $p_Lchess_format_pgn_Tag$Unknown__name$lzycompute__T = (function($thiz) {
+  if (((((1 & $thiz.Lchess_format_pgn_Tag$Unknown__f_bitmap$0) << 24) >> 24) === 0)) {
+    $thiz.Lchess_format_pgn_Tag$Unknown__f_name = $thiz.Lchess_format_pgn_Tag$Unknown__f_n;
+    $thiz.Lchess_format_pgn_Tag$Unknown__f_bitmap$0 = (((1 | $thiz.Lchess_format_pgn_Tag$Unknown__f_bitmap$0) << 24) >> 24)
+  };
+  return $thiz.Lchess_format_pgn_Tag$Unknown__f_name
+});
+const $p_Lchess_format_pgn_Tag$Unknown__lowercase$lzycompute__T = (function($thiz) {
+  if (((((2 & $thiz.Lchess_format_pgn_Tag$Unknown__f_bitmap$0) << 24) >> 24) === 0)) {
+    const this$1 = $thiz.name__T();
+    $thiz.Lchess_format_pgn_Tag$Unknown__f_lowercase = $as_T(this$1.toLowerCase());
+    $thiz.Lchess_format_pgn_Tag$Unknown__f_bitmap$0 = (((2 | $thiz.Lchess_format_pgn_Tag$Unknown__f_bitmap$0) << 24) >> 24)
+  };
+  return $thiz.Lchess_format_pgn_Tag$Unknown__f_lowercase
+});
+class $c_Lchess_format_pgn_Tag$Unknown extends $c_O {
+  constructor(n) {
+    super();
+    this.Lchess_format_pgn_Tag$Unknown__f_n = null;
+    this.Lchess_format_pgn_Tag$Unknown__f_isUnknown = false;
+    this.Lchess_format_pgn_Tag$Unknown__f_name = null;
+    this.Lchess_format_pgn_Tag$Unknown__f_lowercase = null;
+    this.Lchess_format_pgn_Tag$Unknown__f_bitmap$0 = 0;
+    this.Lchess_format_pgn_Tag$Unknown__f_bitmap$init$0 = false;
+    this.Lchess_format_pgn_Tag$Unknown__f_n = n;
+    this.chess$format$pgn$TagType$_setter_$isUnknown_$eq__Z__V(false);
+    this.Lchess_format_pgn_Tag$Unknown__f_isUnknown = true;
+    this.Lchess_format_pgn_Tag$Unknown__f_bitmap$init$0 = true
+  };
+  name__T() {
+    return (((((1 & this.Lchess_format_pgn_Tag$Unknown__f_bitmap$0) << 24) >> 24) === 0) ? $p_Lchess_format_pgn_Tag$Unknown__name$lzycompute__T(this) : this.Lchess_format_pgn_Tag$Unknown__f_name)
+  };
+  lowercase__T() {
+    return (((((2 & this.Lchess_format_pgn_Tag$Unknown__f_bitmap$0) << 24) >> 24) === 0) ? $p_Lchess_format_pgn_Tag$Unknown__lowercase$lzycompute__T(this) : this.Lchess_format_pgn_Tag$Unknown__f_lowercase)
+  };
+  chess$format$pgn$TagType$_setter_$isUnknown_$eq__Z__V(x$1) {
+    this.Lchess_format_pgn_Tag$Unknown__f_bitmap$init$0 = true
+  };
+  toString__T() {
+    return this.Lchess_format_pgn_Tag$Unknown__f_n
+  };
+  productPrefix__T() {
+    return "Unknown"
+  };
+  productArity__I() {
+    return 1
+  };
+  productElement__I__O(x$1) {
+    return ((x$1 === 0) ? this.Lchess_format_pgn_Tag$Unknown__f_n : $m_sr_Statics$().ioobe__I__O(x$1))
+  };
+  productIterator__sc_Iterator() {
+    return new $c_sr_ScalaRunTime$$anon$1(this)
+  };
+  hashCode__I() {
+    const this$2 = $m_s_util_hashing_MurmurHash3$();
+    return this$2.productHash__s_Product__I__Z__I(this, (-889275714), false)
+  };
+  equals__O__Z(x$1) {
+    if ((this === x$1)) {
+      return true
+    } else if ((x$1 instanceof $c_Lchess_format_pgn_Tag$Unknown)) {
+      const Unknown$1 = $as_Lchess_format_pgn_Tag$Unknown(x$1);
+      return (this.Lchess_format_pgn_Tag$Unknown__f_n === Unknown$1.Lchess_format_pgn_Tag$Unknown__f_n)
+    } else {
+      return false
+    }
+  };
+}
+function $as_Lchess_format_pgn_Tag$Unknown(obj) {
+  return (((obj instanceof $c_Lchess_format_pgn_Tag$Unknown) || (obj === null)) ? obj : $throwClassCastException(obj, "chess.format.pgn.Tag$Unknown"))
+}
+function $isArrayOf_Lchess_format_pgn_Tag$Unknown(obj, depth) {
+  return (!(!(((obj && obj.$classData) && (obj.$classData.arrayDepth === depth)) && obj.$classData.arrayBase.ancestors.Lchess_format_pgn_Tag$Unknown)))
+}
+function $asArrayOf_Lchess_format_pgn_Tag$Unknown(obj, depth) {
+  return (($isArrayOf_Lchess_format_pgn_Tag$Unknown(obj, depth) || (obj === null)) ? obj : $throwArrayCastException(obj, "Lchess.format.pgn.Tag$Unknown;", depth))
+}
+const $d_Lchess_format_pgn_Tag$Unknown = new $TypeData().initClass({
+  Lchess_format_pgn_Tag$Unknown: 0
+}, false, "chess.format.pgn.Tag$Unknown", {
+  Lchess_format_pgn_Tag$Unknown: 1,
+  O: 1,
+  Lchess_format_pgn_TagType: 1,
+  s_Product: 1,
+  s_Equals: 1,
+  Ljava_io_Serializable: 1
+});
+$c_Lchess_format_pgn_Tag$Unknown.prototype.$classData = $d_Lchess_format_pgn_Tag$Unknown;
+const $p_Lchess_format_pgn_Tag$Variant$__name$lzycompute__T = (function($thiz) {
+  if (((((1 & $thiz.Lchess_format_pgn_Tag$Variant$__f_bitmap$0) << 24) >> 24) === 0)) {
+    $thiz.Lchess_format_pgn_Tag$Variant$__f_name = "Variant";
+    $thiz.Lchess_format_pgn_Tag$Variant$__f_bitmap$0 = (((1 | $thiz.Lchess_format_pgn_Tag$Variant$__f_bitmap$0) << 24) >> 24)
+  };
+  return $thiz.Lchess_format_pgn_Tag$Variant$__f_name
+});
+const $p_Lchess_format_pgn_Tag$Variant$__lowercase$lzycompute__T = (function($thiz) {
+  if (((((2 & $thiz.Lchess_format_pgn_Tag$Variant$__f_bitmap$0) << 24) >> 24) === 0)) {
+    const this$1 = $thiz.name__T();
+    $thiz.Lchess_format_pgn_Tag$Variant$__f_lowercase = $as_T(this$1.toLowerCase());
+    $thiz.Lchess_format_pgn_Tag$Variant$__f_bitmap$0 = (((2 | $thiz.Lchess_format_pgn_Tag$Variant$__f_bitmap$0) << 24) >> 24)
+  };
+  return $thiz.Lchess_format_pgn_Tag$Variant$__f_lowercase
+});
+class $c_Lchess_format_pgn_Tag$Variant$ extends $c_O {
+  constructor() {
+    super();
+    this.Lchess_format_pgn_Tag$Variant$__f_name = null;
+    this.Lchess_format_pgn_Tag$Variant$__f_lowercase = null;
+    this.Lchess_format_pgn_Tag$Variant$__f_isUnknown = false;
+    this.Lchess_format_pgn_Tag$Variant$__f_bitmap$0 = 0;
+    this.Lchess_format_pgn_Tag$Variant$__f_bitmap$init$0 = false;
+    $n_Lchess_format_pgn_Tag$Variant$ = this;
+    this.chess$format$pgn$TagType$_setter_$isUnknown_$eq__Z__V(false)
+  };
+  name__T() {
+    return (((((1 & this.Lchess_format_pgn_Tag$Variant$__f_bitmap$0) << 24) >> 24) === 0) ? $p_Lchess_format_pgn_Tag$Variant$__name$lzycompute__T(this) : this.Lchess_format_pgn_Tag$Variant$__f_name)
+  };
+  lowercase__T() {
+    return (((((2 & this.Lchess_format_pgn_Tag$Variant$__f_bitmap$0) << 24) >> 24) === 0) ? $p_Lchess_format_pgn_Tag$Variant$__lowercase$lzycompute__T(this) : this.Lchess_format_pgn_Tag$Variant$__f_lowercase)
+  };
+  chess$format$pgn$TagType$_setter_$isUnknown_$eq__Z__V(x$1) {
+    this.Lchess_format_pgn_Tag$Variant$__f_isUnknown = x$1;
+    this.Lchess_format_pgn_Tag$Variant$__f_bitmap$init$0 = true
+  };
+  productPrefix__T() {
+    return "Variant"
+  };
+  productArity__I() {
+    return 0
+  };
+  productElement__I__O(x$1) {
+    return $m_sr_Statics$().ioobe__I__O(x$1)
+  };
+  productIterator__sc_Iterator() {
+    return new $c_sr_ScalaRunTime$$anon$1(this)
+  };
+  hashCode__I() {
+    return 1901439077
+  };
+  toString__T() {
+    return "Variant"
+  };
+}
+const $d_Lchess_format_pgn_Tag$Variant$ = new $TypeData().initClass({
+  Lchess_format_pgn_Tag$Variant$: 0
+}, false, "chess.format.pgn.Tag$Variant$", {
+  Lchess_format_pgn_Tag$Variant$: 1,
+  O: 1,
+  Lchess_format_pgn_TagType: 1,
+  s_Product: 1,
+  s_Equals: 1,
+  Ljava_io_Serializable: 1
+});
+$c_Lchess_format_pgn_Tag$Variant$.prototype.$classData = $d_Lchess_format_pgn_Tag$Variant$;
+let $n_Lchess_format_pgn_Tag$Variant$;
+function $m_Lchess_format_pgn_Tag$Variant$() {
+  if ((!$n_Lchess_format_pgn_Tag$Variant$)) {
+    $n_Lchess_format_pgn_Tag$Variant$ = new $c_Lchess_format_pgn_Tag$Variant$()
+  };
+  return $n_Lchess_format_pgn_Tag$Variant$
+}
+const $p_Lchess_format_pgn_Tag$White$__name$lzycompute__T = (function($thiz) {
+  if (((((1 & $thiz.Lchess_format_pgn_Tag$White$__f_bitmap$0) << 24) >> 24) === 0)) {
+    $thiz.Lchess_format_pgn_Tag$White$__f_name = "White";
+    $thiz.Lchess_format_pgn_Tag$White$__f_bitmap$0 = (((1 | $thiz.Lchess_format_pgn_Tag$White$__f_bitmap$0) << 24) >> 24)
+  };
+  return $thiz.Lchess_format_pgn_Tag$White$__f_name
+});
+const $p_Lchess_format_pgn_Tag$White$__lowercase$lzycompute__T = (function($thiz) {
+  if (((((2 & $thiz.Lchess_format_pgn_Tag$White$__f_bitmap$0) << 24) >> 24) === 0)) {
+    const this$1 = $thiz.name__T();
+    $thiz.Lchess_format_pgn_Tag$White$__f_lowercase = $as_T(this$1.toLowerCase());
+    $thiz.Lchess_format_pgn_Tag$White$__f_bitmap$0 = (((2 | $thiz.Lchess_format_pgn_Tag$White$__f_bitmap$0) << 24) >> 24)
+  };
+  return $thiz.Lchess_format_pgn_Tag$White$__f_lowercase
+});
+class $c_Lchess_format_pgn_Tag$White$ extends $c_O {
+  constructor() {
+    super();
+    this.Lchess_format_pgn_Tag$White$__f_name = null;
+    this.Lchess_format_pgn_Tag$White$__f_lowercase = null;
+    this.Lchess_format_pgn_Tag$White$__f_isUnknown = false;
+    this.Lchess_format_pgn_Tag$White$__f_bitmap$0 = 0;
+    this.Lchess_format_pgn_Tag$White$__f_bitmap$init$0 = false;
+    $n_Lchess_format_pgn_Tag$White$ = this;
+    this.chess$format$pgn$TagType$_setter_$isUnknown_$eq__Z__V(false)
+  };
+  name__T() {
+    return (((((1 & this.Lchess_format_pgn_Tag$White$__f_bitmap$0) << 24) >> 24) === 0) ? $p_Lchess_format_pgn_Tag$White$__name$lzycompute__T(this) : this.Lchess_format_pgn_Tag$White$__f_name)
+  };
+  lowercase__T() {
+    return (((((2 & this.Lchess_format_pgn_Tag$White$__f_bitmap$0) << 24) >> 24) === 0) ? $p_Lchess_format_pgn_Tag$White$__lowercase$lzycompute__T(this) : this.Lchess_format_pgn_Tag$White$__f_lowercase)
+  };
+  chess$format$pgn$TagType$_setter_$isUnknown_$eq__Z__V(x$1) {
+    this.Lchess_format_pgn_Tag$White$__f_isUnknown = x$1;
+    this.Lchess_format_pgn_Tag$White$__f_bitmap$init$0 = true
+  };
+  productPrefix__T() {
+    return "White"
+  };
+  productArity__I() {
+    return 0
+  };
+  productElement__I__O(x$1) {
+    return $m_sr_Statics$().ioobe__I__O(x$1)
+  };
+  productIterator__sc_Iterator() {
+    return new $c_sr_ScalaRunTime$$anon$1(this)
+  };
+  hashCode__I() {
+    return 83549193
+  };
+  toString__T() {
+    return "White"
+  };
+}
+const $d_Lchess_format_pgn_Tag$White$ = new $TypeData().initClass({
+  Lchess_format_pgn_Tag$White$: 0
+}, false, "chess.format.pgn.Tag$White$", {
+  Lchess_format_pgn_Tag$White$: 1,
+  O: 1,
+  Lchess_format_pgn_TagType: 1,
+  s_Product: 1,
+  s_Equals: 1,
+  Ljava_io_Serializable: 1
+});
+$c_Lchess_format_pgn_Tag$White$.prototype.$classData = $d_Lchess_format_pgn_Tag$White$;
+let $n_Lchess_format_pgn_Tag$White$;
+function $m_Lchess_format_pgn_Tag$White$() {
+  if ((!$n_Lchess_format_pgn_Tag$White$)) {
+    $n_Lchess_format_pgn_Tag$White$ = new $c_Lchess_format_pgn_Tag$White$()
+  };
+  return $n_Lchess_format_pgn_Tag$White$
+}
+const $p_Lchess_format_pgn_Tag$WhiteClock$__name$lzycompute__T = (function($thiz) {
+  if (((((1 & $thiz.Lchess_format_pgn_Tag$WhiteClock$__f_bitmap$0) << 24) >> 24) === 0)) {
+    $thiz.Lchess_format_pgn_Tag$WhiteClock$__f_name = "WhiteClock";
+    $thiz.Lchess_format_pgn_Tag$WhiteClock$__f_bitmap$0 = (((1 | $thiz.Lchess_format_pgn_Tag$WhiteClock$__f_bitmap$0) << 24) >> 24)
+  };
+  return $thiz.Lchess_format_pgn_Tag$WhiteClock$__f_name
+});
+const $p_Lchess_format_pgn_Tag$WhiteClock$__lowercase$lzycompute__T = (function($thiz) {
+  if (((((2 & $thiz.Lchess_format_pgn_Tag$WhiteClock$__f_bitmap$0) << 24) >> 24) === 0)) {
+    const this$1 = $thiz.name__T();
+    $thiz.Lchess_format_pgn_Tag$WhiteClock$__f_lowercase = $as_T(this$1.toLowerCase());
+    $thiz.Lchess_format_pgn_Tag$WhiteClock$__f_bitmap$0 = (((2 | $thiz.Lchess_format_pgn_Tag$WhiteClock$__f_bitmap$0) << 24) >> 24)
+  };
+  return $thiz.Lchess_format_pgn_Tag$WhiteClock$__f_lowercase
+});
+class $c_Lchess_format_pgn_Tag$WhiteClock$ extends $c_O {
+  constructor() {
+    super();
+    this.Lchess_format_pgn_Tag$WhiteClock$__f_name = null;
+    this.Lchess_format_pgn_Tag$WhiteClock$__f_lowercase = null;
+    this.Lchess_format_pgn_Tag$WhiteClock$__f_isUnknown = false;
+    this.Lchess_format_pgn_Tag$WhiteClock$__f_bitmap$0 = 0;
+    this.Lchess_format_pgn_Tag$WhiteClock$__f_bitmap$init$0 = false;
+    $n_Lchess_format_pgn_Tag$WhiteClock$ = this;
+    this.chess$format$pgn$TagType$_setter_$isUnknown_$eq__Z__V(false)
+  };
+  name__T() {
+    return (((((1 & this.Lchess_format_pgn_Tag$WhiteClock$__f_bitmap$0) << 24) >> 24) === 0) ? $p_Lchess_format_pgn_Tag$WhiteClock$__name$lzycompute__T(this) : this.Lchess_format_pgn_Tag$WhiteClock$__f_name)
+  };
+  lowercase__T() {
+    return (((((2 & this.Lchess_format_pgn_Tag$WhiteClock$__f_bitmap$0) << 24) >> 24) === 0) ? $p_Lchess_format_pgn_Tag$WhiteClock$__lowercase$lzycompute__T(this) : this.Lchess_format_pgn_Tag$WhiteClock$__f_lowercase)
+  };
+  chess$format$pgn$TagType$_setter_$isUnknown_$eq__Z__V(x$1) {
+    this.Lchess_format_pgn_Tag$WhiteClock$__f_isUnknown = x$1;
+    this.Lchess_format_pgn_Tag$WhiteClock$__f_bitmap$init$0 = true
+  };
+  productPrefix__T() {
+    return "WhiteClock"
+  };
+  productArity__I() {
+    return 0
+  };
+  productElement__I__O(x$1) {
+    return $m_sr_Statics$().ioobe__I__O(x$1)
+  };
+  productIterator__sc_Iterator() {
+    return new $c_sr_ScalaRunTime$$anon$1(this)
+  };
+  hashCode__I() {
+    return (-2069025403)
+  };
+  toString__T() {
+    return "WhiteClock"
+  };
+}
+const $d_Lchess_format_pgn_Tag$WhiteClock$ = new $TypeData().initClass({
+  Lchess_format_pgn_Tag$WhiteClock$: 0
+}, false, "chess.format.pgn.Tag$WhiteClock$", {
+  Lchess_format_pgn_Tag$WhiteClock$: 1,
+  O: 1,
+  Lchess_format_pgn_TagType: 1,
+  s_Product: 1,
+  s_Equals: 1,
+  Ljava_io_Serializable: 1
+});
+$c_Lchess_format_pgn_Tag$WhiteClock$.prototype.$classData = $d_Lchess_format_pgn_Tag$WhiteClock$;
+let $n_Lchess_format_pgn_Tag$WhiteClock$;
+function $m_Lchess_format_pgn_Tag$WhiteClock$() {
+  if ((!$n_Lchess_format_pgn_Tag$WhiteClock$)) {
+    $n_Lchess_format_pgn_Tag$WhiteClock$ = new $c_Lchess_format_pgn_Tag$WhiteClock$()
+  };
+  return $n_Lchess_format_pgn_Tag$WhiteClock$
+}
+const $p_Lchess_format_pgn_Tag$WhiteElo$__name$lzycompute__T = (function($thiz) {
+  if (((((1 & $thiz.Lchess_format_pgn_Tag$WhiteElo$__f_bitmap$0) << 24) >> 24) === 0)) {
+    $thiz.Lchess_format_pgn_Tag$WhiteElo$__f_name = "WhiteElo";
+    $thiz.Lchess_format_pgn_Tag$WhiteElo$__f_bitmap$0 = (((1 | $thiz.Lchess_format_pgn_Tag$WhiteElo$__f_bitmap$0) << 24) >> 24)
+  };
+  return $thiz.Lchess_format_pgn_Tag$WhiteElo$__f_name
+});
+const $p_Lchess_format_pgn_Tag$WhiteElo$__lowercase$lzycompute__T = (function($thiz) {
+  if (((((2 & $thiz.Lchess_format_pgn_Tag$WhiteElo$__f_bitmap$0) << 24) >> 24) === 0)) {
+    const this$1 = $thiz.name__T();
+    $thiz.Lchess_format_pgn_Tag$WhiteElo$__f_lowercase = $as_T(this$1.toLowerCase());
+    $thiz.Lchess_format_pgn_Tag$WhiteElo$__f_bitmap$0 = (((2 | $thiz.Lchess_format_pgn_Tag$WhiteElo$__f_bitmap$0) << 24) >> 24)
+  };
+  return $thiz.Lchess_format_pgn_Tag$WhiteElo$__f_lowercase
+});
+class $c_Lchess_format_pgn_Tag$WhiteElo$ extends $c_O {
+  constructor() {
+    super();
+    this.Lchess_format_pgn_Tag$WhiteElo$__f_name = null;
+    this.Lchess_format_pgn_Tag$WhiteElo$__f_lowercase = null;
+    this.Lchess_format_pgn_Tag$WhiteElo$__f_isUnknown = false;
+    this.Lchess_format_pgn_Tag$WhiteElo$__f_bitmap$0 = 0;
+    this.Lchess_format_pgn_Tag$WhiteElo$__f_bitmap$init$0 = false;
+    $n_Lchess_format_pgn_Tag$WhiteElo$ = this;
+    this.chess$format$pgn$TagType$_setter_$isUnknown_$eq__Z__V(false)
+  };
+  name__T() {
+    return (((((1 & this.Lchess_format_pgn_Tag$WhiteElo$__f_bitmap$0) << 24) >> 24) === 0) ? $p_Lchess_format_pgn_Tag$WhiteElo$__name$lzycompute__T(this) : this.Lchess_format_pgn_Tag$WhiteElo$__f_name)
+  };
+  lowercase__T() {
+    return (((((2 & this.Lchess_format_pgn_Tag$WhiteElo$__f_bitmap$0) << 24) >> 24) === 0) ? $p_Lchess_format_pgn_Tag$WhiteElo$__lowercase$lzycompute__T(this) : this.Lchess_format_pgn_Tag$WhiteElo$__f_lowercase)
+  };
+  chess$format$pgn$TagType$_setter_$isUnknown_$eq__Z__V(x$1) {
+    this.Lchess_format_pgn_Tag$WhiteElo$__f_isUnknown = x$1;
+    this.Lchess_format_pgn_Tag$WhiteElo$__f_bitmap$init$0 = true
+  };
+  productPrefix__T() {
+    return "WhiteElo"
+  };
+  productArity__I() {
+    return 0
+  };
+  productElement__I__O(x$1) {
+    return $m_sr_Statics$().ioobe__I__O(x$1)
+  };
+  productIterator__sc_Iterator() {
+    return new $c_sr_ScalaRunTime$$anon$1(this)
+  };
+  hashCode__I() {
+    return (-2066953249)
+  };
+  toString__T() {
+    return "WhiteElo"
+  };
+}
+const $d_Lchess_format_pgn_Tag$WhiteElo$ = new $TypeData().initClass({
+  Lchess_format_pgn_Tag$WhiteElo$: 0
+}, false, "chess.format.pgn.Tag$WhiteElo$", {
+  Lchess_format_pgn_Tag$WhiteElo$: 1,
+  O: 1,
+  Lchess_format_pgn_TagType: 1,
+  s_Product: 1,
+  s_Equals: 1,
+  Ljava_io_Serializable: 1
+});
+$c_Lchess_format_pgn_Tag$WhiteElo$.prototype.$classData = $d_Lchess_format_pgn_Tag$WhiteElo$;
+let $n_Lchess_format_pgn_Tag$WhiteElo$;
+function $m_Lchess_format_pgn_Tag$WhiteElo$() {
+  if ((!$n_Lchess_format_pgn_Tag$WhiteElo$)) {
+    $n_Lchess_format_pgn_Tag$WhiteElo$ = new $c_Lchess_format_pgn_Tag$WhiteElo$()
+  };
+  return $n_Lchess_format_pgn_Tag$WhiteElo$
+}
+const $p_Lchess_format_pgn_Tag$WhiteRatingDiff$__name$lzycompute__T = (function($thiz) {
+  if (((((1 & $thiz.Lchess_format_pgn_Tag$WhiteRatingDiff$__f_bitmap$0) << 24) >> 24) === 0)) {
+    $thiz.Lchess_format_pgn_Tag$WhiteRatingDiff$__f_name = "WhiteRatingDiff";
+    $thiz.Lchess_format_pgn_Tag$WhiteRatingDiff$__f_bitmap$0 = (((1 | $thiz.Lchess_format_pgn_Tag$WhiteRatingDiff$__f_bitmap$0) << 24) >> 24)
+  };
+  return $thiz.Lchess_format_pgn_Tag$WhiteRatingDiff$__f_name
+});
+const $p_Lchess_format_pgn_Tag$WhiteRatingDiff$__lowercase$lzycompute__T = (function($thiz) {
+  if (((((2 & $thiz.Lchess_format_pgn_Tag$WhiteRatingDiff$__f_bitmap$0) << 24) >> 24) === 0)) {
+    const this$1 = $thiz.name__T();
+    $thiz.Lchess_format_pgn_Tag$WhiteRatingDiff$__f_lowercase = $as_T(this$1.toLowerCase());
+    $thiz.Lchess_format_pgn_Tag$WhiteRatingDiff$__f_bitmap$0 = (((2 | $thiz.Lchess_format_pgn_Tag$WhiteRatingDiff$__f_bitmap$0) << 24) >> 24)
+  };
+  return $thiz.Lchess_format_pgn_Tag$WhiteRatingDiff$__f_lowercase
+});
+class $c_Lchess_format_pgn_Tag$WhiteRatingDiff$ extends $c_O {
+  constructor() {
+    super();
+    this.Lchess_format_pgn_Tag$WhiteRatingDiff$__f_name = null;
+    this.Lchess_format_pgn_Tag$WhiteRatingDiff$__f_lowercase = null;
+    this.Lchess_format_pgn_Tag$WhiteRatingDiff$__f_isUnknown = false;
+    this.Lchess_format_pgn_Tag$WhiteRatingDiff$__f_bitmap$0 = 0;
+    this.Lchess_format_pgn_Tag$WhiteRatingDiff$__f_bitmap$init$0 = false;
+    $n_Lchess_format_pgn_Tag$WhiteRatingDiff$ = this;
+    this.chess$format$pgn$TagType$_setter_$isUnknown_$eq__Z__V(false)
+  };
+  name__T() {
+    return (((((1 & this.Lchess_format_pgn_Tag$WhiteRatingDiff$__f_bitmap$0) << 24) >> 24) === 0) ? $p_Lchess_format_pgn_Tag$WhiteRatingDiff$__name$lzycompute__T(this) : this.Lchess_format_pgn_Tag$WhiteRatingDiff$__f_name)
+  };
+  lowercase__T() {
+    return (((((2 & this.Lchess_format_pgn_Tag$WhiteRatingDiff$__f_bitmap$0) << 24) >> 24) === 0) ? $p_Lchess_format_pgn_Tag$WhiteRatingDiff$__lowercase$lzycompute__T(this) : this.Lchess_format_pgn_Tag$WhiteRatingDiff$__f_lowercase)
+  };
+  chess$format$pgn$TagType$_setter_$isUnknown_$eq__Z__V(x$1) {
+    this.Lchess_format_pgn_Tag$WhiteRatingDiff$__f_isUnknown = x$1;
+    this.Lchess_format_pgn_Tag$WhiteRatingDiff$__f_bitmap$init$0 = true
+  };
+  productPrefix__T() {
+    return "WhiteRatingDiff"
+  };
+  productArity__I() {
+    return 0
+  };
+  productElement__I__O(x$1) {
+    return $m_sr_Statics$().ioobe__I__O(x$1)
+  };
+  productIterator__sc_Iterator() {
+    return new $c_sr_ScalaRunTime$$anon$1(this)
+  };
+  hashCode__I() {
+    return 1301158955
+  };
+  toString__T() {
+    return "WhiteRatingDiff"
+  };
+}
+const $d_Lchess_format_pgn_Tag$WhiteRatingDiff$ = new $TypeData().initClass({
+  Lchess_format_pgn_Tag$WhiteRatingDiff$: 0
+}, false, "chess.format.pgn.Tag$WhiteRatingDiff$", {
+  Lchess_format_pgn_Tag$WhiteRatingDiff$: 1,
+  O: 1,
+  Lchess_format_pgn_TagType: 1,
+  s_Product: 1,
+  s_Equals: 1,
+  Ljava_io_Serializable: 1
+});
+$c_Lchess_format_pgn_Tag$WhiteRatingDiff$.prototype.$classData = $d_Lchess_format_pgn_Tag$WhiteRatingDiff$;
+let $n_Lchess_format_pgn_Tag$WhiteRatingDiff$;
+function $m_Lchess_format_pgn_Tag$WhiteRatingDiff$() {
+  if ((!$n_Lchess_format_pgn_Tag$WhiteRatingDiff$)) {
+    $n_Lchess_format_pgn_Tag$WhiteRatingDiff$ = new $c_Lchess_format_pgn_Tag$WhiteRatingDiff$()
+  };
+  return $n_Lchess_format_pgn_Tag$WhiteRatingDiff$
+}
+const $p_Lchess_format_pgn_Tag$WhiteTeam$__name$lzycompute__T = (function($thiz) {
+  if (((((1 & $thiz.Lchess_format_pgn_Tag$WhiteTeam$__f_bitmap$0) << 24) >> 24) === 0)) {
+    $thiz.Lchess_format_pgn_Tag$WhiteTeam$__f_name = "WhiteTeam";
+    $thiz.Lchess_format_pgn_Tag$WhiteTeam$__f_bitmap$0 = (((1 | $thiz.Lchess_format_pgn_Tag$WhiteTeam$__f_bitmap$0) << 24) >> 24)
+  };
+  return $thiz.Lchess_format_pgn_Tag$WhiteTeam$__f_name
+});
+const $p_Lchess_format_pgn_Tag$WhiteTeam$__lowercase$lzycompute__T = (function($thiz) {
+  if (((((2 & $thiz.Lchess_format_pgn_Tag$WhiteTeam$__f_bitmap$0) << 24) >> 24) === 0)) {
+    const this$1 = $thiz.name__T();
+    $thiz.Lchess_format_pgn_Tag$WhiteTeam$__f_lowercase = $as_T(this$1.toLowerCase());
+    $thiz.Lchess_format_pgn_Tag$WhiteTeam$__f_bitmap$0 = (((2 | $thiz.Lchess_format_pgn_Tag$WhiteTeam$__f_bitmap$0) << 24) >> 24)
+  };
+  return $thiz.Lchess_format_pgn_Tag$WhiteTeam$__f_lowercase
+});
+class $c_Lchess_format_pgn_Tag$WhiteTeam$ extends $c_O {
+  constructor() {
+    super();
+    this.Lchess_format_pgn_Tag$WhiteTeam$__f_name = null;
+    this.Lchess_format_pgn_Tag$WhiteTeam$__f_lowercase = null;
+    this.Lchess_format_pgn_Tag$WhiteTeam$__f_isUnknown = false;
+    this.Lchess_format_pgn_Tag$WhiteTeam$__f_bitmap$0 = 0;
+    this.Lchess_format_pgn_Tag$WhiteTeam$__f_bitmap$init$0 = false;
+    $n_Lchess_format_pgn_Tag$WhiteTeam$ = this;
+    this.chess$format$pgn$TagType$_setter_$isUnknown_$eq__Z__V(false)
+  };
+  name__T() {
+    return (((((1 & this.Lchess_format_pgn_Tag$WhiteTeam$__f_bitmap$0) << 24) >> 24) === 0) ? $p_Lchess_format_pgn_Tag$WhiteTeam$__name$lzycompute__T(this) : this.Lchess_format_pgn_Tag$WhiteTeam$__f_name)
+  };
+  lowercase__T() {
+    return (((((2 & this.Lchess_format_pgn_Tag$WhiteTeam$__f_bitmap$0) << 24) >> 24) === 0) ? $p_Lchess_format_pgn_Tag$WhiteTeam$__lowercase$lzycompute__T(this) : this.Lchess_format_pgn_Tag$WhiteTeam$__f_lowercase)
+  };
+  chess$format$pgn$TagType$_setter_$isUnknown_$eq__Z__V(x$1) {
+    this.Lchess_format_pgn_Tag$WhiteTeam$__f_isUnknown = x$1;
+    this.Lchess_format_pgn_Tag$WhiteTeam$__f_bitmap$init$0 = true
+  };
+  productPrefix__T() {
+    return "WhiteTeam"
+  };
+  productArity__I() {
+    return 0
+  };
+  productElement__I__O(x$1) {
+    return $m_sr_Statics$().ioobe__I__O(x$1)
+  };
+  productIterator__sc_Iterator() {
+    return new $c_sr_ScalaRunTime$$anon$1(this)
+  };
+  hashCode__I() {
+    return 349398534
+  };
+  toString__T() {
+    return "WhiteTeam"
+  };
+}
+const $d_Lchess_format_pgn_Tag$WhiteTeam$ = new $TypeData().initClass({
+  Lchess_format_pgn_Tag$WhiteTeam$: 0
+}, false, "chess.format.pgn.Tag$WhiteTeam$", {
+  Lchess_format_pgn_Tag$WhiteTeam$: 1,
+  O: 1,
+  Lchess_format_pgn_TagType: 1,
+  s_Product: 1,
+  s_Equals: 1,
+  Ljava_io_Serializable: 1
+});
+$c_Lchess_format_pgn_Tag$WhiteTeam$.prototype.$classData = $d_Lchess_format_pgn_Tag$WhiteTeam$;
+let $n_Lchess_format_pgn_Tag$WhiteTeam$;
+function $m_Lchess_format_pgn_Tag$WhiteTeam$() {
+  if ((!$n_Lchess_format_pgn_Tag$WhiteTeam$)) {
+    $n_Lchess_format_pgn_Tag$WhiteTeam$ = new $c_Lchess_format_pgn_Tag$WhiteTeam$()
+  };
+  return $n_Lchess_format_pgn_Tag$WhiteTeam$
+}
+const $p_Lchess_format_pgn_Tag$WhiteTitle$__name$lzycompute__T = (function($thiz) {
+  if (((((1 & $thiz.Lchess_format_pgn_Tag$WhiteTitle$__f_bitmap$0) << 24) >> 24) === 0)) {
+    $thiz.Lchess_format_pgn_Tag$WhiteTitle$__f_name = "WhiteTitle";
+    $thiz.Lchess_format_pgn_Tag$WhiteTitle$__f_bitmap$0 = (((1 | $thiz.Lchess_format_pgn_Tag$WhiteTitle$__f_bitmap$0) << 24) >> 24)
+  };
+  return $thiz.Lchess_format_pgn_Tag$WhiteTitle$__f_name
+});
+const $p_Lchess_format_pgn_Tag$WhiteTitle$__lowercase$lzycompute__T = (function($thiz) {
+  if (((((2 & $thiz.Lchess_format_pgn_Tag$WhiteTitle$__f_bitmap$0) << 24) >> 24) === 0)) {
+    const this$1 = $thiz.name__T();
+    $thiz.Lchess_format_pgn_Tag$WhiteTitle$__f_lowercase = $as_T(this$1.toLowerCase());
+    $thiz.Lchess_format_pgn_Tag$WhiteTitle$__f_bitmap$0 = (((2 | $thiz.Lchess_format_pgn_Tag$WhiteTitle$__f_bitmap$0) << 24) >> 24)
+  };
+  return $thiz.Lchess_format_pgn_Tag$WhiteTitle$__f_lowercase
+});
+class $c_Lchess_format_pgn_Tag$WhiteTitle$ extends $c_O {
+  constructor() {
+    super();
+    this.Lchess_format_pgn_Tag$WhiteTitle$__f_name = null;
+    this.Lchess_format_pgn_Tag$WhiteTitle$__f_lowercase = null;
+    this.Lchess_format_pgn_Tag$WhiteTitle$__f_isUnknown = false;
+    this.Lchess_format_pgn_Tag$WhiteTitle$__f_bitmap$0 = 0;
+    this.Lchess_format_pgn_Tag$WhiteTitle$__f_bitmap$init$0 = false;
+    $n_Lchess_format_pgn_Tag$WhiteTitle$ = this;
+    this.chess$format$pgn$TagType$_setter_$isUnknown_$eq__Z__V(false)
+  };
+  name__T() {
+    return (((((1 & this.Lchess_format_pgn_Tag$WhiteTitle$__f_bitmap$0) << 24) >> 24) === 0) ? $p_Lchess_format_pgn_Tag$WhiteTitle$__name$lzycompute__T(this) : this.Lchess_format_pgn_Tag$WhiteTitle$__f_name)
+  };
+  lowercase__T() {
+    return (((((2 & this.Lchess_format_pgn_Tag$WhiteTitle$__f_bitmap$0) << 24) >> 24) === 0) ? $p_Lchess_format_pgn_Tag$WhiteTitle$__lowercase$lzycompute__T(this) : this.Lchess_format_pgn_Tag$WhiteTitle$__f_lowercase)
+  };
+  chess$format$pgn$TagType$_setter_$isUnknown_$eq__Z__V(x$1) {
+    this.Lchess_format_pgn_Tag$WhiteTitle$__f_isUnknown = x$1;
+    this.Lchess_format_pgn_Tag$WhiteTitle$__f_bitmap$init$0 = true
+  };
+  productPrefix__T() {
+    return "WhiteTitle"
+  };
+  productArity__I() {
+    return 0
+  };
+  productElement__I__O(x$1) {
+    return $m_sr_Statics$().ioobe__I__O(x$1)
+  };
+  productIterator__sc_Iterator() {
+    return new $c_sr_ScalaRunTime$$anon$1(this)
+  };
+  hashCode__I() {
+    return (-2053409841)
+  };
+  toString__T() {
+    return "WhiteTitle"
+  };
+}
+const $d_Lchess_format_pgn_Tag$WhiteTitle$ = new $TypeData().initClass({
+  Lchess_format_pgn_Tag$WhiteTitle$: 0
+}, false, "chess.format.pgn.Tag$WhiteTitle$", {
+  Lchess_format_pgn_Tag$WhiteTitle$: 1,
+  O: 1,
+  Lchess_format_pgn_TagType: 1,
+  s_Product: 1,
+  s_Equals: 1,
+  Ljava_io_Serializable: 1
+});
+$c_Lchess_format_pgn_Tag$WhiteTitle$.prototype.$classData = $d_Lchess_format_pgn_Tag$WhiteTitle$;
+let $n_Lchess_format_pgn_Tag$WhiteTitle$;
+function $m_Lchess_format_pgn_Tag$WhiteTitle$() {
+  if ((!$n_Lchess_format_pgn_Tag$WhiteTitle$)) {
+    $n_Lchess_format_pgn_Tag$WhiteTitle$ = new $c_Lchess_format_pgn_Tag$WhiteTitle$()
+  };
+  return $n_Lchess_format_pgn_Tag$WhiteTitle$
+}
 const $p_Lchess_variant_Antichess$__pawnNotAttackable__Lchess_Actor__Z__Lchess_Board__Z = (function($thiz, pawn, oppositeBishopLight, board) {
   const this$1 = $m_Lchess_Actor$().pawnAttacks__I__Lchess_Color__sci_List(pawn.Lchess_Actor__f_pos, pawn.Lchess_Actor__f_piece.Lchess_Piece__f_color);
   let $$x1;
@@ -35747,6 +40299,10 @@ const $ct_jl_IllegalStateException__T__ = (function($thiz, s) {
   $ct_jl_Throwable__T__jl_Throwable__Z__Z__($thiz, s, null, true, true);
   return $thiz
 });
+const $ct_jl_IllegalStateException__ = (function($thiz) {
+  $ct_jl_Throwable__T__jl_Throwable__Z__Z__($thiz, null, null, true, true);
+  return $thiz
+});
 class $c_jl_IllegalStateException extends $c_jl_RuntimeException {
 }
 const $d_jl_IllegalStateException = new $TypeData().initClass({
@@ -35843,6 +40399,18 @@ function $isArrayOf_jl_SecurityException(obj, depth) {
 }
 function $asArrayOf_jl_SecurityException(obj, depth) {
   return (($isArrayOf_jl_SecurityException(obj, depth) || (obj === null)) ? obj : $throwArrayCastException(obj, "Ljava.lang.SecurityException;", depth))
+}
+function $is_jl_StackOverflowError(obj) {
+  return false
+}
+function $as_jl_StackOverflowError(obj) {
+  return (($is_jl_StackOverflowError(obj) || (obj === null)) ? obj : $throwClassCastException(obj, "java.lang.StackOverflowError"))
+}
+function $isArrayOf_jl_StackOverflowError(obj, depth) {
+  return (!(!(((obj && obj.$classData) && (obj.$classData.arrayDepth === depth)) && obj.$classData.arrayBase.ancestors.jl_StackOverflowError)))
+}
+function $asArrayOf_jl_StackOverflowError(obj, depth) {
+  return (($isArrayOf_jl_StackOverflowError(obj, depth) || (obj === null)) ? obj : $throwArrayCastException(obj, "Ljava.lang.StackOverflowError;", depth))
 }
 const $ct_jl_UnsupportedOperationException__ = (function($thiz) {
   $ct_jl_Throwable__T__jl_Throwable__Z__Z__($thiz, null, null, true, true);
@@ -36174,6 +40742,70 @@ const $d_T3 = new $TypeData().initClass({
   Ljava_io_Serializable: 1
 });
 $c_T3.prototype.$classData = $d_T3;
+class $c_T5 extends $c_O {
+  constructor(_1, _2, _3, _4, _5) {
+    super();
+    this.T5__f__1 = null;
+    this.T5__f__2 = null;
+    this.T5__f__3 = null;
+    this.T5__f__4 = null;
+    this.T5__f__5 = null;
+    this.T5__f__1 = _1;
+    this.T5__f__2 = _2;
+    this.T5__f__3 = _3;
+    this.T5__f__4 = _4;
+    this.T5__f__5 = _5
+  };
+  productArity__I() {
+    return 5
+  };
+  productElement__I__O(n) {
+    return $f_s_Product5__productElement__I__O(this, n)
+  };
+  toString__T() {
+    return (((((((((("(" + this.T5__f__1) + ",") + this.T5__f__2) + ",") + this.T5__f__3) + ",") + this.T5__f__4) + ",") + this.T5__f__5) + ")")
+  };
+  productPrefix__T() {
+    return "Tuple5"
+  };
+  productIterator__sc_Iterator() {
+    return new $c_sr_ScalaRunTime$$anon$1(this)
+  };
+  hashCode__I() {
+    const this$2 = $m_s_util_hashing_MurmurHash3$();
+    return this$2.productHash__s_Product__I__Z__I(this, (-889275714), false)
+  };
+  equals__O__Z(x$1) {
+    if ((this === x$1)) {
+      return true
+    } else if ((x$1 instanceof $c_T5)) {
+      const Tuple5$1 = $as_T5(x$1);
+      return (((($m_sr_BoxesRunTime$().equals__O__O__Z(this.T5__f__1, Tuple5$1.T5__f__1) && $m_sr_BoxesRunTime$().equals__O__O__Z(this.T5__f__2, Tuple5$1.T5__f__2)) && $m_sr_BoxesRunTime$().equals__O__O__Z(this.T5__f__3, Tuple5$1.T5__f__3)) && $m_sr_BoxesRunTime$().equals__O__O__Z(this.T5__f__4, Tuple5$1.T5__f__4)) && $m_sr_BoxesRunTime$().equals__O__O__Z(this.T5__f__5, Tuple5$1.T5__f__5))
+    } else {
+      return false
+    }
+  };
+}
+function $as_T5(obj) {
+  return (((obj instanceof $c_T5) || (obj === null)) ? obj : $throwClassCastException(obj, "scala.Tuple5"))
+}
+function $isArrayOf_T5(obj, depth) {
+  return (!(!(((obj && obj.$classData) && (obj.$classData.arrayDepth === depth)) && obj.$classData.arrayBase.ancestors.T5)))
+}
+function $asArrayOf_T5(obj, depth) {
+  return (($isArrayOf_T5(obj, depth) || (obj === null)) ? obj : $throwArrayCastException(obj, "Lscala.Tuple5;", depth))
+}
+const $d_T5 = new $TypeData().initClass({
+  T5: 0
+}, false, "scala.Tuple5", {
+  T5: 1,
+  O: 1,
+  s_Product5: 1,
+  s_Product: 1,
+  s_Equals: 1,
+  Ljava_io_Serializable: 1
+});
+$c_T5.prototype.$classData = $d_T5;
 class $c_T6 extends $c_O {
   constructor(_1, _2, _3, _4, _5, _6) {
     super();
@@ -37365,6 +41997,83 @@ const $d_sc_StrictOptimizedLinearSeqOps$$anon$1 = new $TypeData().initClass({
   sc_IterableOnceOps: 1
 });
 $c_sc_StrictOptimizedLinearSeqOps$$anon$1.prototype.$classData = $d_sc_StrictOptimizedLinearSeqOps$$anon$1;
+const $p_sc_StringOps$$anon$1__advance__T = (function($thiz) {
+  const start = $thiz.sc_StringOps$$anon$1__f_scala$collection$StringOps$$anon$$index;
+  while (true) {
+    let $$x1;
+    if (($thiz.sc_StringOps$$anon$1__f_scala$collection$StringOps$$anon$$index < $thiz.sc_StringOps$$anon$1__f_scala$collection$StringOps$$anon$$len)) {
+      const this$ = $thiz.sc_StringOps$$anon$1__f_$this$2;
+      const i = $thiz.sc_StringOps$$anon$1__f_scala$collection$StringOps$$anon$$index;
+      const c = (65535 & $uI(this$.charCodeAt(i)));
+      $$x1 = (!((c === 13) || (c === 10)))
+    } else {
+      $$x1 = false
+    };
+    if ($$x1) {
+      $thiz.sc_StringOps$$anon$1__f_scala$collection$StringOps$$anon$$index = ((1 + $thiz.sc_StringOps$$anon$1__f_scala$collection$StringOps$$anon$$index) | 0)
+    } else {
+      break
+    }
+  };
+  let end = $thiz.sc_StringOps$$anon$1__f_scala$collection$StringOps$$anon$$index;
+  if (($thiz.sc_StringOps$$anon$1__f_scala$collection$StringOps$$anon$$index < $thiz.sc_StringOps$$anon$1__f_scala$collection$StringOps$$anon$$len)) {
+    const this$$2 = $thiz.sc_StringOps$$anon$1__f_$this$2;
+    const i$1 = $thiz.sc_StringOps$$anon$1__f_scala$collection$StringOps$$anon$$index;
+    const c$1 = (65535 & $uI(this$$2.charCodeAt(i$1)));
+    $thiz.sc_StringOps$$anon$1__f_scala$collection$StringOps$$anon$$index = ((1 + $thiz.sc_StringOps$$anon$1__f_scala$collection$StringOps$$anon$$index) | 0);
+    let $$x2;
+    if (($thiz.sc_StringOps$$anon$1__f_scala$collection$StringOps$$anon$$index < $thiz.sc_StringOps$$anon$1__f_scala$collection$StringOps$$anon$$len)) {
+      const this$$3 = $thiz.sc_StringOps$$anon$1__f_$this$2;
+      const i$2 = $thiz.sc_StringOps$$anon$1__f_scala$collection$StringOps$$anon$$index;
+      const c$2 = (65535 & $uI(this$$3.charCodeAt(i$2)));
+      $$x2 = ((c$1 === 13) && (c$2 === 10))
+    } else {
+      $$x2 = false
+    };
+    if ($$x2) {
+      $thiz.sc_StringOps$$anon$1__f_scala$collection$StringOps$$anon$$index = ((1 + $thiz.sc_StringOps$$anon$1__f_scala$collection$StringOps$$anon$$index) | 0)
+    };
+    if ((!$thiz.sc_StringOps$$anon$1__f_stripped$1)) {
+      end = $thiz.sc_StringOps$$anon$1__f_scala$collection$StringOps$$anon$$index
+    }
+  };
+  const this$6 = $thiz.sc_StringOps$$anon$1__f_$this$2;
+  const endIndex = end;
+  return $as_T(this$6.substring(start, endIndex))
+});
+class $c_sc_StringOps$$anon$1 extends $c_sc_AbstractIterator {
+  constructor(\u03b4this$2, stripped$1) {
+    super();
+    this.sc_StringOps$$anon$1__f_scala$collection$StringOps$$anon$$len = 0;
+    this.sc_StringOps$$anon$1__f_scala$collection$StringOps$$anon$$index = 0;
+    this.sc_StringOps$$anon$1__f_$this$2 = null;
+    this.sc_StringOps$$anon$1__f_stripped$1 = false;
+    this.sc_StringOps$$anon$1__f_$this$2 = \u03b4this$2;
+    this.sc_StringOps$$anon$1__f_stripped$1 = stripped$1;
+    this.sc_StringOps$$anon$1__f_scala$collection$StringOps$$anon$$len = $uI(\u03b4this$2.length);
+    this.sc_StringOps$$anon$1__f_scala$collection$StringOps$$anon$$index = 0
+  };
+  hasNext__Z() {
+    return (this.sc_StringOps$$anon$1__f_scala$collection$StringOps$$anon$$index < this.sc_StringOps$$anon$1__f_scala$collection$StringOps$$anon$$len)
+  };
+  next__T() {
+    return ((this.sc_StringOps$$anon$1__f_scala$collection$StringOps$$anon$$index >= this.sc_StringOps$$anon$1__f_scala$collection$StringOps$$anon$$len) ? $as_T($m_sc_Iterator$().sc_Iterator$__f_scala$collection$Iterator$$_empty.next__O()) : $p_sc_StringOps$$anon$1__advance__T(this))
+  };
+  next__O() {
+    return this.next__T()
+  };
+}
+const $d_sc_StringOps$$anon$1 = new $TypeData().initClass({
+  sc_StringOps$$anon$1: 0
+}, false, "scala.collection.StringOps$$anon$1", {
+  sc_StringOps$$anon$1: 1,
+  sc_AbstractIterator: 1,
+  O: 1,
+  sc_Iterator: 1,
+  sc_IterableOnce: 1,
+  sc_IterableOnceOps: 1
+});
+$c_sc_StringOps$$anon$1.prototype.$classData = $d_sc_StringOps$$anon$1;
 class $c_sc_View$TakeRightIterator extends $c_sc_AbstractIterator {
   constructor(underlying, maxlen) {
     super();
@@ -41944,6 +46653,294 @@ const $d_Lchess_format_pgn_Glyph$MoveAssessment$$anon$8 = new $TypeData().initCl
   Lchess_format_pgn_Glyph$MoveAssessment: 1
 });
 $c_Lchess_format_pgn_Glyph$MoveAssessment$$anon$8.prototype.$classData = $d_Lchess_format_pgn_Glyph$MoveAssessment$$anon$8;
+class $c_Lchess_format_pgn_Glyph$Observation$$anon$17 extends $c_Lchess_format_pgn_Glyph {
+  constructor() {
+    super();
+    $ct_Lchess_format_pgn_Glyph__I__T__T__(this, 146, "N", "Novelty")
+  };
+}
+const $d_Lchess_format_pgn_Glyph$Observation$$anon$17 = new $TypeData().initClass({
+  Lchess_format_pgn_Glyph$Observation$$anon$17: 0
+}, false, "chess.format.pgn.Glyph$Observation$$anon$17", {
+  Lchess_format_pgn_Glyph$Observation$$anon$17: 1,
+  Lchess_format_pgn_Glyph: 1,
+  O: 1,
+  s_Product: 1,
+  s_Equals: 1,
+  Ljava_io_Serializable: 1,
+  Lchess_format_pgn_Glyph$Observation: 1
+});
+$c_Lchess_format_pgn_Glyph$Observation$$anon$17.prototype.$classData = $d_Lchess_format_pgn_Glyph$Observation$$anon$17;
+class $c_Lchess_format_pgn_Glyph$Observation$$anon$18 extends $c_Lchess_format_pgn_Glyph {
+  constructor() {
+    super();
+    $ct_Lchess_format_pgn_Glyph__I__T__T__(this, 32, "\u2191\u2191", "Development")
+  };
+}
+const $d_Lchess_format_pgn_Glyph$Observation$$anon$18 = new $TypeData().initClass({
+  Lchess_format_pgn_Glyph$Observation$$anon$18: 0
+}, false, "chess.format.pgn.Glyph$Observation$$anon$18", {
+  Lchess_format_pgn_Glyph$Observation$$anon$18: 1,
+  Lchess_format_pgn_Glyph: 1,
+  O: 1,
+  s_Product: 1,
+  s_Equals: 1,
+  Ljava_io_Serializable: 1,
+  Lchess_format_pgn_Glyph$Observation: 1
+});
+$c_Lchess_format_pgn_Glyph$Observation$$anon$18.prototype.$classData = $d_Lchess_format_pgn_Glyph$Observation$$anon$18;
+class $c_Lchess_format_pgn_Glyph$Observation$$anon$19 extends $c_Lchess_format_pgn_Glyph {
+  constructor() {
+    super();
+    $ct_Lchess_format_pgn_Glyph__I__T__T__(this, 36, "\u2191", "Initiative")
+  };
+}
+const $d_Lchess_format_pgn_Glyph$Observation$$anon$19 = new $TypeData().initClass({
+  Lchess_format_pgn_Glyph$Observation$$anon$19: 0
+}, false, "chess.format.pgn.Glyph$Observation$$anon$19", {
+  Lchess_format_pgn_Glyph$Observation$$anon$19: 1,
+  Lchess_format_pgn_Glyph: 1,
+  O: 1,
+  s_Product: 1,
+  s_Equals: 1,
+  Ljava_io_Serializable: 1,
+  Lchess_format_pgn_Glyph$Observation: 1
+});
+$c_Lchess_format_pgn_Glyph$Observation$$anon$19.prototype.$classData = $d_Lchess_format_pgn_Glyph$Observation$$anon$19;
+class $c_Lchess_format_pgn_Glyph$Observation$$anon$20 extends $c_Lchess_format_pgn_Glyph {
+  constructor() {
+    super();
+    $ct_Lchess_format_pgn_Glyph__I__T__T__(this, 40, "\u2192", "Attack")
+  };
+}
+const $d_Lchess_format_pgn_Glyph$Observation$$anon$20 = new $TypeData().initClass({
+  Lchess_format_pgn_Glyph$Observation$$anon$20: 0
+}, false, "chess.format.pgn.Glyph$Observation$$anon$20", {
+  Lchess_format_pgn_Glyph$Observation$$anon$20: 1,
+  Lchess_format_pgn_Glyph: 1,
+  O: 1,
+  s_Product: 1,
+  s_Equals: 1,
+  Ljava_io_Serializable: 1,
+  Lchess_format_pgn_Glyph$Observation: 1
+});
+$c_Lchess_format_pgn_Glyph$Observation$$anon$20.prototype.$classData = $d_Lchess_format_pgn_Glyph$Observation$$anon$20;
+class $c_Lchess_format_pgn_Glyph$Observation$$anon$21 extends $c_Lchess_format_pgn_Glyph {
+  constructor() {
+    super();
+    $ct_Lchess_format_pgn_Glyph__I__T__T__(this, 132, "\u21c6", "Counterplay")
+  };
+}
+const $d_Lchess_format_pgn_Glyph$Observation$$anon$21 = new $TypeData().initClass({
+  Lchess_format_pgn_Glyph$Observation$$anon$21: 0
+}, false, "chess.format.pgn.Glyph$Observation$$anon$21", {
+  Lchess_format_pgn_Glyph$Observation$$anon$21: 1,
+  Lchess_format_pgn_Glyph: 1,
+  O: 1,
+  s_Product: 1,
+  s_Equals: 1,
+  Ljava_io_Serializable: 1,
+  Lchess_format_pgn_Glyph$Observation: 1
+});
+$c_Lchess_format_pgn_Glyph$Observation$$anon$21.prototype.$classData = $d_Lchess_format_pgn_Glyph$Observation$$anon$21;
+class $c_Lchess_format_pgn_Glyph$Observation$$anon$22 extends $c_Lchess_format_pgn_Glyph {
+  constructor() {
+    super();
+    $ct_Lchess_format_pgn_Glyph__I__T__T__(this, 138, "\u2295", "Time trouble")
+  };
+}
+const $d_Lchess_format_pgn_Glyph$Observation$$anon$22 = new $TypeData().initClass({
+  Lchess_format_pgn_Glyph$Observation$$anon$22: 0
+}, false, "chess.format.pgn.Glyph$Observation$$anon$22", {
+  Lchess_format_pgn_Glyph$Observation$$anon$22: 1,
+  Lchess_format_pgn_Glyph: 1,
+  O: 1,
+  s_Product: 1,
+  s_Equals: 1,
+  Ljava_io_Serializable: 1,
+  Lchess_format_pgn_Glyph$Observation: 1
+});
+$c_Lchess_format_pgn_Glyph$Observation$$anon$22.prototype.$classData = $d_Lchess_format_pgn_Glyph$Observation$$anon$22;
+class $c_Lchess_format_pgn_Glyph$Observation$$anon$23 extends $c_Lchess_format_pgn_Glyph {
+  constructor() {
+    super();
+    $ct_Lchess_format_pgn_Glyph__I__T__T__(this, 44, "=\u221e", "With compensation")
+  };
+}
+const $d_Lchess_format_pgn_Glyph$Observation$$anon$23 = new $TypeData().initClass({
+  Lchess_format_pgn_Glyph$Observation$$anon$23: 0
+}, false, "chess.format.pgn.Glyph$Observation$$anon$23", {
+  Lchess_format_pgn_Glyph$Observation$$anon$23: 1,
+  Lchess_format_pgn_Glyph: 1,
+  O: 1,
+  s_Product: 1,
+  s_Equals: 1,
+  Ljava_io_Serializable: 1,
+  Lchess_format_pgn_Glyph$Observation: 1
+});
+$c_Lchess_format_pgn_Glyph$Observation$$anon$23.prototype.$classData = $d_Lchess_format_pgn_Glyph$Observation$$anon$23;
+class $c_Lchess_format_pgn_Glyph$Observation$$anon$24 extends $c_Lchess_format_pgn_Glyph {
+  constructor() {
+    super();
+    $ct_Lchess_format_pgn_Glyph__I__T__T__(this, 140, "\u2206", "With the idea")
+  };
+}
+const $d_Lchess_format_pgn_Glyph$Observation$$anon$24 = new $TypeData().initClass({
+  Lchess_format_pgn_Glyph$Observation$$anon$24: 0
+}, false, "chess.format.pgn.Glyph$Observation$$anon$24", {
+  Lchess_format_pgn_Glyph$Observation$$anon$24: 1,
+  Lchess_format_pgn_Glyph: 1,
+  O: 1,
+  s_Product: 1,
+  s_Equals: 1,
+  Ljava_io_Serializable: 1,
+  Lchess_format_pgn_Glyph$Observation: 1
+});
+$c_Lchess_format_pgn_Glyph$Observation$$anon$24.prototype.$classData = $d_Lchess_format_pgn_Glyph$Observation$$anon$24;
+class $c_Lchess_format_pgn_Glyph$PositionAssessment$$anon$10 extends $c_Lchess_format_pgn_Glyph {
+  constructor() {
+    super();
+    $ct_Lchess_format_pgn_Glyph__I__T__T__(this, 13, "\u221e", "Unclear position")
+  };
+}
+const $d_Lchess_format_pgn_Glyph$PositionAssessment$$anon$10 = new $TypeData().initClass({
+  Lchess_format_pgn_Glyph$PositionAssessment$$anon$10: 0
+}, false, "chess.format.pgn.Glyph$PositionAssessment$$anon$10", {
+  Lchess_format_pgn_Glyph$PositionAssessment$$anon$10: 1,
+  Lchess_format_pgn_Glyph: 1,
+  O: 1,
+  s_Product: 1,
+  s_Equals: 1,
+  Ljava_io_Serializable: 1,
+  Lchess_format_pgn_Glyph$PositionAssessment: 1
+});
+$c_Lchess_format_pgn_Glyph$PositionAssessment$$anon$10.prototype.$classData = $d_Lchess_format_pgn_Glyph$PositionAssessment$$anon$10;
+class $c_Lchess_format_pgn_Glyph$PositionAssessment$$anon$11 extends $c_Lchess_format_pgn_Glyph {
+  constructor() {
+    super();
+    $ct_Lchess_format_pgn_Glyph__I__T__T__(this, 14, "\u2a72", "White is slightly better")
+  };
+}
+const $d_Lchess_format_pgn_Glyph$PositionAssessment$$anon$11 = new $TypeData().initClass({
+  Lchess_format_pgn_Glyph$PositionAssessment$$anon$11: 0
+}, false, "chess.format.pgn.Glyph$PositionAssessment$$anon$11", {
+  Lchess_format_pgn_Glyph$PositionAssessment$$anon$11: 1,
+  Lchess_format_pgn_Glyph: 1,
+  O: 1,
+  s_Product: 1,
+  s_Equals: 1,
+  Ljava_io_Serializable: 1,
+  Lchess_format_pgn_Glyph$PositionAssessment: 1
+});
+$c_Lchess_format_pgn_Glyph$PositionAssessment$$anon$11.prototype.$classData = $d_Lchess_format_pgn_Glyph$PositionAssessment$$anon$11;
+class $c_Lchess_format_pgn_Glyph$PositionAssessment$$anon$12 extends $c_Lchess_format_pgn_Glyph {
+  constructor() {
+    super();
+    $ct_Lchess_format_pgn_Glyph__I__T__T__(this, 15, "\u2a71", "Black is slightly better")
+  };
+}
+const $d_Lchess_format_pgn_Glyph$PositionAssessment$$anon$12 = new $TypeData().initClass({
+  Lchess_format_pgn_Glyph$PositionAssessment$$anon$12: 0
+}, false, "chess.format.pgn.Glyph$PositionAssessment$$anon$12", {
+  Lchess_format_pgn_Glyph$PositionAssessment$$anon$12: 1,
+  Lchess_format_pgn_Glyph: 1,
+  O: 1,
+  s_Product: 1,
+  s_Equals: 1,
+  Ljava_io_Serializable: 1,
+  Lchess_format_pgn_Glyph$PositionAssessment: 1
+});
+$c_Lchess_format_pgn_Glyph$PositionAssessment$$anon$12.prototype.$classData = $d_Lchess_format_pgn_Glyph$PositionAssessment$$anon$12;
+class $c_Lchess_format_pgn_Glyph$PositionAssessment$$anon$13 extends $c_Lchess_format_pgn_Glyph {
+  constructor() {
+    super();
+    $ct_Lchess_format_pgn_Glyph__I__T__T__(this, 16, "\u00b1", "White is better")
+  };
+}
+const $d_Lchess_format_pgn_Glyph$PositionAssessment$$anon$13 = new $TypeData().initClass({
+  Lchess_format_pgn_Glyph$PositionAssessment$$anon$13: 0
+}, false, "chess.format.pgn.Glyph$PositionAssessment$$anon$13", {
+  Lchess_format_pgn_Glyph$PositionAssessment$$anon$13: 1,
+  Lchess_format_pgn_Glyph: 1,
+  O: 1,
+  s_Product: 1,
+  s_Equals: 1,
+  Ljava_io_Serializable: 1,
+  Lchess_format_pgn_Glyph$PositionAssessment: 1
+});
+$c_Lchess_format_pgn_Glyph$PositionAssessment$$anon$13.prototype.$classData = $d_Lchess_format_pgn_Glyph$PositionAssessment$$anon$13;
+class $c_Lchess_format_pgn_Glyph$PositionAssessment$$anon$14 extends $c_Lchess_format_pgn_Glyph {
+  constructor() {
+    super();
+    $ct_Lchess_format_pgn_Glyph__I__T__T__(this, 17, "\u2213", "Black is better")
+  };
+}
+const $d_Lchess_format_pgn_Glyph$PositionAssessment$$anon$14 = new $TypeData().initClass({
+  Lchess_format_pgn_Glyph$PositionAssessment$$anon$14: 0
+}, false, "chess.format.pgn.Glyph$PositionAssessment$$anon$14", {
+  Lchess_format_pgn_Glyph$PositionAssessment$$anon$14: 1,
+  Lchess_format_pgn_Glyph: 1,
+  O: 1,
+  s_Product: 1,
+  s_Equals: 1,
+  Ljava_io_Serializable: 1,
+  Lchess_format_pgn_Glyph$PositionAssessment: 1
+});
+$c_Lchess_format_pgn_Glyph$PositionAssessment$$anon$14.prototype.$classData = $d_Lchess_format_pgn_Glyph$PositionAssessment$$anon$14;
+class $c_Lchess_format_pgn_Glyph$PositionAssessment$$anon$15 extends $c_Lchess_format_pgn_Glyph {
+  constructor() {
+    super();
+    $ct_Lchess_format_pgn_Glyph__I__T__T__(this, 18, "+\u2212", "White is winning")
+  };
+}
+const $d_Lchess_format_pgn_Glyph$PositionAssessment$$anon$15 = new $TypeData().initClass({
+  Lchess_format_pgn_Glyph$PositionAssessment$$anon$15: 0
+}, false, "chess.format.pgn.Glyph$PositionAssessment$$anon$15", {
+  Lchess_format_pgn_Glyph$PositionAssessment$$anon$15: 1,
+  Lchess_format_pgn_Glyph: 1,
+  O: 1,
+  s_Product: 1,
+  s_Equals: 1,
+  Ljava_io_Serializable: 1,
+  Lchess_format_pgn_Glyph$PositionAssessment: 1
+});
+$c_Lchess_format_pgn_Glyph$PositionAssessment$$anon$15.prototype.$classData = $d_Lchess_format_pgn_Glyph$PositionAssessment$$anon$15;
+class $c_Lchess_format_pgn_Glyph$PositionAssessment$$anon$16 extends $c_Lchess_format_pgn_Glyph {
+  constructor() {
+    super();
+    $ct_Lchess_format_pgn_Glyph__I__T__T__(this, 19, "-+", "Black is winning")
+  };
+}
+const $d_Lchess_format_pgn_Glyph$PositionAssessment$$anon$16 = new $TypeData().initClass({
+  Lchess_format_pgn_Glyph$PositionAssessment$$anon$16: 0
+}, false, "chess.format.pgn.Glyph$PositionAssessment$$anon$16", {
+  Lchess_format_pgn_Glyph$PositionAssessment$$anon$16: 1,
+  Lchess_format_pgn_Glyph: 1,
+  O: 1,
+  s_Product: 1,
+  s_Equals: 1,
+  Ljava_io_Serializable: 1,
+  Lchess_format_pgn_Glyph$PositionAssessment: 1
+});
+$c_Lchess_format_pgn_Glyph$PositionAssessment$$anon$16.prototype.$classData = $d_Lchess_format_pgn_Glyph$PositionAssessment$$anon$16;
+class $c_Lchess_format_pgn_Glyph$PositionAssessment$$anon$9 extends $c_Lchess_format_pgn_Glyph {
+  constructor() {
+    super();
+    $ct_Lchess_format_pgn_Glyph__I__T__T__(this, 10, "=", "Equal position")
+  };
+}
+const $d_Lchess_format_pgn_Glyph$PositionAssessment$$anon$9 = new $TypeData().initClass({
+  Lchess_format_pgn_Glyph$PositionAssessment$$anon$9: 0
+}, false, "chess.format.pgn.Glyph$PositionAssessment$$anon$9", {
+  Lchess_format_pgn_Glyph$PositionAssessment$$anon$9: 1,
+  Lchess_format_pgn_Glyph: 1,
+  O: 1,
+  s_Product: 1,
+  s_Equals: 1,
+  Ljava_io_Serializable: 1,
+  Lchess_format_pgn_Glyph$PositionAssessment: 1
+});
+$c_Lchess_format_pgn_Glyph$PositionAssessment$$anon$9.prototype.$classData = $d_Lchess_format_pgn_Glyph$PositionAssessment$$anon$9;
 const $ct_jl_ArrayIndexOutOfBoundsException__T__ = (function($thiz, s) {
   $ct_jl_Throwable__T__jl_Throwable__Z__Z__($thiz, s, null, true, true);
   return $thiz
@@ -42652,6 +47649,15 @@ function $f_sc_StrictOptimizedSeqOps__distinctBy__F1__O($thiz, f) {
     }
   };
   return builder.result__O()
+}
+function $f_sc_StrictOptimizedSeqOps__appended__O__O($thiz, elem) {
+  const b = $thiz.iterableFactory__sc_SeqFactory().newBuilder__scm_Builder();
+  if (($thiz.knownSize__I() >= 0)) {
+    b.sizeHint__I__V(((1 + $thiz.length__I()) | 0))
+  };
+  b.addAll__sc_IterableOnce__scm_Growable($thiz);
+  b.addOne__O__scm_Growable(elem);
+  return b.result__O()
 }
 function $f_sc_StrictOptimizedSeqOps__appendedAll__sc_IterableOnce__O($thiz, suffix) {
   const b = $thiz.iterableFactory__sc_SeqFactory().newBuilder__scm_Builder();
@@ -43634,6 +48640,176 @@ const $d_s_reflect_ClassTag$GenericClassTag = new $TypeData().initClass({
   s_Equals: 1
 });
 $c_s_reflect_ClassTag$GenericClassTag.prototype.$classData = $d_s_reflect_ClassTag$GenericClassTag;
+const $p_s_util_matching_Regex$MatchIterator__ensure__V = (function($thiz) {
+  const x1 = $thiz.s_util_matching_Regex$MatchIterator__f_nextSeen;
+  switch (x1) {
+    case 0: {
+      if ((!$thiz.hasNext__Z())) {
+        throw $ct_jl_IllegalStateException__(new $c_jl_IllegalStateException())
+      };
+      break
+    }
+    case 1: {
+      break
+    }
+    case 2: {
+      break
+    }
+    case 3: {
+      throw $ct_jl_IllegalStateException__(new $c_jl_IllegalStateException());
+      break
+    }
+    default: {
+      throw new $c_s_MatchError(x1)
+    }
+  }
+});
+class $c_s_util_matching_Regex$MatchIterator extends $c_sc_AbstractIterator {
+  constructor(source, regex, groupNames) {
+    super();
+    this.s_util_matching_Regex$MatchIterator__f_source = null;
+    this.s_util_matching_Regex$MatchIterator__f_regex = null;
+    this.s_util_matching_Regex$MatchIterator__f_groupNames = null;
+    this.s_util_matching_Regex$MatchIterator__f_matcher = null;
+    this.s_util_matching_Regex$MatchIterator__f_nextSeen = 0;
+    this.s_util_matching_Regex$MatchIterator__f_scala$util$matching$Regex$MatchData$$nameToIndex = null;
+    this.s_util_matching_Regex$MatchIterator__f_bitmap$0 = false;
+    this.s_util_matching_Regex$MatchIterator__f_source = source;
+    this.s_util_matching_Regex$MatchIterator__f_regex = regex;
+    this.s_util_matching_Regex$MatchIterator__f_groupNames = groupNames;
+    const this$1 = regex.s_util_matching_Regex__f_pattern;
+    this.s_util_matching_Regex$MatchIterator__f_matcher = new $c_ju_regex_Matcher(this$1, source, 0, $dp_length__I(source));
+    this.s_util_matching_Regex$MatchIterator__f_nextSeen = 0
+  };
+  source__jl_CharSequence() {
+    return this.s_util_matching_Regex$MatchIterator__f_source
+  };
+  hasNext__Z() {
+    const x1 = this.s_util_matching_Regex$MatchIterator__f_nextSeen;
+    switch (x1) {
+      case 0: {
+        this.s_util_matching_Regex$MatchIterator__f_nextSeen = (this.s_util_matching_Regex$MatchIterator__f_matcher.find__Z() ? 1 : 3);
+        break
+      }
+      case 1: {
+        break
+      }
+      case 2: {
+        this.s_util_matching_Regex$MatchIterator__f_nextSeen = 0;
+        this.hasNext__Z();
+        break
+      }
+      case 3: {
+        break
+      }
+      default: {
+        throw new $c_s_MatchError(x1)
+      }
+    };
+    return (this.s_util_matching_Regex$MatchIterator__f_nextSeen === 1)
+  };
+  next__T() {
+    const x1 = this.s_util_matching_Regex$MatchIterator__f_nextSeen;
+    switch (x1) {
+      case 0: {
+        if ((!this.hasNext__Z())) {
+          throw $ct_ju_NoSuchElementException__(new $c_ju_NoSuchElementException())
+        };
+        this.next__T();
+        break
+      }
+      case 1: {
+        this.s_util_matching_Regex$MatchIterator__f_nextSeen = 2;
+        break
+      }
+      case 2: {
+        this.s_util_matching_Regex$MatchIterator__f_nextSeen = 0;
+        this.next__T();
+        break
+      }
+      case 3: {
+        throw $ct_ju_NoSuchElementException__(new $c_ju_NoSuchElementException());
+        break
+      }
+      default: {
+        throw new $c_s_MatchError(x1)
+      }
+    };
+    return this.s_util_matching_Regex$MatchIterator__f_matcher.group__T()
+  };
+  toString__T() {
+    return "<iterator>"
+  };
+  start__I() {
+    $p_s_util_matching_Regex$MatchIterator__ensure__V(this);
+    return this.s_util_matching_Regex$MatchIterator__f_matcher.start__I()
+  };
+  start__I__I(i) {
+    $p_s_util_matching_Regex$MatchIterator__ensure__V(this);
+    return this.s_util_matching_Regex$MatchIterator__f_matcher.start__I__I(i)
+  };
+  end__I() {
+    $p_s_util_matching_Regex$MatchIterator__ensure__V(this);
+    return this.s_util_matching_Regex$MatchIterator__f_matcher.end__I()
+  };
+  end__I__I(i) {
+    $p_s_util_matching_Regex$MatchIterator__ensure__V(this);
+    return this.s_util_matching_Regex$MatchIterator__f_matcher.end__I__I(i)
+  };
+  next__O() {
+    return this.next__T()
+  };
+}
+const $d_s_util_matching_Regex$MatchIterator = new $TypeData().initClass({
+  s_util_matching_Regex$MatchIterator: 0
+}, false, "scala.util.matching.Regex$MatchIterator", {
+  s_util_matching_Regex$MatchIterator: 1,
+  sc_AbstractIterator: 1,
+  O: 1,
+  sc_Iterator: 1,
+  sc_IterableOnce: 1,
+  sc_IterableOnceOps: 1,
+  s_util_matching_Regex$MatchData: 1
+});
+$c_s_util_matching_Regex$MatchIterator.prototype.$classData = $d_s_util_matching_Regex$MatchIterator;
+class $c_s_util_matching_Regex$MatchIterator$$anon$4 extends $c_sc_AbstractIterator {
+  constructor(outer) {
+    super();
+    this.s_util_matching_Regex$MatchIterator$$anon$4__f_scala$util$matching$Regex$Replacement$$sb = null;
+    this.s_util_matching_Regex$MatchIterator$$anon$4__f_$outer = null;
+    if ((outer === null)) {
+      throw $m_sjsr_package$().unwrapJavaScriptException__jl_Throwable__O(null)
+    } else {
+      this.s_util_matching_Regex$MatchIterator$$anon$4__f_$outer = outer
+    };
+    this.s_util_matching_Regex$MatchIterator$$anon$4__f_scala$util$matching$Regex$Replacement$$sb = $ct_jl_StringBuffer__(new $c_jl_StringBuffer())
+  };
+  matcher__ju_regex_Matcher() {
+    return this.s_util_matching_Regex$MatchIterator$$anon$4__f_$outer.s_util_matching_Regex$MatchIterator__f_matcher
+  };
+  hasNext__Z() {
+    return this.s_util_matching_Regex$MatchIterator$$anon$4__f_$outer.hasNext__Z()
+  };
+  next__s_util_matching_Regex$Match() {
+    this.s_util_matching_Regex$MatchIterator$$anon$4__f_$outer.next__T();
+    return new $c_s_util_matching_Regex$Match(this.s_util_matching_Regex$MatchIterator$$anon$4__f_$outer.s_util_matching_Regex$MatchIterator__f_source, this.matcher__ju_regex_Matcher(), this.s_util_matching_Regex$MatchIterator$$anon$4__f_$outer.s_util_matching_Regex$MatchIterator__f_groupNames).force__s_util_matching_Regex$Match()
+  };
+  next__O() {
+    return this.next__s_util_matching_Regex$Match()
+  };
+}
+const $d_s_util_matching_Regex$MatchIterator$$anon$4 = new $TypeData().initClass({
+  s_util_matching_Regex$MatchIterator$$anon$4: 0
+}, false, "scala.util.matching.Regex$MatchIterator$$anon$4", {
+  s_util_matching_Regex$MatchIterator$$anon$4: 1,
+  sc_AbstractIterator: 1,
+  O: 1,
+  sc_Iterator: 1,
+  sc_IterableOnce: 1,
+  sc_IterableOnceOps: 1,
+  s_util_matching_Regex$Replacement: 1
+});
+$c_s_util_matching_Regex$MatchIterator$$anon$4.prototype.$classData = $d_s_util_matching_Regex$MatchIterator$$anon$4;
 function $is_s_util_parsing_combinator_Parsers$Error(obj) {
   return false
 }
@@ -51540,6 +56716,10 @@ class $c_Lcats_instances_QueueInstances$$anon$1 extends $c_O {
   traverse__O__F1__Lcats_Applicative__O(fa, f, evidence$1) {
     return this.traverse__sci_Queue__F1__Lcats_Applicative__O($as_sci_Queue(fa), f, evidence$1)
   };
+  foldLeft__O__O__F2__O(fa, b, f) {
+    const fa$1 = $as_sci_Queue(fa);
+    return $f_sc_LinearSeqOps__foldLeft__O__F2__O(fa$1, b, f)
+  };
   map2Eval__O__Lcats_Eval__F2__Lcats_Eval(fa, fb, f) {
     return this.map2Eval__sci_Queue__Lcats_Eval__F2__Lcats_Eval($as_sci_Queue(fa), fb, f)
   };
@@ -52381,6 +57561,10 @@ class $c_Lcats_instances_LazyListInstances$$anon$1 extends $c_O {
   traverse__O__F1__Lcats_Applicative__O(fa, f, evidence$1) {
     return this.traverse__sci_LazyList__F1__Lcats_Applicative__O($as_sci_LazyList(fa), f, evidence$1)
   };
+  foldLeft__O__O__F2__O(fa, b, f) {
+    const fa$1 = $as_sci_LazyList(fa);
+    return fa$1.foldLeft__O__F2__O(b, f)
+  };
   map2Eval__O__Lcats_Eval__F2__Lcats_Eval(fa, fb, f) {
     return this.map2Eval__sci_LazyList__Lcats_Eval__F2__Lcats_Eval($as_sci_LazyList(fa), fb, f)
   };
@@ -52524,6 +57708,10 @@ class $c_Lcats_instances_ListInstances$$anon$1 extends $c_O {
   traverse__O__F1__Lcats_Applicative__O(fa, f, evidence$1) {
     return this.traverse__sci_List__F1__Lcats_Applicative__O($as_sci_List(fa), f, evidence$1)
   };
+  foldLeft__O__O__F2__O(fa, b, f) {
+    const fa$1 = $as_sci_List(fa);
+    return $f_sc_LinearSeqOps__foldLeft__O__F2__O(fa$1, b, f)
+  };
   map2Eval__O__Lcats_Eval__F2__Lcats_Eval(fa, fb, f) {
     return this.map2Eval__sci_List__Lcats_Eval__F2__Lcats_Eval($as_sci_List(fa), fb, f)
   };
@@ -52625,6 +57813,10 @@ class $c_Lcats_instances_StreamInstances$$anon$1 extends $c_O {
   traverse__O__F1__Lcats_Applicative__O(fa, f, evidence$1) {
     return this.traverse__sci_Stream__F1__Lcats_Applicative__O($as_sci_Stream(fa), f, evidence$1)
   };
+  foldLeft__O__O__F2__O(fa, b, f) {
+    const fa$1 = $as_sci_Stream(fa);
+    return fa$1.foldLeft__O__F2__O(b, f)
+  };
   map2Eval__O__Lcats_Eval__F2__Lcats_Eval(fa, fb, f) {
     return this.map2Eval__sci_Stream__Lcats_Eval__F2__Lcats_Eval($as_sci_Stream(fa), fb, f)
   };
@@ -52716,6 +57908,10 @@ class $c_Lcats_instances_VectorInstances$$anon$1 extends $c_O {
   };
   traverse__O__F1__Lcats_Applicative__O(fa, f, evidence$1) {
     return this.traverse__sci_Vector__F1__Lcats_Applicative__O($as_sci_Vector(fa), f, evidence$1)
+  };
+  foldLeft__O__O__F2__O(fa, b, f) {
+    const fa$1 = $as_sci_Vector(fa);
+    return $f_sc_IterableOnceOps__foldLeft__O__F2__O(fa$1, b, f)
   };
   flatMap__O__F1__O(fa, f) {
     const fa$1 = $as_sci_Vector(fa);
@@ -55106,6 +60302,9 @@ class $c_Lcats_package$$anon$1 extends $c_O {
   map2__O__O__F2__O(fa, fb, f) {
     return f.apply__O__O__O(fa, fb)
   };
+  foldLeft__O__O__F2__O(a, b, f) {
+    return f.apply__O__O__O(b, a)
+  };
 }
 const $d_Lcats_package$$anon$1 = new $TypeData().initClass({
   Lcats_package$$anon$1: 0
@@ -55893,6 +61092,18 @@ class $c_Lcats_instances_OptionInstances$$anon$1 extends $c_O {
       throw new $c_s_MatchError(fa)
     }
   };
+  foldLeft__s_Option__O__F2__O(fa, b, f) {
+    const x = $m_s_None$();
+    if ((x === fa)) {
+      return b
+    } else if ((fa instanceof $c_s_Some)) {
+      const x2 = $as_s_Some(fa);
+      const a = x2.s_Some__f_value;
+      return f.apply__O__O__O(b, a)
+    } else {
+      throw new $c_s_MatchError(fa)
+    }
+  };
   traverse__s_Option__F1__Lcats_Applicative__O(fa, f, evidence$1) {
     const x = $m_s_None$();
     if ((x === fa)) {
@@ -55907,6 +61118,9 @@ class $c_Lcats_instances_OptionInstances$$anon$1 extends $c_O {
   };
   traverse__O__F1__Lcats_Applicative__O(fa, f, evidence$1) {
     return this.traverse__s_Option__F1__Lcats_Applicative__O($as_s_Option(fa), f, evidence$1)
+  };
+  foldLeft__O__O__F2__O(fa, b, f) {
+    return this.foldLeft__s_Option__O__F2__O($as_s_Option(fa), b, f)
   };
   map2Eval__O__Lcats_Eval__F2__Lcats_Eval(fa, fb, f) {
     return this.map2Eval__s_Option__Lcats_Eval__F2__Lcats_Eval($as_s_Option(fa), fb, f)
@@ -63678,6 +68892,10 @@ makeSanMovesScala = (function(arg, arg$2, arg$3) {
   const prep1 = arg$2;
   const prep2 = arg$3;
   return $m_Lchess_ChessApp$().makeSanMovesScala__sjs_js_$bar__sjs_js_$bar__sjs_js_Array__sjs_js_Tuple2(prep0, prep1, prep2)
+});
+parsePgn = (function(arg) {
+  const prep0 = $as_T(arg);
+  return $m_Lchess_ChessApp$().parsePgn__T__sjs_js_Tuple2(prep0)
 });
 makeUciMovesScala = (function(arg, arg$2, arg$3) {
   const prep0 = arg;
