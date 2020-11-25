@@ -1323,20 +1323,62 @@ class $c_Lchess_ChessApp$ extends $c_O {
       } else {
         const x$2$1 = $m_s_None$();
         if ((x$2$1 === x1$1)) {
-          const xs$2 = $asArrayOf_T(elem$2, 1);
-          const x$3 = ("ill formatted uci " + uci);
-          const this$65 = $m_s_Array$();
-          const newLength$1 = ((1 + xs$2.u.length) | 0);
-          let dest$3;
-          if ($d_T.getClassOf().isAssignableFrom__jl_Class__Z($objectGetClass(xs$2).getComponentType__jl_Class())) {
-            dest$3 = ($d_T.getClassOf().isPrimitive__Z() ? this$65.copyOf__O__I__O(xs$2, newLength$1) : $m_ju_Arrays$().copyOf__AO__I__jl_Class__AO(xs$2, newLength$1, $d_T.getArrayOf().getClassOf()))
+          const x1$3 = $m_Lchess_format_Uci$().apply__T__s_Option(uci);
+          if ((x1$3 instanceof $c_s_Some)) {
+            const x2$3 = $as_s_Some(x1$3);
+            const drop = $as_Lchess_format_Uci(x2$3.s_Some__f_value);
+            const x1$4 = $as_Lchess_Game(elem$1).apply__Lchess_format_Uci__Lcats_data_Validated(drop);
+            matchEnd7$2: {
+              if ((x1$4 instanceof $c_Lcats_data_Validated$Valid)) {
+                const x2$4 = $as_Lcats_data_Validated$Valid(x1$4);
+                const p3$2 = $as_T2(x2$4.Lcats_data_Validated$Valid__f_a);
+                if ((p3$2 !== null)) {
+                  const ng$2 = $as_Lchess_Game(p3$2._1__O());
+                  elem$1 = ng$2;
+                  break matchEnd7$2
+                }
+              };
+              if ((x1$4 instanceof $c_Lcats_data_Validated$Invalid)) {
+                const x5$2 = $as_Lcats_data_Validated$Invalid(x1$4);
+                const why$2 = $as_T(x5$2.Lcats_data_Validated$Invalid__f_e);
+                const xs$2 = $asArrayOf_T(elem$2, 1);
+                const x$3 = ((uci + " invalid drop ") + why$2);
+                const this$65 = $m_s_Array$();
+                const newLength$1 = ((1 + xs$2.u.length) | 0);
+                let dest$3;
+                if ($d_T.getClassOf().isAssignableFrom__jl_Class__Z($objectGetClass(xs$2).getComponentType__jl_Class())) {
+                  dest$3 = ($d_T.getClassOf().isPrimitive__Z() ? this$65.copyOf__O__I__O(xs$2, newLength$1) : $m_ju_Arrays$().copyOf__AO__I__jl_Class__AO(xs$2, newLength$1, $d_T.getArrayOf().getClassOf()))
+                } else {
+                  const dest$2 = $newArrayObject($d_T.getArrayOf(), [newLength$1]);
+                  $m_s_Array$().copy__O__I__O__I__I__V(xs$2, 0, dest$2, 0, xs$2.u.length);
+                  dest$3 = dest$2
+                };
+                $m_sr_ScalaRunTime$().array_update__O__I__O__V(dest$3, xs$2.u.length, x$3);
+                elem$2 = $asArrayOf_T(dest$3, 1);
+                break matchEnd7$2
+              };
+              throw new $c_s_MatchError(x1$4)
+            }
           } else {
-            const dest$2 = $newArrayObject($d_T.getArrayOf(), [newLength$1]);
-            $m_s_Array$().copy__O__I__O__I__I__V(xs$2, 0, dest$2, 0, xs$2.u.length);
-            dest$3 = dest$2
-          };
-          $m_sr_ScalaRunTime$().array_update__O__I__O__V(dest$3, xs$2.u.length, x$3);
-          elem$2 = $asArrayOf_T(dest$3, 1)
+            const x$5 = $m_s_None$();
+            if ((!(x$5 === x1$3))) {
+              throw new $c_s_MatchError(x1$3)
+            };
+            const xs$3 = $asArrayOf_T(elem$2, 1);
+            const x$6 = ("ill formatted uci " + uci);
+            const this$71 = $m_s_Array$();
+            const newLength$2 = ((1 + xs$3.u.length) | 0);
+            let dest$5;
+            if ($d_T.getClassOf().isAssignableFrom__jl_Class__Z($objectGetClass(xs$3).getComponentType__jl_Class())) {
+              dest$5 = ($d_T.getClassOf().isPrimitive__Z() ? this$71.copyOf__O__I__O(xs$3, newLength$2) : $m_ju_Arrays$().copyOf__AO__I__jl_Class__AO(xs$3, newLength$2, $d_T.getArrayOf().getClassOf()))
+            } else {
+              const dest$4 = $newArrayObject($d_T.getArrayOf(), [newLength$2]);
+              $m_s_Array$().copy__O__I__O__I__I__V(xs$3, 0, dest$4, 0, xs$3.u.length);
+              dest$5 = dest$4
+            };
+            $m_sr_ScalaRunTime$().array_update__O__I__O__V(dest$5, xs$3.u.length, x$6);
+            elem$2 = $asArrayOf_T(dest$5, 1)
+          }
         } else {
           throw new $c_s_MatchError(x1$1)
         }
@@ -1366,8 +1408,8 @@ class $c_Lchess_ChessApp$ extends $c_O {
         throw new $c_s_MatchError(x$1$1)
       }
     }))(this))));
-    const this$74 = $m_s_$less$colon$less$();
-    let legalMovesUcis = $as_sc_IterableOnceOps($as_sc_IterableOps($$x7.flatten__F1__O(this$74.s_$less$colon$less$__f_singleton)).map__F1__O(new $c_sjsr_AnonFunction1(((this$7$1) => ((move$2) => {
+    const this$80 = $m_s_$less$colon$less$();
+    let legalMovesUcis = $as_sc_IterableOnceOps($as_sc_IterableOps($$x7.flatten__F1__O(this$80.s_$less$colon$less$__f_singleton)).map__F1__O(new $c_sjsr_AnonFunction1(((this$7$1) => ((move$2) => {
       const move$1 = $as_Lchess_Move(move$2);
       return new $c_Lchess_format_Uci$Move(move$1.Lchess_Move__f_orig, move$1.Lchess_Move__f_dest, move$1.Lchess_Move__f_promotion).uci__T()
     }))(this)))).toList__sci_List();
@@ -4275,6 +4317,59 @@ function $isArrayOf_Lchess_format_Uci(obj, depth) {
 }
 function $asArrayOf_Lchess_format_Uci(obj, depth) {
   return (($isArrayOf_Lchess_format_Uci(obj, depth) || (obj === null)) ? obj : $throwArrayCastException(obj, "Lchess.format.Uci;", depth))
+}
+class $c_Lchess_format_Uci$ extends $c_O {
+  constructor() {
+    super();
+    this.Lchess_format_Uci$__f_bitmap$init$0 = 0
+  };
+  apply__T__s_Option(move) {
+    const this$1 = $m_s_Predef$().wrapString__T__sci_WrappedString(move);
+    const this$2 = new $c_s_PartialFunction$Lifted(this$1);
+    if (this$2.apply__O__s_Option(1).contains__O__Z($bC(64))) {
+      const this$4 = $m_sc_StringOps$().headOption$extension__T__s_Option(move);
+      let this$5;
+      if (this$4.isEmpty__Z()) {
+        this$5 = $m_s_None$()
+      } else {
+        const arg1 = this$4.get__O();
+        const key = $uC(arg1);
+        this$5 = $m_Lchess_Role$().allByPgn__sci_Map().get__O__s_Option($bC(key))
+      };
+      if (this$5.isEmpty__Z()) {
+        return $m_s_None$()
+      } else {
+        const arg1$1 = this$5.get__O();
+        const role = $as_Lchess_Role(arg1$1);
+        const this$7 = $m_Lchess_Pos$();
+        const key$1 = $m_sc_StringOps$().slice$extension__T__I__I__T(move, 2, 4);
+        const this$8 = this$7.allKeys__sci_Map().get__O__s_Option(key$1);
+        if (this$8.isEmpty__Z()) {
+          return $m_s_None$()
+        } else {
+          const arg1$2 = this$8.get__O();
+          const pos = $as_Lchess_Pos(arg1$2).Lchess_Pos__f_index;
+          return new $c_s_Some(new $c_Lchess_format_Uci$Drop(role, pos))
+        }
+      }
+    } else {
+      return $m_Lchess_format_Uci$Move$().apply__T__s_Option(move)
+    }
+  };
+}
+const $d_Lchess_format_Uci$ = new $TypeData().initClass({
+  Lchess_format_Uci$: 0
+}, false, "chess.format.Uci$", {
+  Lchess_format_Uci$: 1,
+  O: 1
+});
+$c_Lchess_format_Uci$.prototype.$classData = $d_Lchess_format_Uci$;
+let $n_Lchess_format_Uci$;
+function $m_Lchess_format_Uci$() {
+  if ((!$n_Lchess_format_Uci$)) {
+    $n_Lchess_format_Uci$ = new $c_Lchess_format_Uci$()
+  };
+  return $n_Lchess_format_Uci$
 }
 class $c_Lchess_format_Visual$ extends $c_O {
   $greater$greater__Lchess_Board__T(board) {
@@ -25644,6 +25739,13 @@ class $c_Lchess_Drop extends $c_O {
     const x$4$2 = board.Lchess_Board__f_crazyData;
     return new $c_Lchess_Board(x$2$2, x$1$2, x$3$2, x$4$2)
   };
+  withMetrics__Lchess_MoveMetrics__Lchess_Drop(m) {
+    const x$2 = this.Lchess_Drop__f_piece;
+    const x$3 = this.Lchess_Drop__f_pos;
+    const x$4 = this.Lchess_Drop__f_situationBefore;
+    const x$5 = this.Lchess_Drop__f_after;
+    return new $c_Lchess_Drop(x$2, x$3, x$4, x$5, m)
+  };
   toUci__Lchess_format_Uci$Drop() {
     return new $c_Lchess_format_Uci$Drop(this.Lchess_Drop__f_piece.Lchess_Piece__f_role, this.Lchess_Drop__f_pos)
   };
@@ -25813,6 +25915,34 @@ class $c_Lchess_Game extends $c_O {
     const x$7 = this.Lchess_Game__f_genSan;
     return new $c_Lchess_Game(newSituation, x$3, x$4, x$2, x$5, x$6, x$7)
   };
+  drop__Lchess_Role__I__Lchess_MoveMetrics__Lcats_data_Validated(role, pos, metrics) {
+    const this$1 = this.Lchess_Game__f_situation.drop__Lchess_Role__I__Lcats_data_Validated(role, pos);
+    let this$2;
+    if ((this$1 instanceof $c_Lcats_data_Validated$Invalid)) {
+      const x2 = $as_Lcats_data_Validated$Invalid(this$1);
+      this$2 = x2
+    } else {
+      if ((!(this$1 instanceof $c_Lcats_data_Validated$Valid))) {
+        throw new $c_s_MatchError(this$1)
+      };
+      const x4 = $as_Lcats_data_Validated$Valid(this$1);
+      const a = x4.Lcats_data_Validated$Valid__f_a;
+      const x$2 = $as_Lchess_Drop(a);
+      this$2 = new $c_Lcats_data_Validated$Valid(x$2.withMetrics__Lchess_MoveMetrics__Lchess_Drop(metrics))
+    };
+    if ((this$2 instanceof $c_Lcats_data_Validated$Invalid)) {
+      const x2$1 = $as_Lcats_data_Validated$Invalid(this$2);
+      return x2$1
+    } else if ((this$2 instanceof $c_Lcats_data_Validated$Valid)) {
+      const x4$1 = $as_Lcats_data_Validated$Valid(this$2);
+      const a$1 = x4$1.Lcats_data_Validated$Valid__f_a;
+      const drop = $as_Lchess_Drop(a$1);
+      const self = this.applyDrop__Lchess_Drop__Lchess_Game(drop);
+      return new $c_Lcats_data_Validated$Valid(new $c_T2(self, drop))
+    } else {
+      throw new $c_s_MatchError(this$2)
+    }
+  };
   applyDrop__Lchess_Drop__Lchess_Game(drop) {
     const newSituation = drop.situationAfter__Lchess_Situation();
     const x$2 = ((1 + this.Lchess_Game__f_turns) | 0);
@@ -25824,6 +25954,59 @@ class $c_Lchess_Game extends $c_O {
     const x$6 = this.Lchess_Game__f_genUci;
     const x$7 = this.Lchess_Game__f_genSan;
     return new $c_Lchess_Game(newSituation, x$3, x$4, x$2, x$5, x$6, x$7)
+  };
+  apply__Lchess_format_Uci__Lcats_data_Validated(uci) {
+    if ((uci instanceof $c_Lchess_format_Uci$Move)) {
+      const x2 = $as_Lchess_format_Uci$Move(uci);
+      const this$3 = this.apply__I__I__s_Option__Lchess_MoveMetrics__Lcats_data_Validated(x2.Lchess_format_Uci$Move__f_orig, x2.Lchess_format_Uci$Move__f_dest, x2.Lchess_format_Uci$Move__f_promotion, new $c_Lchess_MoveMetrics($m_s_None$(), $m_s_None$()));
+      if ((this$3 instanceof $c_Lcats_data_Validated$Invalid)) {
+        const x2$1 = $as_Lcats_data_Validated$Invalid(this$3);
+        return x2$1
+      } else if ((this$3 instanceof $c_Lcats_data_Validated$Valid)) {
+        const x4 = $as_Lcats_data_Validated$Valid(this$3);
+        const a = x4.Lcats_data_Validated$Valid__f_a;
+        const x0$1 = $as_T2(a);
+        let $$x1;
+        if ((x0$1 !== null)) {
+          const g = $as_Lchess_Game(x0$1._1__O());
+          const m = $as_Lchess_Move(x0$1._2__O());
+          $m_s_package$();
+          const y = new $c_s_util_Left(m);
+          $$x1 = new $c_T2(g, y)
+        } else {
+          throw new $c_s_MatchError(x0$1)
+        };
+        return new $c_Lcats_data_Validated$Valid($$x1)
+      } else {
+        throw new $c_s_MatchError(this$3)
+      }
+    } else if ((uci instanceof $c_Lchess_format_Uci$Drop)) {
+      const x3 = $as_Lchess_format_Uci$Drop(uci);
+      const this$9 = this.drop__Lchess_Role__I__Lchess_MoveMetrics__Lcats_data_Validated(x3.Lchess_format_Uci$Drop__f_role, x3.Lchess_format_Uci$Drop__f_pos, new $c_Lchess_MoveMetrics($m_s_None$(), $m_s_None$()));
+      if ((this$9 instanceof $c_Lcats_data_Validated$Invalid)) {
+        const x2$2 = $as_Lcats_data_Validated$Invalid(this$9);
+        return x2$2
+      } else if ((this$9 instanceof $c_Lcats_data_Validated$Valid)) {
+        const x4$1 = $as_Lcats_data_Validated$Valid(this$9);
+        const a$1 = x4$1.Lcats_data_Validated$Valid__f_a;
+        const x0$2 = $as_T2(a$1);
+        let $$x2;
+        if ((x0$2 !== null)) {
+          const g$1 = $as_Lchess_Game(x0$2._1__O());
+          const d = $as_Lchess_Drop(x0$2._2__O());
+          $m_s_package$();
+          const y$1 = new $c_s_util_Right(d);
+          $$x2 = new $c_T2(g$1, y$1)
+        } else {
+          throw new $c_s_MatchError(x0$2)
+        };
+        return new $c_Lcats_data_Validated$Valid($$x2)
+      } else {
+        throw new $c_s_MatchError(this$9)
+      }
+    } else {
+      throw new $c_s_MatchError(uci)
+    }
   };
   halfMoveClock__I() {
     return this.Lchess_Game__f_situation.Lchess_Situation__f_board.Lchess_Board__f_history.Lchess_History__f_halfMoveClock
@@ -69360,7 +69543,7 @@ const testPgnCrazyhouse = `[Event "Casual Crazyhouse game"]
 1. d4 d5 2. Nf3 { D02 Queen's Pawn Game: Zukertort Variation } Bf5 3. e3 e6 4. Bd3 Bxd3 5. Qxd3 Nf6 6. B@g5 B@a6 7. Qd2 Ne4 8. Bxd8 Nxd2 9. Kxd2 Bb4+ 10. Nc3 Q@e2# { Black wins by checkmate. } 0-1`
 
 //console.log("test", parsePgnFull(testPgnRacingKings))
-console.log("test", parsePgnFull(testPgnCrazyhouse))
+//console.log("test", parsePgnFull(testPgnCrazyhouse))
 
 if(typeof module != "undefined"){
     module.exports = {
