@@ -17,8 +17,29 @@ object ChessApp {
 		
 		chess.format.pgn.Parser.full(pgn) match {
 			case cats.data.Validated.Valid(parsedPgn) => {
-				val tags = parsedPgn.tags.value.map(tag => js.Tuple2(tag.name.lowercase, tag.value)).toJSArray												
-				Replay.games(parsedPgn.strMoves, None, variant.Variant("standard").get) match {
+				var fen = ""
+				var variantName = ""
+				val tags = parsedPgn.tags.value.map(tag => {
+					val name = tag.name.lowercase
+					val value = tag.value
+					if(name == "fen") fen = value
+					if(name == "variant") variantName = value
+					js.Tuple2(name, tag.value)
+				}).toJSArray												
+				
+				var variantKey = "standard"
+				
+				if(variantName == "Chess960") variantKey = "chess960"
+				if(variantName == "Crazyhouse") variantKey = "crazyhouse"
+				if(variantName == "King of the Hill") variantKey = "kingOfTheHill"
+				if(variantName == "Three-check") variantKey = "threeCheck"
+				if(variantName == "Antichess") variantKey = "antichess"
+				if(variantName == "Atomic") variantKey = "atomic"
+				if(variantName == "Horde") variantKey = "horde"
+				if(variantName == "Racing Kings") variantKey = "racingKings"
+				if(variantName == "From Position") variantKey = "fromPosition"							
+				
+				Replay.games(parsedPgn.strMoves, if(fen == "") None else Some(chess.format.FEN(fen)), variant.Variant(variantKey).get) match {
 			case cats.data.Validated.Valid(games) => {													
 				val fens = games.map(g => js.Tuple2(g.genUci, (chess.format.Forsyth >> g).toString)).toJSArray
 				return js.Tuple2(tags, fens)
