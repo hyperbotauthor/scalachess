@@ -6,6 +6,35 @@ import js.JSConverters._
 
 object ChessApp {
 	val DEFAULT_VARIANT = variant.Standard
+	@JSExportTopLevel("parsePgn")
+	def parsePgn(
+		pgn: String
+	):js.Tuple2[
+		js.Array[js.Tuple2[String, String]],
+		js.Array[js.Tuple2[String, String]]
+	] = {
+		val emptyResult = js.Array[js.Tuple2[String, String]]()
+		
+		chess.format.pgn.Parser.full(pgn) match {
+			case cats.data.Validated.Valid(parsedPgn) => {
+				val tags = parsedPgn.tags.value.map(tag => js.Tuple2(tag.name.lowercase, tag.value)).toJSArray												
+				Replay.games(parsedPgn.strMoves, None, variant.Variant("standard").get) match {
+			case cats.data.Validated.Valid(games) => {													
+				val fens = games.map(g => js.Tuple2(g.genUci, (chess.format.Forsyth >> g).toString)).toJSArray
+				return js.Tuple2(tags, fens)
+			}
+			case cats.data.Validated.Invalid(_) => {													
+				println("replay error")
+				return js.Tuple2(emptyResult, emptyResult)
+			}
+		}
+			}
+			case cats.data.Validated.Invalid(_) => {
+				println("parse error")
+				return js.Tuple2(emptyResult, emptyResult)
+			}
+		}
+	}	
 	@JSExportTopLevel("makeSanMovesScala")
 	def makeSanMovesScala(
 		variantKeyOptJs: js.UndefOr[String],
