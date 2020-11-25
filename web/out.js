@@ -69317,7 +69317,7 @@ function parsePgnFull(pgn){
 }
 
 // test
-const testPgn = `[Event "Casual Racing Kings game"]
+const testPgnRacingKings = `[Event "Casual Racing Kings game"]
 [Site "https://lichess.org/oaQqCIYx"]
 [Date "2020.11.25"]
 [White "chesshyperbot"]
@@ -69339,7 +69339,28 @@ const testPgn = `[Event "Casual Racing Kings game"]
 
 1. Kg3 Kb3 2. Kf4 { Black resigns. } 1-0`
 
-//console.log("test", parsePgnFull(testPgn))
+const testPgnCrazyhouse = `[Event "Casual Crazyhouse game"]
+[Site "https://lichess.org/Fae7ZYEr"]
+[Date "2020.11.25"]
+[White "sChessNoob"]
+[Black "chesshyperbot"]
+[Result "0-1"]
+[UTCDate "2020.11.25"]
+[UTCTime "16:53:36"]
+[WhiteElo "1500"]
+[BlackElo "1898"]
+[BlackTitle "BOT"]
+[Variant "Crazyhouse"]
+[TimeControl "180+0"]
+[ECO "D02"]
+[Opening "Queen's Pawn Game: Zukertort Variation"]
+[Termination "Normal"]
+[Annotator "lichess.org"]
+
+1. d4 d5 2. Nf3 { D02 Queen's Pawn Game: Zukertort Variation } Bf5 3. e3 e6 4. Bd3 Bxd3 5. Qxd3 Nf6 6. B@g5 B@a6 7. Qd2 Ne4 8. Bxd8 Nxd2 9. Kxd2 Bb4+ 10. Nc3 Q@e2# { Black wins by checkmate. } 0-1`
+
+//console.log("test", parsePgnFull(testPgnRacingKings))
+console.log("test", parsePgnFull(testPgnCrazyhouse))
 
 if(typeof module != "undefined"){
     module.exports = {
