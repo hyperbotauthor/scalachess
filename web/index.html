@@ -278,6 +278,13 @@ let sfwasm = new UciEngineWeb()
 				return (infoB.plays || 0) - (infoA.plays || 0)
 			}
 			
+			infoA.perf = infoA.score / infoA.plays
+			infoB.perf = infoB.score / infoB.plays
+			
+			if(infoA.perf != infoB.perf){
+				return infoB.perf - infoA.perf
+			}
+			
 			if(infoA.first != infoB.first){
 				return (infoB.first ? 1 : 0) - (infoA.first ? 1 : 0)
 			}
