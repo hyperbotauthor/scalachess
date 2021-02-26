@@ -157,7 +157,7 @@ For detailed instructions see <a href="https://lichess.org/forum/off-topic-discu
 		Labeled("Book depth", Combo({id: "bookDepth", options: [...Array(100).keys()].map(key => ({value:(key+1), display: (key+1)}))})).marl(10),
 		Labeled("Book spread", Combo({id: "bookSpread", options: [...Array(20).keys()].map(key => ({value:(key+1), display: (key+1)}))})).marl(10),
 		Labeled("Book speeds", MultipleSelect({id: "bookSpeeds", options:["bullet", "blitz", "rapid", "classical"].map(speed => [speed, speed])})).marl(10),
-		Labeled("Book ratings", MultipleSelect({id: "bookRatings", options:["1600", "1800", "2200", "2500"].map(speed => [speed, speed])})).marl(10),
+		Labeled("Book ratings", MultipleSelect({id: "bookRatings", options:["1600", "1800", "2000", "2200", "2500"].map(speed => [speed, speed])})).marl(10),
 	)
 	
 	let botSettings = div().a(botSettings1, hr(), botSettings2)
