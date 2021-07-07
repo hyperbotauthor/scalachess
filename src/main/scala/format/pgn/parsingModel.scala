@@ -7,7 +7,8 @@ import cats.syntax.option._
 case class ParsedPgn(
     initialPosition: InitialPosition,
     tags: Tags,
-    sans: Sans
+    sans: Sans,
+	strMoves: List[String]
 )
 
 case class Sans(value: List[San]) extends AnyVal

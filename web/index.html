@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html>
+	
+<head>
+	
+	<link rel='shortcut icon' type='image/x-icon' href='/faviconsc.ico' />
+	
+</head>
+	
+<body>
+
+<div id="root"></div>
+
+<script src="https://unpkg.com/@easychessanimations/foo@1.0.30/lib/fooweb.js"></script>	
+<script src="https://unpkg.com/@easychessanimations/foo@1.0.30/lib/pieces.js"></script>	
+<script src="https://unpkg.com/@easychessanimations/uci@1.0.29/lib/uci.js"></script>	
+
+<script src="stockfishwasm/stockfish.js"></script>
+
+<script>
+let params = (new URL(document.location)).searchParams
+	
+class UciEngineWeb extends UciEngine{
+	constructor(){
+		super()
+    }
+
+    spawn(){
+        if(this.worker) this.worker.close()
+		
+		this.worker = null
+		
+		StockfishMv().then(sf => {
+			sf.addMessageListener(line => {
+				this.processLine(line)
+			})
+			
+			this.worker = sf
+		})
+
+        this.initInfo()
+
+        this.running = false
+        this.pondering = false
+        this.ponderAfter = false
+        this.onbestmove = null
+
+        logEngine(`spawned Stockfish wasm`)
+    }
+	
+	issueCommand(command){				
+		if(!this.worker){
+			console.log("cannot issue engine command ( no worker )")
+			return
+		}
+        this.worker.postMessage(`${command}`)
+        logEngine(`issue command: ${command}`)
+        return this
+    }
+}
+	
+let sfwasm = new UciEngineWeb()
+</script>
+
+<script src="outopt.js"></script>
+
+<script>
+	class ShowBoard_ extends SmartdomElement_{
+		constructor(props){
+			super({...props, ...{tagName: "div"}})			
+			
+			props = props || {}
+			
+			this.uciInfo = {}
+			
+			this.squareSize = props.squareSize || 60
+			this.pieceSize = props.pieceSize || Math.floor(this.squareSize * 0.8)
+			this.pieceMargin = (this.squareSize - this.pieceSize) / 2
+			this.numFiles = props.numFiles || 8
+			this.numRanks = props.numRanks || 8
+			this.boardWidth = this.numFiles * this.squareSize
+			this.boardHeight = this.numRanks * this.squareSize
+			this.legalMovesWidth = props.legalMovesWidth || 280
+			this.controlPanelHeight = props.controlPanelHeight || 40
+			
+			this.variantKeys = props.variantKeys || ["standard"]
+			this.variantKey = props.variantKey || "standard"
+			
+			this.pieceSet = props.pieceSet || "alpha"
+
+			this.squareContainer = div().poa().w(this.boardWidth).h(this.boardHeight)
+			
+			this.clickContainer = div().poa().w(this.boardWidth).h(this.boardHeight)
+
+			this.boardContainer = div().poa().w(this.boardWidth).h(this.boardHeight)
+			
+			this.legalMovesContainer = div().poa().l(this.boardWidth).w(this.legalMovesWidth).h(this.boardHeight).bc("#eee")
+			
+			this.controlButtons = props.controlButtons || ["<<", "<", ">", ">>", "X", "F", "Go", "Stop"]
+			
+			this.variantCombo = Combo({
+				options: this.variantKeys.map(key => ({
+					value: key,
+					display: key
+				})),
+				selected: this.variantKey,
+				selectChangedCallback: this.variantChanged.bind(this)
+			})
+			
+			this.controlPanel = div()
+				.fl().ai("center").jcsa()
+				.poa().w(this.boardWidth).h(this.controlPanelHeight).t(this.boardHeight).bc("#eff")
+				.a(
+					button(this.reset.bind(this)).html("Reset"),
+					this.variantCombo,
+				   	this.controlButtons.map(cb => button(this.controlButtonPressed.bind(this, cb)).html(cb))
+				)
+			
+			this.por().w(this.totalWidth()).h(this.totalHeight()).bc("#ddd")
+				.a(this.squareContainer, this.boardContainer, this.clickContainer, this.legalMovesContainer, this.controlPanel)
+			
+			this.imgCache = {}
+		}
+		
+		setFlip(flip){
+			this.flip = flip
+			this.draw()
+		}
+		
+		reset(){
+			this.variantChanged(this.variantCombo.select.e.value)
+		}
+		
+		variantChanged(variantKey){			
+			if(this.props.variantChangedCallback){
+				this.props.variantChangedCallback(variantKey)
+			}
+		}
+		
+		totalWidth(){
+			return this.boardWidth + this.legalMovesWidth
+		}
+		
+		totalHeight(){
+			return this.boardHeight + this.controlPanelHeight
+		}
+		
+		controlButtonPressed(cb){
+			if(this.props.controlButtonCallback){
+				this.props.controlButtonCallback(cb)
+			}
+		}
+		
+		setFen(fen, legalMovesUcis, uciInfo){
+			this.fen = fen
+			this.legalMovesUcis = legalMovesUcis || []
+			this.uciInfo = uciInfo || {}
+			
+			let raw = this.fen.split(" ")[0]
+			raw = raw.replace(/\//g, "")
+			for(let i=1;i<=8;i++) raw = raw.replace(new RegExp(`${i}`, "g"), "........".substring(0,i))
+			
+			this.raw = raw
+			
+			return this
+		}
+		
+		indexToUci(i){
+			let rank = Math.floor(i / this.numFiles)
+			let file = i - rank * this.numFiles
+			
+			let rankUci = `${this.numRanks - rank}`
+			let fileUci = String.fromCharCode(97 + file)
+			
+			return `${fileUci}${rankUci}`
+		}
+		
+		clickMove(fromI, toI){
+			let moveUci = `${this.indexToUci(fromI)}${this.indexToUci(toI)}`
+			
+			if(this.props.clickedMoveCallback){				
+				this.props.clickedMoveCallback(moveUci)
+			}
+		}
+		
+		clickSquareClicked(i){
+			if(this.clickedSquareIndex != null){
+				this.clickedSquare.op(0)
+				
+				this.clickMove(this.clickedSquareIndex, i)
+				
+				this.clickedSquareIndex = null
+				this.clickedSquare.op(0)
+				
+				return
+			}
+			
+			this.clickedSquareIndex = i
+			
+			this.clickedSquare = this.clickSquares[i]
+			
+			this.clickedSquare.op(0.5)
+		}
+		
+		flipRank(rank, flip){
+			if(flip) return this.numRanks - 1 - rank
+			return rank
+		}
+		
+		flipFile(file, flip){
+			if(flip) return this.numFiles - 1 - file
+			return file
+		}
+		
+		rankFileSquareCoords(rank, file, flip){
+			return Coords(this.flipRank(rank, flip) * this.squareSize, this.flipFile(file, flip) * this.squareSize)
+		}
+		
+		rankFilePieceCoords(rank, file, flip){
+			return Coords(this.flipRank(rank, flip) * this.squareSize + this.pieceMargin, this.flipFile(file, flip) * this.squareSize + this.pieceMargin)
+		}
+		
+		draw(){
+			this.squareContainer.x()
+			this.boardContainer.x()
+			
+			this.clickSquares = {}
+			
+			this.clickedSquareIndex = null
+			
+			for(let file=0;file<this.numFiles;file++) for(let rank=0;rank<this.numRanks;rank++){
+				let i = file + rank * 8
+				
+				this.squareContainer.a(div().poa().w(this.squareSize).h(this.squareSize)
+						.tl(this.rankFileSquareCoords(rank, file, this.flip)).bc((file+rank)%2?"#aaa":"#ddd"))
+				
+				this.clickContainer.a(this.clickSquares[i] = div().poa().w(this.squareSize).h(this.squareSize)
+						.tl(this.rankFileSquareCoords(rank, file, this.flip)).bc("#00f").op(0)
+						.ae("click", this.clickSquareClicked.bind(this, i)))
+				
+				let p = this.raw.substring(i, i+1)		
+				
+				if(p!="."){
+					let cachedImg = this.imgCache[`${p}${i}${!!this.flip}`]
+					
+					if(cachedImg){
+						this.boardContainer.a(cachedImg)
+					}else{
+						let img = Image().setWidth(this.pieceSize).setHeight(this.pieceSize).poa()						
+						.tl(this.rankFilePieceCoords(rank, file, this.flip))
+						.load(PIECES_CSS[this.pieceSet][p.toLowerCase() == p ? "b" : "w"][p.toLowerCase()], _=>{
+							this.boardContainer.a(img)
+							this.imgCache[`${p}${i}${!!this.flip}`] = img
+						})			
+					}					
+				}			
+			}		
+			
+			this.legalMovesContainer.x()
+				.ffms().ovfys().c("#007")
+				.a(this.legalMovesUcis.sort(this.cmpUcis.bind(this)).map(uci => div()
+					.pad(3).mar(1).curp()
+					.bc(this.uciInfo[uci] ? this.uciInfo[uci].bc : "#ffe")
+					.ae("click", _=>this.moveClicked(uci))
+																		 .html(this.uciInfo[uci] ? `${this.uciInfo[uci].san.padEnd(6, ' ')}${this.uciInfo[uci].plays ? ` plays <span style="font-weight:bold;color:#070;">${this.uciInfo[uci].plays.toString().padStart(6, ' ')}</span> | perf <span style="font-weight:bold;color:#770;">${(Math.round(this.uciInfo[uci].score/this.uciInfo[uci].plays*100)).toString().padStart(4, ' ')} %`: ""}</span>`.replace(/ /g, "&nbsp;").replace(/span.nbsp./g, "span ") : uci))
+				 )
+			
+			return this
+		}		
+		
+		cmpUcis(a, b){
+			let infoA = this.uciInfo[a] || {san: a}
+			infoA.san = infoA.san || a
+			let infoB = this.uciInfo[b] || {san: b}
+			infoB.san = infoB.san || b
+			
+			if(infoA.plays != infoB.plays){
+				return (infoB.plays || 0) - (infoA.plays || 0)
+			}
+			
+			infoA.perf = infoA.score / infoA.plays
+			infoB.perf = infoB.score / infoB.plays
+			
+			if(infoA.perf != infoB.perf){
+				return infoB.perf - infoA.perf
+			}
+			
+			if(infoA.first != infoB.first){
+				return (infoB.first ? 1 : 0) - (infoA.first ? 1 : 0)
+			}
+			
+			if(infoA.branching != infoB.branching){
+				return (infoB.branching ? 1 : 0) - (infoA.branching ? 1 : 0)	
+			}
+				
+			return infoA.san.localeCompare(infoB.san)
+		}
+		
+		moveClicked(uci){			
+			if(this.props.moveClickedCallback){				
+				this.props.moveClickedCallback(uci)
+			}
+		}
+		
+		setVariantKey(variantKey){
+			this.variantKey = variantKey
+			
+			this.variantCombo.selectOption(this.variantKey)
+		}
+	}
+	function ShowBoard(props){return new ShowBoard_(props)}
+	
+	class ShowGame_ extends SmartdomElement_{
+		gameId(){
+			return this.id + "/game"	
+		}
+		
+		constructor(props){
+			super({...props, ...{tagName: "div"}})			
+			
+			props = props || {}
+			
+			this.id = props.id || "chess"
+			
+			this.borderWidth = props.borderWidth || 8
+			
+			this.sb = ShowBoard({
+				moveClickedCallback: this.moveClickedCallback.bind(this),
+				controlButtonCallback: this.controlButtonCallback.bind(this),
+				variantKeys: ["standard", "atomic", "antichess", "horde", "racingKings", "kingOfTheHill", "threeCheck", "chess960", "fromPosition"],
+				variantChangedCallback: this.variantChangedCallback.bind(this),
+				clickedMoveCallback: this.clickedMoveCallback.bind(this)
+			}).bdrs("solid").bdrw(this.borderWidth).bdrc("#bbb").bdrr(10)
+			
+			this.game = Game(undefined, undefined, this.gameId())
+			
+			this.game.load()
+			
+			this.showLineHeight = props.showLineHeight || 80
+			
+			this.w(this.totalWidth()).h(this.totalHeight())
+			
+			this.showLineContainer = div().fl()
+				.bc("#eff").ovfys()
+				.w(this.totalWidth()).h(this.showLineHeight)
+			
+			this.por().a(
+				this.sb.t(0).l(0),
+				this.showLineContainer.t(this.sb.totalHeight()).l(0)
+			)
+			
+			this.analyzedDisplays = {}
+			
+			this.setGame()
+		}
+		
+		totalWidth(){
+			return this.sb.totalWidth() + 2 * this.borderWidth
+		}
+		
+		totalHeight(){
+			return this.sb.totalHeight() + this.showLineHeight + 2 * this.borderWidth
+		}
+		
+		moveClickedCallback(uci){
+			this.game.makeUciMove(uci)
+
+			this.setGame()
+		}
+		
+		setGame(){
+			let uciInfo = {}			
+			for(let uci of this.game.currentNode.legalMovesUcis){
+				let hasNode = this.game.nodes[this.game.currentNode.id + "_" + uci]
+				this.game.makeUciMove(uci)
+				uciInfo[uci] = {
+					san: this.game.currentNode.san,
+					branching: false,
+					first: false
+				}
+				if(hasNode) this.game.back(); else this.game.del()
+			}
+			let first = true
+			for(let childId of this.game.currentNode.childIds){
+				let node = this.game.getNodeById(childId)
+				uciInfo[node.uci].bc = first ? "#0f0" : "#aaf"
+				uciInfo[node.uci].branching = true
+				uciInfo[node.uci].first = first
+				first = false
+			}
+			
+			const fen = this.game.fen()
+			const legalMovesUcis = this.game.legalMovesUcis()
+			const variantKey = this.game.variantKey
+			
+			this.sb.setVariantKey(this.game.variantKey)
+			this.sb.setFen(fen, legalMovesUcis, uciInfo)			
+			this.sb.setFlip(this.game.flip)
+			
+			this.game.save()
+			
+			let app = params.get("app")
+			
+			if(app){
+				fetch(`https://${app}.herokuapp.com/book/?fen=${fen}&variant=${variantKey}`, {headers: {Accept: "application/json"}}).then(response => response.text().then(content => {
+					try{
+						const blob = JSON.parse(content)
+						
+						if(this.game.fen() == fen){
+							for(let item of blob){
+								uciInfo[item.uci].plays = item.plays
+								uciInfo[item.uci].score = item.score
+							}
+							
+							this.sb.setFen(fen, legalMovesUcis, uciInfo)			
+							this.sb.setFlip(this.game.flip)
+						}
+					}catch(err){
+						console.log("could not parse book content", err)
+					}
+				}))
+			}
+			
+			this.showLineContainer.html(this.game.linePgn() + (this.analyzedDisplays[this.game.fen()] ? ` [ eval ${this.analyzedDisplays[this.game.fen()]} ]` : ""))
+			
+			console.log("should run", this.shouldRun)
+			
+			if(sfwasm.running){
+				if(this.sfwasmTimeout) clearTimeout(this.sfwasmTimeout)
+				
+				this.sfwasmTimeout = setTimeout(_=>{
+					console.log("stop engine for restart")					
+					if(sfwasm.running){
+						sfwasm.setonbestmove(_=>{
+							console.log("restart engine")
+							this.go()
+						}, "restart")
+						sfwasm.stop()
+					}
+				}, 250)
+			}
+		}
+		
+		go(){
+			if(!this.shouldRun){
+				console.log("go command while should not run")
+				return
+			}
+			sfwasm.setoption("UCI_Variant", this.game.variantKey.toLowerCase())
+			this.analyzedFen = this.game.fen()
+			sfwasm.position("fen " + this.analyzedFen)
+			sfwasm.go({infinite: true})
+			this.watchEngine = setInterval(_=>{
+				if(this.shouldRun){
+					let info = sfwasm.info
+					let depthInfos = info.depthInfos
+					if(depthInfos.length){
+						let currInfo = depthInfos[depthInfos.length - 1]
+						if(currInfo.score){
+							let engineDisplay = `${currInfo.depth} ${currInfo.score.unit} ${currInfo.score.value} ${currInfo.pv}`
+							this.analyzedDisplays[this.analyzedFen] = engineDisplay
+							
+							this.showLineContainer.html(engineDisplay)
+						}						
+					}										
+				}else{
+					clearInterval(this.watchEngine)
+				}				
+			}, 1000)
+		}
+		
+		controlButtonCallback(cb){
+			if(cb == "<") this.game.back()
+			if(cb == ">") this.game.forward()
+			if(cb == "<<") this.game.tobegin()
+			if(cb == ">>") this.game.toend()
+			if(cb == "X") this.game.del()
+			if(cb == "F"){
+				this.game.flip = !this.game.flip				
+			}
+			if(cb == "Go"){				
+				this.shouldRun = true
+				
+				this.go()
+			}
+			if(cb == "Stop"){
+				this.shouldRun = false
+				
+				sfwasm.issueCommand("stop")				
+			}
+
+			this.setGame()
+		}
+		
+		variantChangedCallback(variantKey){
+			this.game = Game(variantKey, undefined, this.gameId())
+
+			this.setGame()
+		}
+		
+		clickedMoveCallback(moveUci){
+			this.game.makeUciMove(moveUci)
+
+			this.setGame()
+		}
+	}
+	function ShowGame(props){return new ShowGame_(props)}
+
+	let app = div().h(window.innerHeight - 20).bc("#ddf").fl().aic().jcsa().a(
+		ShowGame().bdrs("solid").bdrw(10).bdrc("#aaa").bdrr(20)
+	)
+	
+	document.getElementById("root").appendChild(app.e)
+</script>
+	
+</body>
+
+</html>

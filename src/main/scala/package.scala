@@ -1,6 +1,4 @@
-import ornicar.scalalib
-
-package object chess extends scalalib.Common with scalalib.OrnicarOption with scalalib.OrnicarBoolean {
+package object chess extends ornicar.scalalib.Common with ornicar.scalalib.OrnicarOption with ornicar.scalalib.OrnicarBoolean {
 
   val White = Color.White
   val Black = Color.Black

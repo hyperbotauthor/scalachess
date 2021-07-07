@@ -10,7 +10,9 @@ case class Game(
     pgnMoves: Vector[String] = Vector(),
     clock: Option[Clock] = None,
     turns: Int = 0, // plies
-    startedAtTurn: Int = 0
+    startedAtTurn: Int = 0,
+	genUci: String = "",
+	genSan: String = ""
 ) {
   def apply(
       orig: Pos,

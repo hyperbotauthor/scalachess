@@ -152,11 +152,11 @@ object Move {
     noDoubleLineBreakRegex.replaceAllIn(txt, "\n")
 
   private def formatPgnSeconds(t: Int) =
-    periodFormatter.print(
+    /*periodFormatter.print(
       org.joda.time.Duration.standardSeconds(t).toPeriod
-    )
+    )*/t.toString
 
-  private[this] val periodFormatter = new org.joda.time.format.PeriodFormatterBuilder().printZeroAlways
+  /*private[this] val periodFormatter = new org.joda.time.format.PeriodFormatterBuilder().printZeroAlways
     .minimumPrintedDigits(1)
     .appendHours
     .appendSeparator(":")
@@ -164,6 +164,6 @@ object Move {
     .appendMinutes
     .appendSeparator(":")
     .appendSeconds
-    .toFormatter
+    .toFormatter*/
 
 }

@@ -43,7 +43,7 @@ object Parser {
         resultOption = parsedMoves._3
         tags         = resultOption.filterNot(_ => preTags.exists(_.Result)).foldLeft(preTags)(_ + _)
         sans <- objMoves(strMoves, tags.variant | Variant.default)
-      } yield ParsedPgn(init, tags, sans)
+      } yield ParsedPgn(init, tags, sans, strMoves.map(sm => sm.san))
     } catch {
       case _: StackOverflowError =>
         sys error "### StackOverflowError ### in PGN parser"

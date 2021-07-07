@@ -1,3 +1,5 @@
+enablePlugins(ScalaJSPlugin)
+
 name := "scalachess"
 
 organization := "org.lichess"
@@ -7,12 +9,10 @@ version := "10.2.5"
 scalaVersion := "2.13.6"
 
 libraryDependencies ++= List(
-  "org.scala-lang.modules" %% "scala-parser-combinators" % "1.1.2",
-  "org.specs2"             %% "specs2-core"              % "4.10.0" % Test,
-  "org.specs2"             %% "specs2-cats"              % "4.10.0" % Test,
-  "com.github.ornicar"     %% "scalalib"                 % "7.0.2",
-  "joda-time"               % "joda-time"                % "2.10.10",
-  "org.typelevel"          %% "cats-core"                % "2.2.0"
+  "org.scala-lang.modules" %%% "scala-parser-combinators" % "1.1.2",
+  "org.specs2"             %%% "specs2-core"              % "4.10.0" % Test,
+  "org.specs2"             %%% "specs2-cats"              % "4.10.0" % Test,    
+  "org.typelevel"          %%% "cats-core"                % "2.2.0"
 )
 
 resolvers ++= Seq(
@@ -62,3 +62,5 @@ scalacOptions ++= Seq(
 )
 
 publishTo := Option(Resolver.file("file", new File(sys.props.getOrElse("publishTo", ""))))
+
+scalaJSUseMainModuleInitializer := true

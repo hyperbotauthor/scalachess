@@ -1,8 +1,8 @@
 package chess
 package format.pgn
 
-import org.joda.time.DateTimeZone
-import org.joda.time.format.DateTimeFormat
+/*import org.joda.time.DateTimeZone
+import org.joda.time.format.DateTimeFormat*/
 import cats.syntax.option._
 
 case class Tag(name: TagType, value: String) {
@@ -91,10 +91,10 @@ object Tag {
   case object Site  extends TagType
   case object Date  extends TagType
   case object UTCDate extends TagType {
-    val format = DateTimeFormat forPattern "yyyy.MM.dd" withZone DateTimeZone.UTC
+    /*val format = DateTimeFormat forPattern "yyyy.MM.dd" withZone DateTimeZone.UTC*/
   }
   case object UTCTime extends TagType {
-    val format = DateTimeFormat forPattern "HH:mm:ss" withZone DateTimeZone.UTC
+    /*val format = DateTimeFormat forPattern "HH:mm:ss" withZone DateTimeZone.UTC*/
   }
   case object Round           extends TagType
   case object White           extends TagType
