@@ -6,7 +6,7 @@ const DEFAULT_REPO      = "easychess"
 const fs = require('fs')
 
 const octokit = Octokit({
-    auth: process.env.SCALA_GITHUB_TOKEN_GITHUB_TOKEN,
+    auth: process.env.SCALA_GITHUB_TOKEN,
     userAgent: "Scala Chess"
 })
 
