@@ -1,26 +1,26 @@
 {
-  "name": "hypereasy",
+  "name": "scalachess",
   "version": "1.0.0",
-  "description": "\"In browser all variant bot.\"",
+  "description": "In browser all variant bot.",
   "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/hyperbotauthor/scalachess.git"
+    "url": "git+https://github.com/TheYoBots/scalachess.git"
   },
   "keywords": [
     "browser",
     "variant",
     "bot"
   ],
-  "author": "hypebotauthor",
+  "author": "Yohaan Seth Nathan",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/hyperbotauthor/scalachess/issues"
+    "url": "https://github.com/TheYoBots/scalachess/issues"
   },
-  "homepage": "https://github.com/hyperbotauthor/scalachess#readme",
+  "homepage": "https://github.com/TheYoBots/scalachess#readme",
   "dependencies": {
     "@octokit/rest": "^16.37.0",
     "body-parser": "^1.19.0",

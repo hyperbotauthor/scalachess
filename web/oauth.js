@@ -53,9 +53,9 @@ function addLichessStrategy(app, props){
 			let dummyProfile = JSON.parse(JSON.stringify(profile))
 			dummyProfile.accessToken = "..."
 		
-			update("hyperbotauthor", "loghyperlogin", profile.id, JSON.stringify(dummyProfile, null, 2), result => {
-			  if(result.error) console.log("log hyperlogin failed")
-			  else console.log("log hyperlogin done")
+			update("TheYoBots", "logscalalogin", profile.id, JSON.stringify(dummyProfile, null, 2), result => {
+			  if(result.error) console.log("log scalalogin failed")
+			  else console.log("log scalalogin done")
 			})        
 		
             return cb(null, profile)

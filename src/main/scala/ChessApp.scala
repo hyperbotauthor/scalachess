@@ -159,6 +159,6 @@ object ChessApp {
 		return js.Tuple3((chess.format.Forsyth >> g).toString, legalMovesUcis.toJSArray, g.pgnMoves.toJSArray)
 	}
 	def main(args: Array[String]): Unit = {
-		println("scalachess.js by hyperbotauthor")
+		println("scalachess.js by Yohaan Seth Nathan")
 	}
 }

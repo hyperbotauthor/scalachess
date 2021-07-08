@@ -6,8 +6,8 @@ const DEFAULT_REPO      = "easychess"
 const fs = require('fs')
 
 const octokit = Octokit({
-    auth: process.env.HYPER_GITHUB_TOKEN,
-    userAgent: "Hyper Chess"
+    auth: process.env.SCALA_GITHUB_TOKEN_GITHUB_TOKEN,
+    userAgent: "Scala Chess"
 })
 
 function putfile(ownerOpt, repoOpt, path, content, sha, callback){
@@ -24,8 +24,8 @@ function putfile(ownerOpt, repoOpt, path, content, sha, callback){
         path: path,
         content: contentb64,        
         message: path,
-        "commiter.name": "easychessanimations",
-        "commiter.email": "chessbotroulette@gmail.com",        
+        "commiter.name": "TheYoBots",
+        "commiter.email": "yohaan.nathanjw@gmail.com",        
     }
 
     if(sha){

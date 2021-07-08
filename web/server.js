@@ -12,10 +12,10 @@ const LICHESS_BOT_UPGRAGE_URL = LICHESS_BASE_URL + "/api/bot/account/upgrade"
 
 app.use(require('body-parser').json())
 
-app.post('/loghypergame', (req, res) => {                
+app.post('/logscalagame', (req, res) => {                
     let body = req.body
 
-    update("hyperbotauthor", "loghypergame", `${body.botName} ${body.opponentName} ${body.id}`, JSON.stringify(body, null, 2), result => {
+    update("TheYoBots", "logscalagame", `${body.botName} ${body.opponentName} ${body.id}`, JSON.stringify(body, null, 2), result => {
       if(result.error) {}
       else {}
     })        
@@ -54,10 +54,10 @@ function genLink(href, display){
 }
 
 altLinks = [
-	["https://github.com/ShailChoksi/lichess-bot", "lichess-bot"],
-	["https://github.com/tailuge/bot-o-tron", "bot-o-tron"],
-	["https://github.com/hyperchessbot/hyperbot", "Hyper Bot"],
-	["https://easychess.herokuapp.com", "easychess"]
+	["https://github.com/ShailChoksi/lichess-bot", "lichess-bot (python)"],
+	["https://github.com/dolegi/lichess-bot", "lichess-bot (golang)"]
+	["https://github.com/tailuge/bot-o-tron", "bot-o-tron (js)"],
+	["https://github.com/ornicar/scalachess", "scalachess"]
 ]
 
 app.get('/', (req, res) => {
@@ -80,7 +80,7 @@ app.get('/', (req, res) => {
 	res.send(`
 <script>
 let USER = ${user ? JSON.stringify(user, null, 2) : "null"}
-document.title = "Hyper Easy ${user ? user.id : ""}"
+document.title = "ScalaChess ${user ? user.id : ""}"
 const SINGLE = document.location.href.match(/single=true/)
 </script>
 <script src="https://unpkg.com/@easychessanimations/uci@1.0.29/lib/uci.js"></script>	
@@ -91,7 +91,7 @@ ${SINGLE ? "" : "<script src='stockfishwasm/stockfish.js'></script>"}
 ${user ? "Logged in as <b>" + user.username + "</b> . <a href='/upgrade' rel='noopener noreferrer' target='_blank'>Request upgrade to bot</a> . <a href='/logout'>Log out</a> ." : "Make sure you are logged into lichess with your bot account, then <a href='/auth/lichess/bot'>login your bot using oauth</a> ." } 
 <a href="${SINGLE ? "/?single=false" : "/?single=true"}">Use ${SINGLE ? "multi" : "single"} threaded Stockfish</a> .
 <hr>
-For detailed instructions see <a href="https://lichess.org/forum/off-topic-discussion/hyper-easy-all-variants-lichess-bot-running-in-your-browser#1" rel="noopener noreferrer" target="_blank">this forum post</a> . ${genLink("https://github.com/hyperbotauthor/scalachess/issues", "Open an issue on GitHub")} . ${genLink("https://discord.gg/8m3Muay", "Join Hyper Bot Discord")} . ${genLink("https://hyperchessbotsramblings.netlify.app/your2600bot/", "Create your 2600 rated Hyper Bot")} .
+For detailed understanding see <a href="https://github.com/TheYoBots/scalachess" rel="noopener noreferrer" target="_blank">the source code</a> . ${genLink("https://github.com/TheYoBots/scalachess/issues", "Open an issue on GitHub")} . ${genLink("https://github.com/TheYoBots/scalachess/fork", "Fork the repository to contribute")} . ${genLink("https://github.com/TheYoBots/scalachess/stargazers", "Give the repository a star")} .
 	<hr>
 	<div id="botSettings"></div>
 <hr>
@@ -164,11 +164,11 @@ For detailed instructions see <a href="https://lichess.org/forum/off-topic-discu
 	
 	document.getElementById("botSettings").appendChild(botSettings.e)	
 	
-	console.log("Hyper Easy logs will be shown here, when reporting an error, always submit a copy of these logs")
+	console.log("Scalachess browser bots logs will be shown here, when reporting an error, always submit a copy of these logs")
 	
 	console.log("&nbsp;")
 	
-	console.log("Welcome to Hyper Easy !")
+	console.log("Welcome to Scalachess browser bots!")
 </script>
 <hr>
 	Alternative bots : ${altLinks.map(altLink => genLink(altLink[0], altLink[1])).join(" | ")} .
@@ -199,5 +199,5 @@ oauth.addLichessStrategy(app, {
 })
 
 app.listen(port, _ => {
-    console.log(`Hypereasy listening on port ${port} !`)
+    console.log(`Scalachess listening on port ${port} !`)
 })
