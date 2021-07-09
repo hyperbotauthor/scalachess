@@ -223,7 +223,7 @@ function random(){
     return x - Math.floor(x)
 }
 
-const LICHESS_LOGIN_URL             = "/auth/lichess"
+const LICHESS_LOGIN_URL             = "/oauth"
 const LICHESS_BASE_URL              = "https://lichess.org"
 const LICHESS_ANALYSIS_URL          = LICHESS_BASE_URL + "/analysis"
 const LICHESS_GAMES_URL             = LICHESS_BASE_URL + "/api/games/user"
@@ -576,7 +576,7 @@ function getlichessgames(user, token, max, callback){
 /////////////////////////////////////////////////
 // bot
 
-const LICHESS_BOT_LOGIN_URL             = "/auth/lichess/bot"
+const LICHESS_BOT_LOGIN_URL             = "/oauth/bot"
 const LICHESS_BOT_UPGRAGE_URL           = LICHESS_BASE_URL + "/api/bot/account/upgrade"
 const LICHESS_STREAM_EVENTS_URL         = LICHESS_BASE_URL + "/api/stream/event"
 const LICHESS_CHALLENGE_URL             = LICHESS_BASE_URL + "/api/challenge"

@@ -42,7 +42,6 @@ function addLichessStrategy(app, props){
     let [host, prot, url] = getHostProtAndUrl(props)
     passport.use(props.tag, new LichessStrategy({
         clientID: props.clientID,
-        clientSecret: props.clientSecret,
         callbackURL: url + "/callback",
         scope: props.scope || ""
         },

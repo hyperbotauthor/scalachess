@@ -88,7 +88,7 @@ ${SINGLE ? "" : "<script src='stockfishwasm/stockfish.js'></script>"}
 <script src="utils.js"></script>
 <script src="outopt.js"></script>
 <script src="bot.js"></script>
-${user ? "Logged in as <b>" + user.username + "</b> . <a href='/upgrade' rel='noopener noreferrer' target='_blank'>Request upgrade to bot</a> . <a href='/logout'>Log out</a> ." : "Make sure you are logged into lichess with your bot account, then <a href='/auth/lichess/bot'>login your bot using oauth</a> ." } 
+${user ? "Logged in as <b>" + user.username + "</b> . <a href='/upgrade' rel='noopener noreferrer' target='_blank'>Request upgrade to bot</a> . <a href='/logout'>Log out</a> ." : "Make sure you are logged into lichess with your bot account, then <a href='/oauth/bot'>login your bot using oauth</a> ." } 
 <a href="${SINGLE ? "/?single=false" : "/?single=true"}">Use ${SINGLE ? "multi" : "single"} threaded Stockfish</a> .
 <hr>
 For detailed understanding see <a href="https://github.com/TheYoBots/scalachess" rel="noopener noreferrer" target="_blank">the source code</a> . ${genLink("https://github.com/TheYoBots/scalachess/issues", "Open an issue on GitHub")} . ${genLink("https://github.com/TheYoBots/scalachess/fork", "Fork the repository to contribute")} . ${genLink("https://github.com/TheYoBots/scalachess/stargazers", "Give the repository a star")} .
@@ -191,8 +191,7 @@ oauth.initOauth(app, firestore, maxAge)
 oauth.addLichessStrategy(app, {
     tag: "lichess-bot",
     clientID: process.env.LICHESS_BOT_CLIENT_ID,
-    clientSecret: process.env.LICHESS_BOT_CLIENT_SECRET,
-    authURL: "/auth/lichess/bot",
+    authURL: "/oauth/bot",
     scope: "challenge:read challenge:write bot:play",
     failureRedirect: "/?lichessbotlogin=failed",
     okRedirect: "/?lichessbotlogin=ok"
