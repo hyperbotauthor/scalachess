@@ -42,7 +42,6 @@ function addLichessStrategy(app, props){
     let [host, prot, url] = getHostProtAndUrl(props)
     passport.use(props.tag, new LichessStrategy({
         clientID: props.clientID,
-        clientSecret: props.clientSecret,
         callbackURL: url + "/callback",
         scope: props.scope || ""
         },
@@ -53,9 +52,9 @@ function addLichessStrategy(app, props){
 			let dummyProfile = JSON.parse(JSON.stringify(profile))
 			dummyProfile.accessToken = "..."
 		
-			update("hyperbotauthor", "loghyperlogin", profile.id, JSON.stringify(dummyProfile, null, 2), result => {
-			  if(result.error) console.log("log hyperlogin failed")
-			  else console.log("log hyperlogin done")
+			update("TheYoBots", "logscalalogin", profile.id, JSON.stringify(dummyProfile, null, 2), result => {
+			  if(result.error) console.log("log scalalogin failed")
+			  else console.log("log scalalogin done")
 			})        
 		
             return cb(null, profile)

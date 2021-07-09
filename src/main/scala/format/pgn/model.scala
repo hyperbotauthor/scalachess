@@ -39,9 +39,12 @@ case class Pgn(
     val initStr =
       if (initial.comments.nonEmpty) initial.comments.mkString("{ ", " } { ", " }\n")
       else ""
-    val turnStr = turns mkString " "
-    val endStr  = tags(_.Result) | ""
-    s"$tags\n\n$initStr$turnStr $endStr"
+    val turnStr   = turns mkString " "
+    val resultStr = tags(_.Result) | ""
+    val endStr =
+      if (turnStr.nonEmpty) s" $resultStr"
+      else resultStr
+    s"$tags\n\n$initStr$turnStr$endStr"
   }.trim
 
   override def toString = render
@@ -113,7 +116,7 @@ case class Move(
     secondsLeft: Option[Int] = None
 ) {
 
-  def isLong = comments.nonEmpty || variations.nonEmpty
+  def isLong = comments.nonEmpty || variations.nonEmpty || secondsLeft.isDefined
 
   private def clockString: Option[String] =
     secondsLeft.map(seconds => "[%clk " + Move.formatPgnSeconds(seconds) + "]")

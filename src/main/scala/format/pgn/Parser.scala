@@ -7,6 +7,7 @@ import scala.util.parsing.combinator._
 import cats.data.Validated
 import cats.data.Validated.{ invalid, valid }
 import cats.implicits._
+import scala.util.matching.Regex
 
 // http://www.saremba.de/chessgml/standards/pgn/pgn-complete.htm
 object Parser {
@@ -45,7 +46,6 @@ object Parser {
       } yield ParsedPgn(init, tags, sans, strMoves.map(sm => sm.san))
     } catch {
       case _: StackOverflowError =>
-        println(pgn)
         sys error "### StackOverflowError ### in PGN parser"
     }
 
@@ -130,15 +130,20 @@ object Parser {
     def nagGlyphs: Parser[Glyphs] =
       as("nagGlyphs") {
         rep(nag) ^^ { nags =>
-          Glyphs fromList nags.flatMap { n =>
-            n.drop(1).toIntOption flatMap Glyph.find
-          }
+          Glyphs fromList nags.flatMap { Glyph.find _ }
         }
       }
 
+    val nagGlyphsRE = Glyph.PositionAssessment.all
+      .map(_.symbol)
+      .sortBy(-_.length)
+      .map(Regex.quote(_))
+      .mkString("|")
+      .r
+
     def nag: Parser[String] =
       as("nag") {
-        """\$\d+""".r
+        """\$\d+""".r | nagGlyphsRE
       }
 
     def variation: Parser[List[StrMove]] =

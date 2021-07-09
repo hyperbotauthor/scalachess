@@ -4,7 +4,7 @@ const DEFAULT_REDUCE_THINKING_TIME      = 1
 
 class LichessBotGame_{
     poweredBy(){
-        this.writeBotChat(["player", "spectator"], `${this.botName} powered by https://hypereasy.herokuapp.com .`)
+        this.writeBotChat(["player", "spectator"], `${this.botName} is an easy to make browser bot. No coding done.`)
     }
 
     constructor(props){
@@ -81,7 +81,7 @@ class LichessBotGame_{
 			postBody.botName = this.botName
 			postBody.opponentName = this.opponentName
 			
-			fetch('/loghypergame', {
+			fetch('/logscalagame', {
 				method: "POST",
 				headers: {
 				   "Content-Type": "application/json"
@@ -110,7 +110,7 @@ class LichessBotGame_{
 
             this.state = gameFull.state
 
-            this.writeBotChat(["player", "spectator"], `Good luck, ${this.opponentName} !`)                
+            this.writeBotChat(["player", "spectator"], `Good luck against this browser bot!`)                
             
             this.poweredBy()
         }else if(event.type == "gameState"){
@@ -332,7 +332,7 @@ class LichessBotGame_{
     processTermination(){
         console.log(`Game ${this.id} terminated .`)
 
-        this.writeBotChat(["player", "spectator"], `Good game, ${this.opponentName} !`)
+        this.writeBotChat(["player", "spectator"], `Good game, Hope you had fun playing this browser bot!`)
         this.poweredBy()
         this.engine.terminate()
     }

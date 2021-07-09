@@ -7,11 +7,10 @@
 	url = git://github.com/ornicar/scalachess
 	fetch = +refs/heads/*:refs/remotes/origin/*
 [remote "github"]
-	url = https://github.com/hyperbotauthor/scalachess
+	url = https://github.com/TheYoBots/scalachess
 	fetch = +refs/heads/*:refs/remotes/github/*
 [user]
-	name = hyperbotauthor
-	email = hyperchessbotauthor@gmail.com
-	[credential "https://github.com/hyperbotauthor/scalachess"]
-		username = hyperbotauthor
-	
+	name = Yohaan Seth Nathan
+	email = yohaan.nathanjw@gmail.com
+	[credential "https://github.com/TheYoBots/scalachess"]
+		username = TheYoBots	
