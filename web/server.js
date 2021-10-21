@@ -7,6 +7,12 @@ const app = express()
 const port = process.env.PORT || 3000
 const fetch = require('node-fetch')
 
+app.use(function(req, res, next) {    
+  res.setHeader('Cross-Origin-Embedder-Policy', 'require-corp');
+  res.setHeader('Cross-Origin-Opener-Policy', 'same-origin');
+  return next();
+});
+
 const LICHESS_BASE_URL        = "https://lichess.org"
 const LICHESS_BOT_UPGRAGE_URL = LICHESS_BASE_URL + "/api/bot/account/upgrade"
 
