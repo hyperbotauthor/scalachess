@@ -89,7 +89,7 @@ let USER = ${user ? JSON.stringify(user, null, 2) : "null"}
 document.title = "Hyper Easy ${user ? user.id : ""}"
 const SINGLE = document.location.href.match(/single=true/)
 </script>
-<script src="https://unpkg.com/@easychessanimations/uci@1.0.29/lib/uci.js"></script>	
+<script src="uci.js"></script>	
 ${SINGLE ? "" : "<script src='stockfishwasm/stockfish.js'></script>"}
 <script src="utils.js"></script>
 <script src="outopt.js"></script>
@@ -102,7 +102,7 @@ For detailed instructions see <a href="https://lichess.org/forum/off-topic-discu
 	<div id="botSettings"></div>
 <hr>
 <div id="logs"></div>
-<script src="https://unpkg.com/@easychessanimations/foo@1.0.39/lib/fooweb.js"></script>
+<script src="fooweb.js"></script>
 <script src="smartdom.js"></script>
 <script>
 	let oldConsole = console
